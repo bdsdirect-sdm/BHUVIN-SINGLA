@@ -1,0 +1,8 @@
+.input_main_div {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    padding: 5px 10px;
+    box-shadow: 0cap;
+    
+}
