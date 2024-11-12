@@ -3,38 +3,32 @@ import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import './Dassboard.css'; // Ensure the CSS file is named correctly
+import greenImage from '../Assets/green.jpg';  // Import the image
 
 const Dashboard: React.FC = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const token = localStorage.getItem("token");
 
     useEffect(() => {
         if (!token) {
             navigate("/login");
         }
-    }, []);
+    }, [token, navigate]);
 
     const getUser = async () => {
-        // try{
-        console.log("Hello")
         const response = await api.get(`${Local.GET_USER}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log("Response-------->", response);
         return response;
-        // }
-        // catch(err){
-        //     console.log("Error-------->", err);
-        // }
-    }
+    };
 
     const { data, isError, error, isLoading } = useQuery({
         queryKey: ['dashboard'],
-        queryFn: getUser
-    })
+        queryFn: getUser,
+    });
 
     if (isLoading) {
         return (
@@ -44,7 +38,7 @@ const Dashboard: React.FC = () => {
                     <span className="visually-hidden">Loading...</span>
                 </div>
             </>
-        )
+        );
     }
 
     if (isError) {
@@ -52,23 +46,76 @@ const Dashboard: React.FC = () => {
             <>
                 <div>Error: {error.message}</div>
             </>
-        )
+        );
     }
-    console.log("Data--------->", data?.data);
+
     return (
         <div>
-            <b>Doctor Name:</b> {data?.data.user.firstname} {data?.data.user.lastname} <br />
-            <b>Doctor Type:</b> {(data?.data.user.doctype == 2) && (<>
-                OD
-            </>)}
-            {(data?.data.user.doctype == 1) && (<>
-                MD
-            </>)}<br />
-            <button onClick={() => window.location.href = '/add-address'}>
-                Add Address
-            </button>
-        </div>
-    )
-}
+            <h5>Dashboard</h5>
+            <div>
+                <div className="row">
+                    <div className="column">
+                        <div className="card">
+                            <div className="card-content">
+                                <div className="card-left">
+                                    <img src={greenImage} alt="Green" height="25px" width="25px" />
+                                    <p className="card-text">Referrals Placed</p>
+                                </div>
+                                <div className="card-right">
+                                    <p>312</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-export default Dashboard
+                    <div className="column">
+                        <div className="card">
+                            <div className="card-content">
+                                <div className="card-left">
+                                    <img src={greenImage} alt="Green" height="25px" width="25px" />
+                                    <p className="card-text">Referrals Completed</p>
+                                </div>
+                                <div className="card-right">
+                                    <p>250</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="column">
+                        <div className="card">
+                            <div className="card-content">
+                                <div className="card-left">
+                                    <img src={greenImage} alt="Green" height="25px" width="25px" />
+                                    <p className="card-text">Doctor OD/MD</p>
+                                </div>
+                                <div className="card-right">
+                                    <p>42</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+
+                <div className="header-container">
+                    <div>
+                        <h6>Referral Patient</h6>
+                    </div>
+                    <div>
+                        <button className="btn-addrefer">+ Add Referral Patient</button>
+                    </div>
+                </div>
+
+            </div>
+            {/* <b>Doctor Name:</b> {data?.data.user.firstname} {data?.data.user.lastname} <br /> */}
+            {/* <b>Doctor Type:</b> {(data?.data.user.doctype == 2) ? "OD" : "MD"}<br /> */}
+            {/* <button onClick={() => window.location.href = '/add-address'}>
+                Add Address
+            </button> */}
+        </div>
+    );
+};
+
+export default Dashboard;

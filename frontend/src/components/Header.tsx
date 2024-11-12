@@ -7,66 +7,76 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const doctype: any = localStorage.getItem("doctype");
+  // const userFirstName = localStorage.getItem("user_firstname");
 
   return (
     <>
-      <header className="header">
-        <div className="container">
-          <div className="header-content">
-            <Link to="#" className="logo">
-              <img src={logo} alt="EyeRefer" height={50} />
-            </Link>
+      <div className="layout">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <ul className="nav-list">
+            {token && (
+              <>
+                <li><Link to="/dashboard" className="nav-link">Dashboard</Link></li>
+                <li><Link to="/patient" className="nav-link">Patient</Link></li>
+                {doctype === "1" && (
+                  <li><Link to="/appointment" className="nav-link">Appointments</Link></li>
+                )}
+                <li><Link to="/doctor" className="nav-link">Doctors</Link></li>
+                <li><Link to="/chat" className="nav-link">Chat</Link></li>
+                <li><Link to="/staff" className="nav-link">Staff</Link></li>
+                {doctype === "2" && (
+                  <li><Link to="/add-patient" className="nav-link">Add Referral Patient</Link></li>
+                )}
+              </>
+            )}
+          </ul>
+        </div>
 
-            <nav>
-              <ul className="nav-list">
-                {token && (
+        {/* Main Content Area */}
+        <div className="main-content">
+          <header className="header">
+            <div className="container">
+              {/* Logo aligned to the left */}
+              <Link to="/" className="logo">
+                <img src={logo} alt="EyeRefer" height={50} />
+                <b className='container-text'>EYE REFER</b>
+              </Link>
+
+              {/* Right Side (Hi Doctor Dropdown) aligned to the right */}
+              <div className="auth-buttons">
+                {token ? (
+                  <div className="dropdown">
+                    <button className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Hi, John Doe<br />
+                      <span className="dropdown-smalltext">Welcome Back</span>
+                    </button>
+                    <ul className="dropdown-menu">
+                      <li><Link to="/profile" className="dropdown-item">Profile</Link></li>
+                      <li><Link to="/update-password" className="dropdown-item">Change Password</Link></li>
+                      <li><a className="dropdown-item" onClick={() => {
+                        localStorage.clear();
+                        navigate("/login");
+                      }}>Logout</a></li>
+                    </ul>
+                  </div>
+                ) : (
                   <>
-                    <li><Link to="/dashboard" className="nav-link">Dashboard</Link></li>
-                    <li><Link to="/patient" className="nav-link">Patient</Link></li>
-                    {doctype == 1 && (
-                      <li><Link to="/appointment" className="nav-link">Appointments</Link></li>
-                    )}
-                    <li><Link to="/doctor" className="nav-link">Doctors</Link></li>
-                    <li><Link to="/chat" className="nav-link">Chat</Link></li>
-                    <li><Link to="/staff" className="nav-link">Staff</Link></li>
-                    {doctype == 2 && (
-                      <li><Link to="/add-patient" className="nav-link">Add Referral Patient</Link></li>
-                    )}
+                    <Link to="/login" className="btn btn-login">Login</Link>
+                    <Link to="/" className="btn btn-signup">Sign-up</Link>
                   </>
                 )}
-              </ul>
-            </nav>
-
-            <div className="auth-buttons">
-              {token ? (
-                <div className="dropdown">
-                  <button className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Hi Doctor
-                  </button>
-                  <ul className="dropdown-menu">
-                    <li><Link to="/profile" className="dropdown-item">Profile</Link></li>
-                    <li><Link to="/update-password" className="dropdown-item">Change Password</Link></li>
-                    <li><a className="dropdown-item" onClick={() => {
-                      localStorage.clear();
-                      navigate("/login");
-                    }}>Logout</a></li>
-                  </ul>
-                </div>
-              ) : (
-                <>
-                  <Link to="/login" className="btn btn-login">Login</Link>
-                  <Link to="/" className="btn btn-signup">Sign-up</Link>
-                </>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      <br />
-      <Outlet />
+          <br />
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 };
 
 export default Header;
+

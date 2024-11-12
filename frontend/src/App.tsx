@@ -1,3 +1,4 @@
+//App.tsx
 import react from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
@@ -16,15 +17,15 @@ import Profile from './components/Profile'
 import AddAddress from './components/AddAddress'
 import './App.css'
 
-const  App:react.FC = () => {
+const App: react.FC = () => {
 
   const router = createBrowserRouter([
     {
-      path:'/',
+      path: '/',
       element: <Header />,
-      children:[
+      children: [
         {
-          path:'/',
+          path: '/',
           element: <Signup />
         },
         {
@@ -70,14 +71,14 @@ const  App:react.FC = () => {
       ]
     }
   ]
-)
+  )
 
   return (
-<>
-<RouterProvider router={router} />
-<ToastContainer newestOnTop={false}
-closeOnClick />
-</>
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer newestOnTop={false}
+        closeOnClick />
+    </>
   )
 }
 
