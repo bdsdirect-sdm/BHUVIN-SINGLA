@@ -7,7 +7,11 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const doctype: any = localStorage.getItem("doctype");
-  // const userFirstName = localStorage.getItem("user_firstname");
+  const userFirstName = localStorage.getItem("user_firstname");
+  // const userLastName = localStorage.getItem("user_lastname");
+
+
+  const fullName = userFirstName ? `${userFirstName} ` : 'User'; // Fallback to 'User' if not available
 
   return (
     <>
@@ -43,17 +47,17 @@ const Header: React.FC = () => {
                 <b className='container-text'>EYE REFER</b>
               </Link>
 
-              {/* Right Side (Hi Doctor Dropdown) aligned to the right */}
+              {/* Right Side (Hi User Dropdown) aligned to the right */}
               <div className="auth-buttons">
                 {token ? (
                   <div className="dropdown">
                     <button className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Hi, John Doe<br />
+                      Hi, {fullName}<br />
                       <span className="dropdown-smalltext">Welcome Back</span>
                     </button>
                     <ul className="dropdown-menu">
                       <li><Link to="/profile" className="dropdown-item">Profile</Link></li>
-                      <li><Link to="/update-password" className="dropdown-item">Change Password</Link></li>
+                      <li><Link to="/change-password" className="dropdown-item">Change Password</Link></li>
                       <li><a className="dropdown-item" onClick={() => {
                         localStorage.clear();
                         navigate("/login");
@@ -79,4 +83,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-

@@ -15,6 +15,7 @@ import Verify from './components/Verify'
 import Login from './components/Login'
 import Profile from './components/Profile'
 import AddAddress from './components/AddAddress'
+import ChangePassword from './components/ChangePassword'; // Add ChangePassword
 import './App.css'
 
 const App: react.FC = () => {
@@ -22,20 +23,20 @@ const App: react.FC = () => {
   const router = createBrowserRouter([
     {
       path: '/',
+      element: <Signup />
+    },
+    {
+      path: '/login',
+      element: <Login />
+    },
+    {
+      path: '/verify',
+      element: <Verify />
+    },
+    {
+      path: '/',
       element: <Header />,
       children: [
-        {
-          path: '/',
-          element: <Signup />
-        },
-        {
-          path: '/login',
-          element: <Login />
-        },
-        {
-          path: '/verify',
-          element: <Verify />
-        },
         {
           path: '/dashboard',
           element: <Dashboard />
@@ -67,6 +68,10 @@ const App: react.FC = () => {
         {
           path: '/profile',
           element: <Profile />
+        },
+        {
+          path: '/change-password', // Add route for change password
+          element: <ChangePassword />
         }
       ]
     }

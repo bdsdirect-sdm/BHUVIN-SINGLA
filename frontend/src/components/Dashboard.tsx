@@ -16,13 +16,14 @@ const Dashboard: React.FC = () => {
         }
     }, [token, navigate]);
 
+    // Fetch user data dynamically from the backend
     const getUser = async () => {
         const response = await api.get(`${Local.GET_USER}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-        return response;
+        return response.data; // Return the data from the API response
     };
 
     const { data, isError, error, isLoading } = useQuery({
@@ -49,6 +50,7 @@ const Dashboard: React.FC = () => {
         );
     }
 
+    // Render dynamic data in the dashboard
     return (
         <div>
             <h5>Dashboard</h5>
@@ -62,7 +64,7 @@ const Dashboard: React.FC = () => {
                                     <p className="card-text">Referrals Placed</p>
                                 </div>
                                 <div className="card-right">
-                                    <p>312</p>
+                                    <p>{data?.referCount || 0}</p> {/* Dynamically display the referral count */}
                                 </div>
                             </div>
                         </div>
@@ -76,7 +78,7 @@ const Dashboard: React.FC = () => {
                                     <p className="card-text">Referrals Completed</p>
                                 </div>
                                 <div className="card-right">
-                                    <p>250</p>
+                                    <p>{data?.referCompleted || 0}</p> {/* Dynamically display the referrals completed */}
                                 </div>
                             </div>
                         </div>
@@ -90,7 +92,7 @@ const Dashboard: React.FC = () => {
                                     <p className="card-text">Doctor OD/MD</p>
                                 </div>
                                 <div className="card-right">
-                                    <p>42</p>
+                                    <p>{data?.docCount || 0}</p> {/* Dynamically display the doctor count */}
                                 </div>
                             </div>
                         </div>
@@ -98,7 +100,6 @@ const Dashboard: React.FC = () => {
                 </div>
             </div>
             <div>
-
                 <div className="header-container">
                     <div>
                         <h6>Referral Patient</h6>
@@ -107,7 +108,6 @@ const Dashboard: React.FC = () => {
                         <button className="btn-addrefer">+ Add Referral Patient</button>
                     </div>
                 </div>
-
             </div>
             {/* <b>Doctor Name:</b> {data?.data.user.firstname} {data?.data.user.lastname} <br /> */}
             {/* <b>Doctor Type:</b> {(data?.data.user.doctype == 2) ? "OD" : "MD"}<br /> */}

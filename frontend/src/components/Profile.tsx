@@ -22,7 +22,7 @@ const Profile: React.FC = () => {
         Authorization: `Bearer ${token}`
       }
     });
-    return response;
+    return response.data;  // Ensure you return the correct response data
   };
 
   const { data, isError, error, isLoading } = useQuery({
@@ -30,6 +30,7 @@ const Profile: React.FC = () => {
     queryFn: getUser,
   });
 
+  // Show a loading state while fetching data
   if (isLoading) {
     return (
       <>
@@ -41,13 +42,26 @@ const Profile: React.FC = () => {
     );
   }
 
+  // Handle errors if the data fetching fails
   if (isError) {
     return (
-      <>
-        <div>Error: {error.message}</div>
-      </>
+      <div className="text-danger">
+        <strong>Error:</strong> {error instanceof Error ? error.message : 'Unknown Error'}
+      </div>
     );
   }
+
+  // Handle case when data is not available or structured as expected
+  if (!data || !data.user) {
+    return (
+      <div className="text-danger">
+        <strong>Error:</strong> User data is missing or invalid.
+      </div>
+    );
+  }
+
+  // Destructure user data for easier access
+  const { user } = data;
 
   return (
     <div>
@@ -57,8 +71,8 @@ const Profile: React.FC = () => {
           <div className="profile-info">
             <img src={greenImage} alt="Profile" className="profile-image" />
             <div>
-              <b>{data?.data.user.firstname}</b><br />
-              {data?.data.user.doctype === 1 ? 'md' : 'od'}
+              <b>{user.firstname} {user.lastname}</b><br />
+              {user.doctype === 1 ? 'MD' : 'OD'}
             </div>
           </div>
           <div>
@@ -70,23 +84,34 @@ const Profile: React.FC = () => {
         <div className="user-details-container">
           <div className="user-details">
             <div className="user-detail-item">
-              <b>Name:</b> {data?.data.user.lastname}
+              <b>Name:</b> {user.firstname} {user.lastname}
             </div>
             <div className="user-detail-item">
-              <b>Gender:</b> {data?.data.user.gender}
+              <b>Gender:</b> {user.gender || 'Not Available'}
             </div>
             <div className="user-detail-item">
-              <b>Phone:</b> {data?.data.user.phone}
+              <b>Phone:</b> {user.phone || 'Not Available'}
             </div>
             <div className="user-detail-item">
-              <b>Email:</b> {data?.data.user.email}
+              <b>Email:</b> {user.email || 'Not Available'}
             </div>
           </div>
         </div>
 
-        <div>
+        {/* Address Section */}
+        <div className="user-address-container">
           <h6>Address Information</h6>
-
+          {/* Example of displaying address, make sure to structure your response to match */}
+          {user.address ? (
+            <div>
+              <p><b>Street:</b> {user.address.street || 'N/A'}</p>
+              <p><b>City:</b> {user.address.city || 'N/A'}</p>
+              <p><b>State:</b> {user.address.state || 'N/A'}</p>
+              <p><b>Zip:</b> {user.address.zip || 'N/A'}</p>
+            </div>
+          ) : (
+            <div>No address information available.</div>
+          )}
         </div>
 
       </div>
