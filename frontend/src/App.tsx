@@ -1,4 +1,3 @@
-//App.tsx
 import react from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
@@ -14,9 +13,10 @@ import Header from './components/Header';
 import Verify from './components/Verify'
 import Login from './components/Login'
 import Profile from './components/Profile'
-import AddAddress from './components/AddAddress'
+import EditProfile from './components/EditProfile.tsx'; // Add the new EditProfile route
 import ChangePassword from './components/ChangePassword'; // Add ChangePassword
 import './App.css'
+import AddAddress from './components/AddAddress.tsx';
 
 const App: react.FC = () => {
 
@@ -70,21 +70,23 @@ const App: react.FC = () => {
           element: <Profile />
         },
         {
-          path: '/change-password', // Add route for change password
+          path: '/edit-profile',
+          element: <EditProfile />
+        },
+        {
+          path: '/change-password',
           element: <ChangePassword />
         }
       ]
     }
-  ]
-  )
+  ]);
 
   return (
     <>
       <RouterProvider router={router} />
-      <ToastContainer newestOnTop={false}
-        closeOnClick />
+      <ToastContainer newestOnTop={false} closeOnClick />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

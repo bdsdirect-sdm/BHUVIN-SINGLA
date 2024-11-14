@@ -1,4 +1,6 @@
-interface config{
+interface config {
+    UPDATE_USER: any;
+    GET_DOCTOR_ADDRESSES: any;
     BASE_URL: string;
     CREATE_USER: string;
     VERIFY_USER: string;
@@ -10,7 +12,7 @@ interface config{
     ADD_ADDRESS: string
 }
 
-export const Local:config = {
+export const Local: config = {
     BASE_URL: import.meta.env.VITE_BASE_URL,
     CREATE_USER: import.meta.env.VITE_CREATE_USER,
     VERIFY_USER: import.meta.env.VITE_VERIFY_USER,
@@ -19,5 +21,7 @@ export const Local:config = {
     GET_DOC_LIST: import.meta.env.VITE_GET_DOC_LIST,
     GET_PATIENT_LIST: import.meta.env.VITE_GET_PATIENT_LIST,
     ADD_PATIENT: import.meta.env.VITE_ADD_PATIENT,
-    ADD_ADDRESS: import.meta.env.VITE_ADD_ADDRESS
+    ADD_ADDRESS: import.meta.env.VITE_ADD_ADDRESS,
+    GET_DOCTOR_ADDRESSES: undefined,
+    UPDATE_USER: undefined
 }

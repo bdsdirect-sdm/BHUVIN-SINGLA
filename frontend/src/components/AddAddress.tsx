@@ -1,4 +1,4 @@
-import {Formik, Form, Field, ErrorMessage} from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Local } from '../environment/env';
@@ -8,17 +8,17 @@ import * as Yup from 'yup';
 import React, { useEffect } from 'react';
 const token = localStorage.getItem('token');
 
-const AddAddress:React.FC = () => {
+const AddAddress: React.FC = () => {
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    if(!token){
+  useEffect(() => {
+    if (!token) {
       navigate('/login')
     }
-  },[])
-  
-  const addAddress = async(data:any) =>{
-    try{
+  }, [])
+
+  const addAddress = async (data: any) => {
+    try {
       const response = await api.post(`${Local.ADD_ADDRESS}`, data, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -26,14 +26,14 @@ const AddAddress:React.FC = () => {
       });
       return response.data;
     }
-    catch(err:any){
+    catch (err: any) {
       toast.error(`${err.response.message}`)
     }
   }
 
   const addressMutation = useMutation({
     mutationFn: addAddress,
-    onSuccess: ()=>{
+    onSuccess: () => {
       toast.success("Address Saved");
       navigate("/profile");
     }
@@ -48,69 +48,69 @@ const AddAddress:React.FC = () => {
     pincode: Yup.number().required("Pincode is required"),
   })
 
-  const addressHandler = (values:any) =>{
+  const addressHandler = (values: any) => {
     addressMutation.mutate(values);
     console.log("Address Saved------->", addressMutation.data);
   }
   return (
     <Formik
-    initialValues={{
-      street: "",
-      district: "",
-      state: "",
-      city: "",
-      phone: "",
-      pincode: "",
+      initialValues={{
+        street: "",
+        district: "",
+        state: "",
+        city: "",
+        phone: "",
+        pincode: "",
       }}
       validationSchema={validationSchema}
       onSubmit={addressHandler}
     >
-      {()=>(
+      {() => (
         <>
-              <Form>
-                <div className="form-group"> 
-                  <label>Street</label>
-                  <Field type="text" name="street" className="form-control"/>
-                  <ErrorMessage name="street" component="div" className="text-danger"/>
-                </div>
-                <br />
+          <Form>
+            <div className="form-group">
+              <label>Street</label>
+              <Field type="text" name="street" className="form-control" />
+              <ErrorMessage name="street" component="div" className="text-danger" />
+            </div>
+            <br />
 
-                <div className="form-group">
-                  <label>District</label>
-                  <Field type="text" name="district" className="form-control"/>
-                  <ErrorMessage name="district" component="div" className="text-danger"/>
-                </div>
-                <br />
-                
-                <div className="form-group">
-                  <label>State</label>
-                  <Field type="text" name="state" className="form-control"/>
-                  <ErrorMessage name="state" component="div" className="text-danger"/>
-                </div>
-                <br />
-                
-                <div className="form-group">
-                  <label>City</label>
-                  <Field type="text" name="city" className="form-control"/>
-                  <ErrorMessage name="city" component="div" className="text-danger"/>
-                </div>
-                <br />
-                
-                <div className="form-group">
-                  <label>Phone</label>
-                  <Field type="text" name="phone" maxLength={10} className="form-control"/>
-                  <ErrorMessage name="phone" component="div" className="text-danger"/>
-                </div>
-                <br />
-                
-                <div className="form-group">
-                  <label>Pincode</label>
-                  <Field type="text" name="pincode" maxLength={6} className="form-control" />
-                  <ErrorMessage name="pincode" component="div" className="text-danger"/>
-                </div>
-                <br />
-                <button type="submit" className='btn btn-outline-dark'>Submit</button>
-              </Form>
+            <div className="form-group">
+              <label>District</label>
+              <Field type="text" name="district" className="form-control" />
+              <ErrorMessage name="district" component="div" className="text-danger" />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label>State</label>
+              <Field type="text" name="state" className="form-control" />
+              <ErrorMessage name="state" component="div" className="text-danger" />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label>City</label>
+              <Field type="text" name="city" className="form-control" />
+              <ErrorMessage name="city" component="div" className="text-danger" />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label>Phone</label>
+              <Field type="text" name="phone" maxLength={10} className="form-control" />
+              <ErrorMessage name="phone" component="div" className="text-danger" />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label>Pincode</label>
+              <Field type="text" name="pincode" maxLength={6} className="form-control" />
+              <ErrorMessage name="pincode" component="div" className="text-danger" />
+            </div>
+            <br />
+            <button type="submit" className='btn btn-outline-dark'>Submit</button>
+          </Form>
         </>
       )}
     </Formik>

@@ -130,7 +130,6 @@
 // export default Profile;
 
 
-// Profile.tsx
 import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
@@ -171,7 +170,9 @@ const Profile: React.FC = () => {
       <>
         <div>Loading...</div>
         <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">
+            Loading...
+          </span>
         </div>
       </>
     );
@@ -198,9 +199,9 @@ const Profile: React.FC = () => {
   // Destructure user data for easier access
   const { user } = data;
 
-  // Function to handle the Add Address button click
-  const handleAddAddressClick = () => {
-    navigate('/add-address'); // Navigate to Add Address page
+  // Function to handle the Edit Profile button click
+  const handleEditProfileClick = () => {
+    navigate('/edit-profile', { state: { user } }); // Navigate to Edit Profile page
   };
 
   return (
@@ -216,7 +217,7 @@ const Profile: React.FC = () => {
             </div>
           </div>
           <div>
-            <button className="btn-editprofile">Edit Profile</button>
+            <button className="btn-editprofile" onClick={handleEditProfileClick}>Edit Profile</button>
           </div>
         </div>
 
@@ -239,9 +240,6 @@ const Profile: React.FC = () => {
         </div>
 
         {/* Address Section */}
-        <button className="add-address" onClick={handleAddAddressClick}>
-          Add Address
-        </button>
         <div className="user-address-container">
           <h4>Address Information</h4>
           {/* Displaying addresses */}
@@ -255,8 +253,11 @@ const Profile: React.FC = () => {
               </div>
             ))
           ) : (
-            <div>No address information available.</div>
+            <div className='sub-div'>No address information available.</div>
           )}
+          <button className='add-address'>
+            Add address
+          </button>
         </div>
       </div>
     </div>
@@ -264,3 +265,4 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+

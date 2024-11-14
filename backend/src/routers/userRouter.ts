@@ -16,6 +16,7 @@ router.get('/patient-list', userAuthMiddleware, getPatientList);
 router.post('/add-patient', userAuthMiddleware, addPatient);
 router.post('/add-address', userAuthMiddleware, addAddress);
 router.get('/doctor-addresses', userAuthMiddleware, getDoctorAddresses);  // New route for doctor addresses
+
 router.put('/change-password', userAuthMiddleware, changePassword);
 
 export default router;
