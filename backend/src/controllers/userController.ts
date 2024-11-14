@@ -1,3 +1,4 @@
+
 import { Local } from "../environment/env";
 import Address from "../models/Address";
 import Patient from "../models/Patient";
@@ -85,18 +86,23 @@ export const loginUser = async (req: any, res: Response) => {
 export const getUser = async (req: any, res: Response) => {
     try {
         const { uuid } = req.user; // Get the user UUID from the token
-        const user = await User.findOne({ where: { uuid: uuid }, include: Address });
+
+        // Fetch the user along with the associated addresses (hasMany)
+        const user = await User.findOne({
+            where: { uuid },
+            include: [{
+                model: Address, // Include the Address model (a list of addresses)
+                required: false, // If no address exists, the query will still return the user
+            }],
+        });
 
         if (user) {
-            // Count referrals placed (referred to this user)
+            // Additional logic like counting referrals
             const referCount = await Patient.count({ where: { referedto: uuid } });
-
-            // Count referrals completed (referred to this user and completed)
             const referCompleted = await Patient.count({ where: { referedto: uuid, referalstatus: 1 } });
 
-            // Count doctors based on type (MD or OD)
             let docCount;
-            if (user.doctype == 1) {
+            if (user.doctype === 1) {
                 docCount = await User.count({ where: { is_verified: 1 } });
             } else {
                 docCount = await User.count({ where: { is_verified: 1, doctype: 1 } });
@@ -105,15 +111,39 @@ export const getUser = async (req: any, res: Response) => {
             res.status(200).json({
                 user: user,
                 message: "User Found",
-                docCount: docCount,
-                referCount: referCount,
-                referCompleted: referCompleted,
+                docCount,
+                referCount,
+                referCompleted,
             });
         } else {
             res.status(404).json({ message: "User Not Found" });
         }
     } catch (err) {
         res.status(500).json({ message: `Error: ${err}` });
+    }
+};
+
+export const getDoctorAddresses = async (req: any, res: any) => {
+    try {
+        const { uuid } = req.user; // Get the logged-in user's UUID from the token
+
+        // Find the logged-in doctor (user)
+        const user = await User.findOne({ where: { uuid } });
+
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found" });
+        }
+
+        // Fetch all addresses for the logged-in user (doctor)
+        const addresses = await Address.findAll({ where: { user_uuid: uuid } });
+
+        if (addresses.length > 0) {
+            return res.status(200).json({ addresses, message: "Doctor's addresses found" });
+        } else {
+            return res.status(404).json({ message: "No addresses found for this doctor" });
+        }
+    } catch (err) {
+        return res.status(500).json({ message: `Error: ${err}` });
     }
 };
 
@@ -202,13 +232,29 @@ export const addPatient = async (req: any, res: Response) => {
 export const addAddress = async (req: any, res: Response) => {
     try {
         const { addressLine, city, state, country } = req.body;
-        const address = await Address.create({ addressLine, city, state, country });
-        res.status(201).json({ "message": "Address Added Successfully", address });
+        const { uuid } = req.user; // Get user UUID from token
+
+        // Create or update address for the user
+        const [address, created] = await Address.upsert(
+            {
+                addressLine,
+                city,
+                state,
+                country,
+                user_uuid: uuid, // Associate address with the current user
+            },
+            { returning: true }
+        );
+
+        if (created) {
+            res.status(201).json({ message: "Address Added Successfully", address });
+        } else {
+            res.status(200).json({ message: "Address Updated Successfully", address });
+        }
     } catch (err) {
-        res.status(500).json({ "message": `${err}` });
+        res.status(500).json({ message: `Error: ${err}` });
     }
 };
-
 
 // Change Password
 export const changePassword = async (req: any, res: any) => {
@@ -238,3 +284,5 @@ export const changePassword = async (req: any, res: any) => {
         res.status(500).json({ message: err });
     }
 };
+
+

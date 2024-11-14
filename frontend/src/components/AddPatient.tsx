@@ -64,6 +64,7 @@ const AddPatient: React.FC = () => {
   });
 
   const referPatientHandler = (values: any) => {
+    console.log("valuesWER", values)
     patientMutate.mutate(values);
   };
 
