@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Local } from '../environment/env';
 import api from '../api/axiosInstance';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Dassboard.css'; // Ensure the CSS file is named correctly
 import greenImage from '../Assets/green.jpg';  // Import the image
 
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
                                     <p className="card-text">Doctor OD/MD</p>
                                 </div>
                                 <div className="card-right">
-                                    <p>{data?.docCount || 0}</p> {/* Dynamically display the doctor count */}
+                                    <p>{data?.docCount || 0}</p>
                                 </div>
                             </div>
                         </div>
@@ -103,9 +103,19 @@ const Dashboard: React.FC = () => {
                 <div className="header-container">
                     <div>
                         <h6>Referral Patient</h6>
+
                     </div>
                     <div>
-                        <button className="btn-addrefer">+ Add Referral Patient</button>
+                        {/* <div className="btn-addrefer">
+                            <Link to='/add-patient'>
+                                + Add Referral Patient
+                            </Link>
+                        </div> */}
+                        <button className="btn-addrefer">
+                            <Link to='/add-patient'>
+                                + Add Referral Patient
+                            </Link>
+                        </button>
                     </div>
                 </div>
             </div>

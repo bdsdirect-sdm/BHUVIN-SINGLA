@@ -8,10 +8,12 @@ const Header: React.FC = () => {
   const token = localStorage.getItem("token");
   const doctype: any = localStorage.getItem("doctype");
   const userFirstName = localStorage.getItem("user_firstname");
+  const userLastName = localStorage.getItem("user_lastname");
+
   // const userLastName = localStorage.getItem("user_lastname");
 
-
   const fullName = userFirstName ? `${userFirstName} ` : 'User'; // Fallback to 'User' if not available
+  const lastName = userLastName ? `${userLastName} ` : 'User'; // Fallback to 'User' if not available
 
   return (
     <>
@@ -52,7 +54,7 @@ const Header: React.FC = () => {
                 {token ? (
                   <div className="dropdown">
                     <button className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Hi, {fullName}<br />
+                      Hi, {fullName}{lastName}<br />
                       <span className="dropdown-smalltext">Welcome Back</span>
                     </button>
                     <ul className="dropdown-menu">

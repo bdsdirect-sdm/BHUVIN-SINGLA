@@ -17,6 +17,8 @@ import EditProfile from './components/EditProfile.tsx'; // Add the new EditProfi
 import ChangePassword from './components/ChangePassword'; // Add ChangePassword
 import './App.css'
 import AddAddress from './components/AddAddress.tsx';
+import Chat from './components/chat.tsx';
+import Appointments from './components/Appointments.tsx';
 
 const App: react.FC = () => {
 
@@ -40,6 +42,14 @@ const App: react.FC = () => {
         {
           path: '/dashboard',
           element: <Dashboard />
+        },
+        {
+          path: '/chat',
+          element: <Chat />
+        },
+        {
+          path: '/appointments',
+          element: <Appointments />
         },
         {
           path: '/patient',

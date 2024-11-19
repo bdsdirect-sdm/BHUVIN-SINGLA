@@ -69,23 +69,27 @@ const PatientList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {Patients?.patientList?.map((patient: any, index: number) => (
-            <tr key={patient.uuid}> {/* Assuming UUID is unique */}
-              <td className='fw-bold'>{index + 1}</td>
-              <td>{patient.firstname} {patient.lastname}</td>
-              <td>{patient.disease}</td>
-              <td>
-                {/* Check if referedby is null or undefined */}
-                {patient.referedby ? `${patient.referedby.firstname} ${patient.referedby.lastname}` : 'Not Available'}
-              </td>
-              <td>
-                {/* Check if referedto is null or undefined */}
-                {patient.referedto ? `${patient.referedto.firstname} ${patient.referedto.lastname}` : 'Not Available'}
-              </td>
-              <td>{patient.referback ? 'Yes' : 'No'}</td>
-              <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
-            </tr>
-          ))}
+          {Patients?.patientList?.map((patient: any, index: number) => {
+            // Set background color based on referalstatus
+            const statusColor = patient.referalstatus ? '#C7F3E2' : '#E8FAF4';
+            const statusText = patient.referalstatus ? 'Completed' : 'Pending';
+
+            return (
+              <tr key={patient.uuid}> {/* Assuming UUID is unique */}
+                <td className='fw-bold'>{index + 1}</td>
+                <td>{patient.firstname} {patient.lastname}</td>
+                <td>{patient.disease}</td>
+                <td>
+                  {patient.referedby ? `${patient.referedby.firstname} ${patient.referedby.lastname}` : 'Not Available'}
+                </td>
+                <td>
+                  {patient.referedto ? `${patient.referedto.firstname} ${patient.referedto.lastname}` : 'Not Available'}
+                </td>
+                <td>{patient.referback ? 'Yes' : 'No'}</td>
+                <td style={{ backgroundColor: statusColor }}>{statusText}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>

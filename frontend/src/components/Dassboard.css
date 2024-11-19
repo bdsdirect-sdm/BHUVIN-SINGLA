@@ -91,12 +91,15 @@ body {
     background-color: #2A99B6;
     /* Blue background color */
     color: white;
+    -webkit-text-fill-color: #ffffff;
+    text-decoration: none;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .btn-addrefer:hover {
-    background-color: #0056b3;
+    /* background-color: #0056b3; */
+    text-decoration: none;
     /* Darker blue on hover */
 }

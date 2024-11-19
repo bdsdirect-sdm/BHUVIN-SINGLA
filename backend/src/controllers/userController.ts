@@ -103,9 +103,9 @@ export const getUser = async (req: any, res: Response) => {
 
             let docCount;
             if (user.doctype === 1) {
-                docCount = await User.count({ where: { is_verified: 1 } });
+                docCount = await User.count({ where: { is_verified: 1 }, include: Address });
             } else {
-                docCount = await User.count({ where: { is_verified: 1, doctype: 1 } });
+                docCount = await User.count({ where: { is_verified: 1, doctype: 1 }, include: Address });
             }
 
             res.status(200).json({
@@ -256,6 +256,25 @@ export const addAddress = async (req: any, res: Response) => {
     }
 };
 
+export const getAddress = async (req: any, res: Response) => {
+    try {
+        const { uuid } = req.user;
+
+        // Fetch addresses for the user
+        const addresses = await Address.findAll({
+            where: { userUuid: uuid }, // Assuming userUuid is the foreign key in the Address table
+        });
+
+        if (addresses.length > 0) {
+            res.status(200).json({ addresses, message: "Addresses fetched successfully" });
+        } else {
+            res.status(404).json({ message: "No addresses found" });
+        }
+    } catch (err) {
+        res.status(500).json({ message: `Error: ${err}` });
+    }
+};
+
 // Change Password
 export const changePassword = async (req: any, res: any) => {
     try {
@@ -284,5 +303,3 @@ export const changePassword = async (req: any, res: any) => {
         res.status(500).json({ message: err });
     }
 };
-
-
