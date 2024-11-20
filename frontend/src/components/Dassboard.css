@@ -1,0 +1,107 @@
+/* Dassboard.css */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.column {
+    float: left;
+    width: 33.33%;
+    /* Adjusted to fit 3 columns */
+    padding: 0 10px;
+}
+
+
+.row {
+    margin: 0 -5px;
+}
+
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-left {
+    display: block;
+    /* Change to block to stack items vertically */
+    text-align: left;
+}
+
+.card-left img {
+    background-image: linear-gradient(to right, #5BEBB3, #5AE1FA);
+    /* Light green transparent background */
+    padding: 5px;
+    /* Add padding around the image */
+    /* border-radius: 50%; */
+    /* Optional: Make the background circular */
+    margin-bottom: 10px;
+    /* Space between image and text */
+}
+
+.card-text {
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.card-right {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+
+.header-container {
+    display: flex;
+    /* Enables flexbox layout */
+    justify-content: space-between;
+    /* Distribute items across the container */
+    align-items: center;
+    /* Align items vertically in the center */
+    margin-bottom: 20px;
+    /* Add some space below this section */
+}
+
+
+.btn-addrefer {
+    padding: 8px 16px;
+    background-color: #2A99B6;
+    /* Blue background color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-addrefer:hover {
+    background-color: #0056b3;
+
+}
