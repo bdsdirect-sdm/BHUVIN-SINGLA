@@ -27,7 +27,7 @@ const EditProfile: React.FC = () => {
 
     const updateUser = async (data: any) => {
         try {
-            const response = await api.put(`${Local.UPDATE_USER}`, data, {
+            const response = await api.post(`${Local.UPDATE_USER}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -55,13 +55,13 @@ const EditProfile: React.FC = () => {
         phone: Yup.string().required('Phone number is required')
             .min(10, 'Phone number must be 10 digits')
             .max(10, 'Phone number must be 10 digits'),
-        street: Yup.string().required('Street is required'),
-        district: Yup.string().required('District is required'),
-        state: Yup.string().required('State is required'),
-        city: Yup.string().required('City is required'),
-        pincode: Yup.string().required('Pincode is required')
-            .min(6, 'Pincode must be 6 digits')
-            .max(6, 'Pincode must be 6 digits'),
+        // street: Yup.string().required('Street is required'),
+        // district: Yup.string().required('District is required'),
+        // state: Yup.string().required('State is required'),
+        // city: Yup.string().required('City is required'),
+        // pincode: Yup.string().required('Pincode is required')
+        // .min(6, 'Pincode must be 6 digits')
+        // .max(6, 'Pincode must be 6 digits'),
     });
 
     const handleFormSubmit = (values: any) => {

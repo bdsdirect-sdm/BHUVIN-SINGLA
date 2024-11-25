@@ -1,0 +1,147 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './PatientList.css';
+
+const ReferralPatients: React.FC = () => {
+  const navigate = useNavigate(); // Use the navigate hook for redirection
+
+  // Sample data for table (replace with actual API data)
+  const patients = [
+    {
+      name: 'Abel Brenda',
+      dob: 'June-05-1990',
+      consult: 'Cataract',
+      dateSent: 'Apr-01-2024',
+      appointmentDate: 'June-01-2024',
+      doctor: 'Hal Brenda',
+      firstSurgery: 'Completed',
+      consultNote: 'Yes',
+      readyToReturn: 'Yes',
+    },
+    {
+      name: 'Bennet De',
+      dob: 'Apr-06-1984',
+      consult: 'Medical',
+      dateSent: 'Apr-01-2024',
+      appointmentDate: 'June-01-2024',
+      doctor: 'Gernett De',
+      firstSurgery: 'Completed',
+      consultNote: 'Yes',
+      readyToReturn: 'Yes',
+    },
+    {
+      name: 'Chains Nancy',
+      dob: 'Aug-16-1994',
+      consult: 'Corneal',
+      dateSent: 'Apr-01-2024',
+      appointmentDate: 'Nov-01-2024',
+      doctor: 'Harris Nancy',
+      firstSurgery: 'Pending',
+      consultNote: 'Yes',
+      readyToReturn: 'No',
+    },
+    {
+      name: 'Chains Nancy',
+      dob: 'Aug-16-1994',
+      consult: 'Corneal',
+      dateSent: 'Apr-01-2024',
+      appointmentDate: 'Nov-01-2024',
+      doctor: 'Harris Nancy',
+      firstSurgery: 'Pending',
+      consultNote: 'Yes',
+      readyToReturn: 'No',
+    },
+    {
+      name: 'Chains Nancy',
+      dob: 'Aug-16-1994',
+      consult: 'Corneal',
+      dateSent: 'Apr-01-2024',
+      appointmentDate: 'Nov-01-2024',
+      doctor: 'Harris Nancy',
+      firstSurgery: 'Pending',
+      consultNote: 'Yes',
+      readyToReturn: 'No',
+    },
+    // Add more data as necessary
+  ];
+
+  const handleAddReferral = () => {
+    navigate('/add-patient'); // Redirect to the "/add-patient" route
+  };
+
+  return (
+    <div className="referral-container">
+      <div className="header">
+        <h5>Referral Patient</h5>
+        <button className="btn-add-referral" onClick={handleAddReferral}>
+          + Add Referral Patient
+        </button>
+      </div>
+
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>DOB</th>
+              <th>Consult</th>
+              <th>Date Sent</th>
+              <th>Appointment Date</th>
+              <th>Doctor OD/MD</th>
+              <th>First Surgery</th>
+              <th>Consult Note</th>
+              <th>Ready To Return</th>
+              <th>Direct Message</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {patients.map((patient, index) => (
+              <tr key={index}>
+                <td>{patient.name}</td>
+                <td>{patient.dob}</td>
+                <td>{patient.consult}</td>
+                <td>{patient.dateSent}</td>
+                <td>{patient.appointmentDate}</td>
+                <td>{patient.doctor}</td>
+                <td>
+                  <span
+                    className={
+                      patient.firstSurgery === 'Completed' ? 'completed' : 'pending'
+                    }
+                  >
+                    {patient.firstSurgery}
+                  </span>
+                </td>
+                <td>{patient.consultNote}</td>
+                <td>{patient.readyToReturn}</td>
+                <td>
+                  <a href="#" className="direct-message-link">
+                    Link
+                  </a>
+                </td>
+                <td>
+                  <button className="action-button">...</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="pagination">
+        <button className="pagination-btn">&laquo;</button>
+        <button className="pagination-btn active">1</button>
+        <button className="pagination-btn">2</button>
+        <button className="pagination-btn">3</button>
+        <button className="pagination-btn">&raquo;</button>
+      </div>
+    </div>
+  );
+};
+
+export default ReferralPatients;
+
+
+bring data from backend api not static .
+provide me full code

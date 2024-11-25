@@ -15,7 +15,7 @@ const otpGenerator = () => {
     return String(Math.round(Math.random() * 10000000000)).slice(0, 6);
 };
 
-// Register User
+
 export const registerUser = async (req: any, res: Response) => {
     try {
         const { firstname, lastname, doctype, email, password } = req.body;
@@ -38,7 +38,7 @@ export const registerUser = async (req: any, res: Response) => {
     }
 };
 
-// Verify User
+
 export const verifyUser = async (req: any, res: Response) => {
     try {
         const { email } = req.body;
@@ -55,7 +55,7 @@ export const verifyUser = async (req: any, res: Response) => {
     }
 };
 
-// Login User
+
 export const loginUser = async (req: any, res: Response) => {
     try {
         const { email, password } = req.body;
@@ -82,7 +82,7 @@ export const loginUser = async (req: any, res: Response) => {
     }
 };
 
-// Get User Data (Dynamic)
+
 export const getUser = async (req: any, res: Response) => {
     try {
         const { uuid } = req.user; // Get the user UUID from the token
@@ -147,20 +147,28 @@ export const getDoctorAddresses = async (req: any, res: any) => {
     }
 };
 
-// Get Doctor List (Dynamic)
+
 export const getDocList = async (req: any, res: Response) => {
     try {
         const { uuid } = req.user;
         const user = await User.findOne({ where: { uuid: uuid } });
 
         let docList;
-        if (user?.doctype == 1) {
-            docList = await User.findAll({ where: { uuid: { [Op.ne]: uuid } }, include: Address });
+
+        // Fetch both doctype 1 and doctype 2 doctors
+        if (user?.doctype === 1 || user?.doctype === 2) {
+            docList = await User.findAll({
+                where: { uuid: { [Op.ne]: uuid } }, // Exclude the current user
+                include: Address
+            });
         } else {
-            docList = await User.findAll({ where: { doctype: 1, uuid: { [Op.ne]: uuid } }, include: Address });
+            docList = await User.findAll({
+                where: { doctype: 1, uuid: { [Op.ne]: uuid } }, // Only fetch doctype 1 doctors
+                include: Address
+            });
         }
 
-        if (docList) {
+        if (docList && docList.length > 0) {
             res.status(200).json({ "docList": docList, "message": "Doctors List Found" });
         } else {
             res.status(404).json({ "message": "MD List Not Found" });
@@ -170,7 +178,7 @@ export const getDocList = async (req: any, res: Response) => {
     }
 };
 
-// Get Patient List
+
 export const getPatientList = async (req: any, res: Response) => {
     try {
         const { uuid } = req.user;
@@ -217,18 +225,27 @@ export const getPatientList = async (req: any, res: Response) => {
     }
 };
 
-// Add Patient
-export const addPatient = async (req: any, res: Response) => {
+
+export const addPatient = async (req: any, res: any) => {
     try {
         const { referedby, referedto, firstname, lastname, disease, address, referalstatus } = req.body;
-        const patient = await Patient.create({ referedby, referedto, firstname, lastname, disease, address, referalstatus });
-        res.status(201).json({ "message": "Patient Added Successfully", patient });
+
+        const patient = await Patient.create({
+            referedby,
+            referedto,
+            firstname,
+            lastname,
+            disease,
+            address,
+            referalstatus,
+        });
+
+        res.status(201).json({ message: 'Patient Added Successfully', patient });
     } catch (err) {
-        res.status(500).json({ "message": `${err}` });
+        res.status(500).json({ message: `Error: ${err}` });
     }
 };
 
-// Add Address
 export const addAddress = async (req: any, res: Response) => {
     try {
         const { addressLine, city, state, country } = req.body;
@@ -237,11 +254,12 @@ export const addAddress = async (req: any, res: Response) => {
         // Create or update address for the user
         const [address, created] = await Address.upsert(
             {
+
                 addressLine,
                 city,
                 state,
                 country,
-                user_uuid: uuid, // Associate address with the current user
+                user: uuid, // Associate address with the current user
             },
             { returning: true }
         );
@@ -256,7 +274,7 @@ export const addAddress = async (req: any, res: Response) => {
     }
 };
 
-// Change Password
+
 export const changePassword = async (req: any, res: any) => {
     try {
         const { currentPassword, newPassword } = req.body;
@@ -282,6 +300,62 @@ export const changePassword = async (req: any, res: any) => {
         res.status(200).json({ message: "Password updated successfully" });
     } catch (err) {
         res.status(500).json({ message: err });
+    }
+};
+
+export const updateUser = async (req: any, res: any) => {
+    try {
+        const { uuid } = req.user; // Get the user UUID from the token
+        const {
+            firstname,
+            lastname,
+            gender,
+            phone,
+            address, // Array of address objects
+        } = req.body;
+
+        // Update user details
+        const user = await User.findOne({ where: { uuid } });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Update user fields
+        await user.update({
+            firstname,
+            lastname,
+            gender,
+            phone,
+        });
+
+        // Update or create addresses
+        if (address && Array.isArray(address)) {
+            for (const addr of address) {
+                const { id, street, district, city, state, pincode } = addr;
+
+                if (id) {
+                    // Update existing address
+                    await Address.update(
+                        { street, district, city, state, pincode },
+                        { where: { id, userId: user.uuid } }
+                    );
+                } else {
+                    // Create new address
+                    await Address.create({
+                        street,
+                        district,
+                        city,
+                        state,
+                        pincode,
+                        userId: user.uuid,
+                    });
+                }
+            }
+        }
+
+        res.status(200).json({ message: "User updated successfully", user });
+    } catch (err: any) {
+        res.status(500).json({ message: `Error: ${err.message}` });
     }
 };
 

@@ -23,5 +23,5 @@ export const Local: config = {
     ADD_PATIENT: import.meta.env.VITE_ADD_PATIENT,
     ADD_ADDRESS: import.meta.env.VITE_ADD_ADDRESS,
     GET_DOCTOR_ADDRESSES: undefined,
-    UPDATE_USER: undefined
+    UPDATE_USER: import.meta.env.VITE_UPDATE_USER
 }

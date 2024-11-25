@@ -1,95 +1,118 @@
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Local } from '../environment/env';
-import api from '../api/axiosInstance';
-import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import api from '../api/axiosInstance'; // Axios instance for API calls
+import './PatientList.css';
 
-const PatientList: React.FC = () => {
+const ReferralPatients: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, []);
-
-  const fetchPatient = async () => {
-    try {
-      const response = await api.get(`${Local.GET_PATIENT_LIST}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      return response.data;
-    } catch (err) {
-      toast.error(`${err}`);
-    }
+  // Fetch patient list using React Query
+  const fetchPatientList = async () => {
+    const response = await api.get('/patient-list', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.patientList;
   };
 
-  const { data: Patients, error, isLoading, isError } = useQuery({
-    queryKey: ['patient'],
-    queryFn: fetchPatient
+  const { data: patients, isLoading, isError, error } = useQuery({
+    queryKey: ['patientList'],
+    queryFn: fetchPatientList,
+    // onError: (err: any) => {
+    //   toast.error(err.response?.data?.message || 'Error fetching patient list');
+    // },
   });
+
+  const handleAddReferral = () => {
+    navigate('/add-patient'); // Redirect to the "Add Patient" page
+  };
 
   if (isLoading) {
     return (
-      <>
+      <div className="loading-container">
         <div>Loading...</div>
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
-      </>
+      </div>
     );
   }
 
   if (isError) {
-    return (
-      <>
-        <div className='text-danger'>Error: {error.message}</div>
-      </>
-    );
+    return <div>Error: {error?.message || 'Failed to load patient list'}</div>;
   }
 
-  console.log("Patient-List------------>", Patients);
-
   return (
-    <>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Patient Name</th>
-            <th scope="col">Disease</th>
-            <th scope="col">Refer by</th>
-            <th scope="col">Refer to</th>
-            <th scope="col">Refer back</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Patients?.patientList?.map((patient: any, index: number) => (
-            <tr key={patient.uuid}> {/* Assuming UUID is unique */}
-              <td className='fw-bold'>{index + 1}</td>
-              <td>{patient.firstname} {patient.lastname}</td>
-              <td>{patient.disease}</td>
-              <td>
-                {/* Check if referedby is null or undefined */}
-                {patient.referedby ? `${patient.referedby.firstname} ${patient.referedby.lastname}` : 'Not Available'}
-              </td>
-              <td>
-                {/* Check if referedto is null or undefined */}
-                {patient.referedto ? `${patient.referedto.firstname} ${patient.referedto.lastname}` : 'Not Available'}
-              </td>
-              <td>{patient.referback ? 'Yes' : 'No'}</td>
-              <td>{patient.referalstatus ? 'Completed' : 'Pending'}</td>
+    <div className="referral-container">
+      <div className="header">
+        <h5>Referral Patient</h5>
+        <button className="btn-add-referral" onClick={handleAddReferral}>
+          + Add Referral Patient
+        </button>
+      </div>
+
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>DOB</th>
+              <th>Consult</th>
+              <th>Date Sent</th>
+              <th>Appointment Date</th>
+              <th>Doctor OD/MD</th>
+              <th>First Surgery</th>
+              <th>Consult Note</th>
+              <th>Ready To Return</th>
+              <th>Direct Message</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+          </thead>
+          <tbody>
+            {patients?.map((patient: any, index: number) => (
+              <tr key={index}>
+                <td>{`${patient.firstname} ${patient.lastname}`}</td>
+                <td>{new Date(patient.dob).toLocaleDateString()}</td>
+                <td>{patient.disease}</td>
+                <td>{new Date(patient.createdAt).toLocaleDateString()}</td>
+                <td>{new Date(patient.appointmentDate).toLocaleDateString()}</td>
+                <td>{`${patient.referedto?.firstname} ${patient.referedto?.lastname}`}</td>
+                <td>
+                  <span
+                    className={
+                      patient.firstSurgery === 'Completed' ? 'completed' : 'pending'
+                    }
+                  >
+                    {patient.firstSurgery || 'Pending'}
+                  </span>
+                </td>
+                <td>{patient.consultNote || 'N/A'}</td>
+                <td>{patient.referback ? 'Yes' : 'No'}</td>
+                <td>
+                  <a href="#" className="direct-message-link">
+                    Link
+                  </a>
+                </td>
+                <td>
+                  <button className="action-button">...</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="pagination">
+        <button className="pagination-btn">&laquo;</button>
+        <button className="pagination-btn active">1</button>
+        <button className="pagination-btn">2</button>
+        <button className="pagination-btn">3</button>
+        <button className="pagination-btn">&raquo;</button>
+      </div>
+    </div>
   );
 };
 
-export default PatientList;
+export default ReferralPatients;

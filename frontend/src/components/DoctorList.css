@@ -1,0 +1,85 @@
+.table-section {
+    padding: 20px;
+}
+
+.table-container {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+    overflow: initial;
+}
+
+.table-container table {
+    width: 100%;
+    border: none;
+}
+
+.table-container th,
+.table-container td {
+    text-align: left;
+    padding: 12px;
+    border: none;
+}
+
+.table-container tr {
+    border: 1px solid #DDE2E4;
+}
+
+.table-container th {
+    background-color: #ffffff;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.header-container h6 {
+    font-weight: 600;
+}
+
+.pagination button,
+.pagination span {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination .active {
+    background-color: #4caf50;
+    color: white;
+}
+
+.pagination span {
+    font-weight: bold;
+}
+
+.pagination .prev,
+.pagination .next {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.pagination .prev:hover,
+.pagination .next:hover {
+    background-color: #007bff;
+    color: white;
+}

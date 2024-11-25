@@ -15,6 +15,7 @@ import Login from './components/Login'
 import Profile from './components/Profile'
 import EditProfile from './components/EditProfile.tsx'; // Add the new EditProfile route
 import ChangePassword from './components/ChangePassword'; // Add ChangePassword
+import Chat from './components/Chat.tsx'
 import './App.css'
 import AddAddress from './components/AddAddress.tsx';
 
@@ -76,6 +77,10 @@ const App: react.FC = () => {
         {
           path: '/change-password',
           element: <ChangePassword />
+        },
+        {
+          path: '/chat',
+          element: <Chat />
         }
       ]
     }

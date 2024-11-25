@@ -1,0 +1,101 @@
+.referral-container {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h5 {
+    font-size: 18px;
+    color: #333;
+}
+
+.btn-add-referral {
+    padding: 8px 16px;
+    background-color: #2A99B6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead tr {
+    background-color: #f4f4f4;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.completed {
+    color: green;
+    font-weight: bold;
+}
+
+.pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.direct-message-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.direct-message-link:hover {
+    text-decoration: underline;
+}
+
+.action-button {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-btn {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    background-color: #2A99B6;
+    color: white;
+}
+
+.pagination-btn:hover {
+    background-color: #ddd;
+}
