@@ -1,4 +1,5 @@
 interface config {
+    // ADD_STAFF: any;
     UPDATE_USER: any;
     GET_DOCTOR_ADDRESSES: any;
     BASE_URL: string;

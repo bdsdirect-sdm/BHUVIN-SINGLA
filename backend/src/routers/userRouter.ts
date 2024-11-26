@@ -18,6 +18,7 @@ router.post('/add-address', userAuthMiddleware, addAddress);
 router.post('/update-user', userAuthMiddleware, updateUser);
 router.get('/doctor-addresses', userAuthMiddleware, getDoctorAddresses);  // New route for doctor addresses
 
+
 router.put('/change-password', userAuthMiddleware, changePassword);
 
 export default router;

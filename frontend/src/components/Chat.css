@@ -1,0 +1,118 @@
+.chat-container {
+    display: flex;
+    height: 100vh;
+}
+
+.chat-sidebar {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.chat-sidebar input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.patient-list {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.patient-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.patient-item.selected {
+    background-color: #d1f1f1;
+}
+
+.referred-to {
+    display: block;
+    font-size: 12px;
+    color: #555;
+}
+
+.chat-window {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.chat-window h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.messages {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+
+.message.sent {
+    text-align: right;
+}
+
+.message.received {
+    text-align: left;
+}
+
+.message-text {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #e9e9e9;
+    border-radius: 15px;
+    max-width: 70%;
+    margin-bottom: 5px;
+}
+
+.message-time {
+    font-size: 10px;
+    color: #aaa;
+}
+
+.message-input-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.message-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.send-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.send-btn:hover {
+    background-color: #0056b3;
+}
+
+.no-patient-selected {
+    font-size: 18px;
+    text-align: center;
+    color: #888;
+}

@@ -1,40 +1,32 @@
-.doctor-list-container {
+.staff-container {
     padding: 20px;
 }
 
-.table-section {
-    padding: 20px;
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.table-container {
-    margin-top: 20px;
-    border-collapse: collapse;
-    width: 100%;
-    background-color: white;
-    overflow: initial;
+.header-container h6 {
+    margin: 0;
+    font-size: 1.5rem;
 }
 
-.table-container table {
-    width: 100%;
+.add-staff-btn {
+    padding: 8px 16px;
+    background-color: #35C0E4;
+    color: white;
     border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.table-container th,
-.table-container td {
-    text-align: left;
-    padding: 12px;
-    border: none;
+.add-staff-btn:hover {
+    background-color: #2A99B6;
 }
 
-.table-container tr {
-    border: 1px solid #DDE2E4;
-}
-
-.table-container th {
-    background-color: #ffffff;
-}
-
-/* Search Box Styling */
 .search-container {
     display: flex;
     align-items: center;
@@ -49,7 +41,7 @@
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 50%;
+    width: 35%;
     outline: none;
     margin-right: 8px;
 }
@@ -82,6 +74,40 @@
 
 .search-btn:hover {
     background-color: #2A99B6;
+}
+
+.table-container {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+    overflow: initial;
+}
+
+.table-container table {
+    width: 100%;
+    border: none;
+}
+
+.table-container th,
+.table-container td {
+    text-align: left;
+    padding: 12px;
+    border: none;
+}
+
+.table-container tr {
+    border: 1px solid #DDE2E4;
+}
+
+.table-container th {
+    background-color: #ffffff;
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
 }
 
 /* Pagination Styling */

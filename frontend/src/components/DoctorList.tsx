@@ -9,6 +9,8 @@ const DoctorList: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -82,6 +84,20 @@ const DoctorList: React.FC = () => {
         <div className="header-container">
           <h6>Doctors List</h6>
         </div>
+
+        {/* Search Box */}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search"
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="clear-btn" onClick={() => setSearchQuery('')}>✕</button>
+          <button className="search-btn">Search</button>
+        </div>
+
         <div className="table-container">
           <table>
             <thead>
@@ -112,25 +128,31 @@ const DoctorList: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </div>
 
-      {/* Pagination Controls */}
-      <div className="pagination">
-        <button
-          onClick={prevPage}
-          disabled={currentPage === 1}
-          className="prev"
-        >
-          &lt;
-        </button>
-        <span className="page-number">{currentPage}</span>
-        <button
-          onClick={nextPage}
-          disabled={currentPage === Math.ceil(data?.docList.length / doctorsPerPage)}
-          className="next"
-        >
-          &gt;
-        </button>
+
+        {/* Pagination Controls */}
+        <div className="pagination">
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 1}
+            className="page-arrow">
+            &lt;
+          </button>
+          {Array.from({ length: Math.ceil(data?.docList.length / doctorsPerPage) }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`page-number ${currentPage === i + 1 ? 'active' : ''}`}>
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={nextPage}
+            disabled={currentPage === Math.ceil(data?.docList.length / doctorsPerPage)}
+            className="page-arrow">
+            &gt;
+          </button>
+        </div>
       </div>
     </div>
   );
