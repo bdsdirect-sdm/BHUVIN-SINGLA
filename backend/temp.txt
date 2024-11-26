@@ -1,0 +1,23 @@
+router.post('/add-staff', userAuthMiddleware, addStaff);
+
+export const addPatient = async (req: any, res: any) => {
+    try {
+        const { referedby, referedto, firstname, lastname, disease, address, referalstatus } = req.body;
+
+        const patient = await Patient.create({
+            referedby,
+            referedto,
+            firstname,
+            lastname,
+            disease,
+            address,
+            referalstatus,
+        });
+
+        res.status(201).json({ message: 'Patient Added Successfully', patient });
+    } catch (err) {
+        res.status(500).json({ message: `Error: ${err}` });
+    }
+};
+
+like this , create post api for addStaff to save uuid staff_name email contact gender created_at updated_at referedby referedto as saved in mysql

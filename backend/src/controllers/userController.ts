@@ -15,7 +15,6 @@ const otpGenerator = () => {
     return String(Math.round(Math.random() * 10000000000)).slice(0, 6);
 };
 
-
 export const registerUser = async (req: any, res: Response) => {
     try {
         const { firstname, lastname, doctype, email, password } = req.body;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Staff.css';
-
+import { useNavigate } from 'react-router-dom';
 const Staff: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [staffList, setStaffList] = useState([
@@ -10,6 +10,8 @@ const Staff: React.FC = () => {
     // Add more staff data as needed
   ]);
 
+  const navigate = useNavigate();
+
   // Filter the staff list based on the search query
   const filteredStaffList = staffList.filter(staff =>
     staff.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -18,13 +20,16 @@ const Staff: React.FC = () => {
     staff.gender.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleAddStaff = () => {
+    navigate('/add-staff');
+  }
 
   return (
     <div className="staff-container">
       {/* Heading with Staff List and Add Staff Button */}
       <div className="header-container">
         <h6>Staff List</h6>
-        <button className="add-staff-btn" >+ Add Staff</button>
+        <button className="add-staff-btn" onClick={handleAddStaff} >+ Add Staff</button>
       </div>
 
       {/* Search Box */}
