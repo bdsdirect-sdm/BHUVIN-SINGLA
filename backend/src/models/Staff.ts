@@ -1,6 +1,8 @@
 import { Model, DataTypes, UUIDV4 } from "sequelize";
 import sequelize from "../config/db";
 import User from "./User";
+// import { v4 as UUIDV4 } from "uuid";
+
 
 class Staff extends Model {
     public uuid!: number;

@@ -8,7 +8,7 @@ import { Response } from 'express';
 import jwt from "jsonwebtoken";
 import { Op } from "sequelize";
 import bcrypt from 'bcrypt';
-
+import Staff from "../models/Staff";
 const Security_Key: any = Local.SECRET_KEY;
 
 const otpGenerator = () => {
@@ -358,4 +358,36 @@ export const updateUser = async (req: any, res: any) => {
     }
 };
 
+export const addStaff = async (req: any, res: any) => {
+    try {
+        const { referedto, referedby, staffName, email, contact, gender } = req.body;
 
+        // Check if the email already exists
+        const existingStaff = await Staff.findOne({ where: { email } });
+        if (existingStaff) {
+            return res.status(400).json({ message: "Staff with this email already exists" });
+        }
+
+        // Verify the referenced users exist (referedby and referedto)
+        const referredByUser = await User.findOne({ where: { uuid: referedby } });
+        const referredToUser = await User.findOne({ where: { uuid: referedto } });
+
+        if (!referredByUser || !referredToUser) {
+            return res.status(404).json({ message: "Referenced user(s) not found" });
+        }
+
+        // Create the new staff record
+        const staff = await Staff.create({
+            referedby,
+            referedto,
+            staffName,
+            email,
+            contact,
+            gender,
+        });
+
+        res.status(201).json({ message: "Staff added successfully", staff });
+    } catch (err: any) {
+        res.status(500).json({ message: `Error: ${err.message}` });
+    }
+};

@@ -3,7 +3,7 @@ import './Staff.css';
 import { useNavigate } from 'react-router-dom';
 const Staff: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [staffList, setStaffList] = useState([
+  const [staffList] = useState([
     { id: 1, name: 'John Doe', email: 'john@example.com', contact: '123-456-7890', gender: 'Male' },
     { id: 2, name: 'Jane Smith', email: 'jane@example.com', contact: '987-654-3210', gender: 'Female' },
     { id: 3, name: 'Mark Wilson', email: 'mark@example.com', contact: '456-789-1234', gender: 'Male' },

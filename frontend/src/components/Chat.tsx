@@ -24,18 +24,18 @@ const Chat: React.FC = () => {
     // Dummy data to simulate the patient data
     const patientList: Patient[] = [
         {
-            name: 'Rina Waller',
-            referredTo: 'Sujal Anand',
+            name: 'Ler',
+            referredTo: 'Bhuvin Singla',
             messages: [
-                { sender: 'Rina Waller', text: 'Hello ustad ji', time: '9 days ago' },
+                { sender: 'Rina Waller', text: 'Hello 555', time: '9 days ago' },
                 { sender: 'Sujal Anand', text: 'Hello', time: '11 days ago' },
                 { sender: 'Rina Waller', text: 'hii', time: '14 hours ago' },
                 { sender: 'Sujal Anand', text: 'hello', time: '14 hours ago' },
             ],
         },
         {
-            name: 'Hedwig Clark',
-            referredTo: 'Sidhu Mosse wala',
+            name: 'park',
+            referredTo: 'Langles',
             messages: [
                 { sender: 'Hedwig Clark', text: 'How are you?', time: '1 hour ago' },
                 { sender: 'Sidhu Mosse wala', text: 'I am fine, thank you.', time: '30 minutes ago' },

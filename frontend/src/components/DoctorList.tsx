@@ -10,6 +10,8 @@ const DoctorList: React.FC = () => {
   const token = localStorage.getItem("token");
 
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [currentPage, setCurrentPage] = useState(1);
+  const doctorsPerPage = 5;
 
   useEffect(() => {
     if (!token) {
@@ -33,10 +35,6 @@ const DoctorList: React.FC = () => {
     queryFn: fetchDoctorList,
   });
 
-  // State for pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const doctorsPerPage = 5;
-
   // Handle loading state
   if (isLoading) {
     return (
@@ -58,14 +56,20 @@ const DoctorList: React.FC = () => {
     );
   }
 
-  // Calculate the index of the last and first doctor for current page
+  // Filter doctors based on search query
+  const filteredDoctors = searchQuery
+    ? data?.docList.filter((doctor: any) =>
+      `${doctor.firstname} ${doctor.lastname}`.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    : data?.docList;
+
+  // Pagination logic
   const indexOfLastDoctor = currentPage * doctorsPerPage;
   const indexOfFirstDoctor = indexOfLastDoctor - doctorsPerPage;
-  const currentDoctors = data?.docList.slice(indexOfFirstDoctor, indexOfLastDoctor);
+  const currentDoctors = filteredDoctors?.slice(indexOfFirstDoctor, indexOfLastDoctor);
 
-  // Pagination handler functions
   const nextPage = () => {
-    if (currentPage < Math.ceil(data?.docList.length / doctorsPerPage)) {
+    if (currentPage < Math.ceil(filteredDoctors?.length / doctorsPerPage)) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -76,7 +80,6 @@ const DoctorList: React.FC = () => {
     }
   };
 
-  // Render the doctor list
   return (
     <div>
       {/* Doctor List Table */}
@@ -129,7 +132,6 @@ const DoctorList: React.FC = () => {
           </table>
         </div>
 
-
         {/* Pagination Controls */}
         <div className="pagination">
           <button
@@ -138,7 +140,7 @@ const DoctorList: React.FC = () => {
             className="page-arrow">
             &lt;
           </button>
-          {Array.from({ length: Math.ceil(data?.docList.length / doctorsPerPage) }, (_, i) => (
+          {Array.from({ length: Math.ceil(filteredDoctors?.length / doctorsPerPage) }, (_, i) => (
             <button
               key={i + 1}
               onClick={() => setCurrentPage(i + 1)}
@@ -148,7 +150,7 @@ const DoctorList: React.FC = () => {
           ))}
           <button
             onClick={nextPage}
-            disabled={currentPage === Math.ceil(data?.docList.length / doctorsPerPage)}
+            disabled={currentPage === Math.ceil(filteredDoctors?.length / doctorsPerPage)}
             className="page-arrow">
             &gt;
           </button>

@@ -1,281 +1,303 @@
-name email contact gender .
+dont change above divs design and functionality 
 
+//Dashboard.tsx
 import React, { useEffect } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import * as Yup from 'yup';
 import api from '../api/axiosInstance';
 import { Local } from '../environment/env';
-// import './AddPatient.css';
+import './Dashboard.css';
 
-const AddPatient: React.FC = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+import refferal_placed from '../Assets/5be148eb11e3f4de1fe4.svg';
+import refferal_completed from '../Assets/77540cee2e45a0c333cd.svg';
+import md from '../Assets/0685f1c668f1deb33e75.png';
 
-  // Redirect unauthorized users to login
-  useEffect(() => {
-    if (!token) navigate('/login');
-    if (localStorage.getItem('doctype') === '1') navigate('/dashboard');
-  }, [navigate, token]);
+const Dashboard: React.FC = () => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem('token');
 
-  // Fetch the list of doctors
-  const fetchDocs = async () => {
-    const response = await api.get(`${Local.GET_DOC_LIST}`, {
-      headers: { Authorization: `Bearer ${token}` },
+    // Redirect to login if token is missing
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+        }
+    }, [token, navigate]);
+
+    // Fetch user and referral patient data
+    const getUserData = async () => {
+        const response = await api.get(`${Local.GET_USER}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data;
+    };
+
+    const { data, isError, error, isLoading } = useQuery({
+        queryKey: ['dashboard'],
+        queryFn: getUserData,
     });
-    return response.data;
-  };
 
-  const { data: MDList, isLoading, isError, error } = useQuery({
-    queryKey: ['MDList'],
-    queryFn: fetchDocs,
-  });
+    // Handle navigation to add referral
+    const handleAddReferral = () => {
+        navigate('/add-patient');
+    };
 
-  // Mutation to handle patient addition
-  const patientMutate = useMutation({
-    mutationFn: async (values: any) => {
-      const response = await api.post(`${Local.ADD_PATIENT}`, values, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
-    },
-    onSuccess: (_data) => {
-      toast.success('Patient referred successfully');
-      navigate('/dashboard');
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Error occurred while adding patient');
-    },
-  });
+    if (isLoading) {
+        return (
+            <div className="loading-container">
+                <div>Loading...</div>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
 
-  // Form validation schema
-  const validationSchema = Yup.object().shape({
-    firstname: Yup.string().required('First Name is required'),
-    lastname: Yup.string().required('Last Name is required'),
-    disease: Yup.string().required('Disease is required'),
-    referedto: Yup.string().required('Please select a doctor'),
-    address: Yup.string().required('Please select an address'),
-    referback: Yup.string().required('Please select an option'),
-  });
+    if (isError) {
+        return <div>Error: {error?.message || 'Failed to load data'}</div>;
+    }
 
-  const handleFormSubmit = (values: any) => {
-    patientMutate.mutate(values);
-  };
-
-  if (isLoading) {
     return (
-      <div>
-        <div>Loading...</div>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+        <div>
+            <h5>Dashboard</h5>
+            <div className="row">
+                <div className="column">
+                    <div className="card">
+                        <div className="card-content">
+                            <div className="card-left">
+                                <img src={refferal_placed} alt="Referrals Placed" height="25px" width="25px" />
+                                <p className="card-text">Referrals Placed</p>
+                            </div>
+                            <div className="card-right">
+                                <p>{data?.referCount || 0}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="column">
+                    <div className="card">
+                        <div className="card-content">
+                            <div className="card-left">
+                                <img src={refferal_completed} alt="Referrals Completed" height="25px" width="25px" />
+                                <p className="card-text">Referrals Completed</p>
+                            </div>
+                            <div className="card-right">
+                                <p>{data?.referCompleted || 0}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="column">
+                    <div className="card">
+                        <div className="card-content">
+                            <div className="card-left">
+                                <img src={md} alt="Doctor OD/MD" height="25px" width="25px" />
+                                <p className="card-text">Doctor OD/MD</p>
+                            </div>
+                            <div className="card-right">
+                                <p>{data?.docCount || 0}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Referral Patient Table */}
+            <div className="table-section">
+                <div className="header-container">
+                    <h6>Referral Patient Table</h6>
+                    <button onClick={handleAddReferral} className="btn-addrefer">
+                        + Add Referral Patient
+                    </button>
+                </div>
+                <div className="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>DOB</th>
+                                <th>Consult</th>
+                                <th>Date Sent</th>
+                                <th>Appointment Date</th>
+                                <th>Doctor OD/MD</th>
+                                <th>First Surgery</th>
+                                <th>Consult Note</th>
+                                <th>Ready To Return</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data?.referralPatients?.length > 0 ? (
+                                data.referralPatients.map((patient: any, index: number) => (
+                                    <tr key={index}>
+                                        <td>{patient.name}</td>
+                                        <td>{new Date(patient.dob).toLocaleDateString()}</td>
+                                        <td>{patient.consult}</td>
+                                        <td>{new Date(patient.dateSent).toLocaleDateString()}</td>
+                                        <td>{new Date(patient.appointmentDate).toLocaleDateString()}</td>
+                                        <td>{patient.doctor}</td>
+                                        <td>
+                                            <span
+                                                className={`status-box ${patient.firstSurgery === 'Completed'
+                                                    ? 'status-completed'
+                                                    : 'status-pending'
+                                                    }`}
+                                            >
+                                                {patient.firstSurgery || 'Pending'}
+                                            </span>
+                                        </td>
+                                        <td>{patient.consultNote || 'N/A'}</td>
+                                        <td>{patient.readyToReturn ? 'Yes' : 'No'}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={9} className="text-center">
+                                        No referral data available.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
     );
-  }
-
-  if (isError) {
-    return <div>Error: {error?.message || 'Error loading data'}</div>;
-  }
-
-  return (
-    <div>
-      <Formik
-        initialValues={{
-          firstname: '',
-          lastname: '',
-          disease: '',
-          referedto: '',
-          address: '',
-          referback: '',
-        }}
-        validationSchema={validationSchema}
-        onSubmit={handleFormSubmit}
-      >
-        {({ values }) => (
-          <Form>
-            <div className="form-group">
-              <label>First Name:</label>
-              <Field
-                type="text"
-                name="firstname"
-                placeholder="Enter First Name"
-                className="form-control"
-              />
-              <ErrorMessage name="firstname" component="div" className="text-danger" />
-            </div>
-            <br />
-
-            <div className="form-group">
-              <label>Last Name:</label>
-              <Field
-                type="text"
-                name="lastname"
-                placeholder="Enter Last Name"
-                className="form-control"
-              />
-              <ErrorMessage name="lastname" component="div" className="text-danger" />
-            </div>
-            <br />
-
-            <div className="form-group">
-              <label>Disease:</label>
-              <Field as="select" name="disease" className="form-select">
-                <option value="" disabled>
-                  Choose Disease
-                </option>
-                {['Disease 1', 'Disease 2', 'Disease 3', 'Disease 4', 'Disease 5'].map(
-                  (disease) => (
-                    <option key={disease} value={disease}>
-                      {disease}
-                    </option>
-                  )
-                )}
-              </Field>
-              <ErrorMessage name="disease" component="div" className="text-danger" />
-            </div>
-            <br />
-
-            <div className="form-group">
-              <label>Doctor:</label>
-              <Field as="select" name="referedto" className="form-select">
-                <option value="" disabled>
-                  Choose Doctor
-                </option>
-                {MDList?.docList?.map((md: any) => (
-                  <option key={md.uuid} value={md.uuid}>
-                    {md.firstname} {md.lastname}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage name="referedto" component="div" className="text-danger" />
-            </div>
-            <br />
-
-            <div className="form-group">
-              <label>Address:</label>
-              <Field as="select" name="address" className="form-select">
-                <option value="" disabled>
-                  Choose Address
-                </option>
-                {values.referedto &&
-                  MDList.docList
-                    .find((md: any) => md.uuid === values.referedto)
-                    ?.Addresses.map((address: any) => (
-                      <option key={address.uuid} value={address.uuid}>
-                        {address.street}, {address.city}, {address.state}
-                      </option>
-                    ))}
-              </Field>
-              <ErrorMessage name="address" component="div" className="text-danger" />
-            </div>
-            <br />
-
-            <div className="form-group">
-              <label>Return back to referer:</label>
-              <div>
-                <label>
-                  <Field type="radio" name="referback" value="1" /> Yes
-                </label>
-                <label className="ms-3">
-                  <Field type="radio" name="referback" value="0" /> No
-                </label>
-              </div>
-              <ErrorMessage name="referback" component="div" className="text-danger" />
-            </div>
-            <br />
-
-            <button type="submit" className="btn btn-outline-primary">
-              Add Referral
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
-  );
 };
 
-export default AddPatient;
+export default Dashboard;
 
-
-/* Container for the form */
-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Dassboard.css */
+* {
+    box-sizing: border-box;
 }
 
-/* Form group styling */
-.form-group {
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+    font-size: xx-large;
+}
+
+.column {
+    float: left;
+    width: 33.33%;
+    /* Adjusted to fit 3 columns */
+    padding: 0 10px;
+}
+
+
+.row {
+    margin: 0 -5px;
+}
+
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+
+.card {
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
+    /* padding: 16px; */
+    border: none;
+    background-color: #ffffff;
     margin-bottom: 20px;
 }
 
-/* Labels */
-form label {
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-left {
     display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
+    /* Change to block to stack items vertically */
+    text-align: left;
 }
 
-/* Input fields and dropdowns */
-form input[type="text"],
-form select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+.card-left img {
+    background-image: linear-gradient(to right, #5BEBB3, #5AE1FA);
+    /* Light green transparent background */
+    padding: 5px;
+    /* Add padding around the image */
+    /* border-radius: 50%; */
+    /* Optional: Make the background circular */
+    margin-bottom: 10px;
+    /* Space between image and text */
 }
 
-/* Error messages */
-.text-danger {
+.card-text {
+    margin: 0;
     font-size: 14px;
-    color: red;
-    margin-top: 5px;
+    font-weight: normal;
 }
 
-/* Radio buttons */
-form label input[type="radio"] {
-    margin-right: 8px;
+.card-right {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
-form .form-group div {
-    margin-top: 10px;
+
+.header-container {
+    display: flex;
+    /* Enables flexbox layout */
+    justify-content: space-between;
+    /* Distribute items across the container */
+    align-items: center;
+    /* Align items vertically in the center */
+    margin-bottom: 20px;
+    /* Add some space below this section */
 }
 
-/* Button */
-button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
+
+.btn-addrefer {
+    padding: 8px 16px;
+    background-color: #2A99B6;
+    /* Blue background color */
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
+.btn-addrefer:hover {
     background-color: #0056b3;
+
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    form {
-        padding: 15px;
-    }
-
-    button[type="submit"] {
-        font-size: 14px;
-        padding: 8px;
-    }
+.status-box {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    /* font-weight: bold;    */
+    text-align: center;
+    white-space: nowrap;
+    color: #000;
+    /* Text color */
 }
 
+/* Specific colors for different statuses */
+.status-schedule {
+    background-color: #FFF9E4;
+    /* Yellowish background */
+}
 
-like this i have to create file AddStaff.tsx with user details Satff name , email ,contact and gender . give me full code 
+.status-pending {
+    background-color: #E8FAF4;
+    /* Light green background */
+}

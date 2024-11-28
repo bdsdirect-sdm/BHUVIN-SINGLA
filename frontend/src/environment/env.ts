@@ -1,5 +1,5 @@
 interface config {
-    // ADD_STAFF: any;
+    ADD_STAFF: string;
     UPDATE_USER: any;
     GET_DOCTOR_ADDRESSES: any;
     BASE_URL: string;
@@ -24,5 +24,6 @@ export const Local: config = {
     ADD_PATIENT: import.meta.env.VITE_ADD_PATIENT,
     ADD_ADDRESS: import.meta.env.VITE_ADD_ADDRESS,
     GET_DOCTOR_ADDRESSES: undefined,
-    UPDATE_USER: import.meta.env.VITE_UPDATE_USER
+    UPDATE_USER: import.meta.env.VITE_UPDATE_USER,
+    ADD_STAFF: import.meta.env.VITE_ADD_STAFF
 }
