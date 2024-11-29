@@ -9,6 +9,8 @@ import jwt from "jsonwebtoken";
 import { Op } from "sequelize";
 import bcrypt from 'bcrypt';
 import Staff from "../models/Staff";
+import Room from "../models/Room";
+import Chat from "../models/Chat";
 const Security_Key: any = Local.SECRET_KEY;
 
 const otpGenerator = () => {
@@ -212,7 +214,7 @@ export const getPatientList = async (req: any, res: Response) => {
                     plist.push(newPatientList);
                 }
 
-                res.status(200).json({ "patientList": plist, "message": "Patient List Found" });
+                res.status(200).json({ "patientList": plist, "user": user, "message": "Patient List Found" });
             } else {
                 res.status(404).json({ "message": "Patient List Not Found" });
             }
@@ -227,7 +229,9 @@ export const getPatientList = async (req: any, res: Response) => {
 
 export const addPatient = async (req: any, res: any) => {
     try {
-        const { referedby, referedto, firstname, lastname, disease, address, referalstatus } = req.body;
+        const { uuid } = req.user;
+        const referedby = uuid;
+        const { referedto, firstname, lastname, disease, address, referalstatus } = req.body;
 
         const patient = await Patient.create({
             referedby,
@@ -239,7 +243,7 @@ export const addPatient = async (req: any, res: any) => {
             referalstatus,
         });
 
-        res.status(201).json({ message: 'Patient Added Successfully', patient });
+        res.status(201).json({ message: 'Patient Added Successfully', "patient": patient });
     } catch (err) {
         res.status(500).json({ message: `Error: ${err}` });
     }
@@ -358,36 +362,167 @@ export const updateUser = async (req: any, res: any) => {
     }
 };
 
+// export const addStaff = async (req: any, res: any) => {
+//     try {
+//         const { staffName, email, contact, gender } = req.body;
+//         const { uuid } = req.user;
+
+//         // Check if the email already exists
+//         const existingStaff = await Staff.findOne({ where: { email } });
+//         if (existingStaff) {
+//             return res.status(400).json({ message: "Staff with this email already exists" });
+//         }
+
+//         // Create the new staff record
+//         const staff = await Staff.create({
+//             staffName,
+//             email,
+//             contact,
+//             gender,
+//             user_id: uuid
+//         });
+
+//         res.status(201).json({ message: "Staff added successfully", staff });
+//     } catch (err: any) {
+//         res.status(500).json({ message: `Error: ${err.message}` });
+//     }
+// };
+
+// export const getStaffList = async (req: any, res: Response) => {
+//     try {
+//         const { uuid } = req.user;
+//         const page = parseInt(req.query.page);
+//         const limit = parseInt(req.query.limit);
+//         const search = req.query.find;
+//         const offset = limit * (page - 1)
+
+//         const user = await User.findByPk(uuid);
+//         if (user) {
+//             const staffs = await Staff.findAll({
+//                 where: {
+//                     [Op.and]: [
+//                         { user_id: uuid },
+//                         {
+//                             [Op.or]: [
+//                                 { firstname: { [Op.like]: `%${search}%` } },
+//                                 { lastname: { [Op.like]: `%${search}%` } },
+//                             ],
+//                         },
+//                     ],
+//                 },
+//                 limit,
+//                 offset,
+//             });
+
+//             const totalStaff = await Staff.count({ where: { user_id: uuid } });
+
+//             res.status(200).json({ "staff": staffs, "totalStaff": totalStaff });
+//         } else {
+//             res.status(404).json({ "message": "You're not authorized" });
+//         }
+//     }
+//     catch (err) {
+//         res.status(500).json({ "message": err });
+//     }
+// }
+
 export const addStaff = async (req: any, res: any) => {
     try {
-        const { referedto, referedby, staffName, email, contact, gender } = req.body;
+        const { staffName, email, contact, gender } = req.body;
+        const { uuid } = req.user;
 
-        // Check if the email already exists
+        // Check for duplicate email
         const existingStaff = await Staff.findOne({ where: { email } });
         if (existingStaff) {
-            return res.status(400).json({ message: "Staff with this email already exists" });
+            return res.status(400).json({ message: 'Staff with this email already exists' });
         }
 
-        // Verify the referenced users exist (referedby and referedto)
-        const referredByUser = await User.findOne({ where: { uuid: referedby } });
-        const referredToUser = await User.findOne({ where: { uuid: referedto } });
-
-        if (!referredByUser || !referredToUser) {
-            return res.status(404).json({ message: "Referenced user(s) not found" });
-        }
-
-        // Create the new staff record
+        // Create a new staff record
         const staff = await Staff.create({
-            referedby,
-            referedto,
             staffName,
             email,
             contact,
             gender,
+            user_id: uuid,
         });
 
-        res.status(201).json({ message: "Staff added successfully", staff });
+        res.status(201).json({ message: 'Staff added successfully', staff });
     } catch (err: any) {
         res.status(500).json({ message: `Error: ${err.message}` });
     }
 };
+
+// Get Staff List
+export const getStaffList = async (req: any, res: any) => {
+    try {
+        const { uuid } = req.user;
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const search = req.query.find || '';
+        const offset = limit * (page - 1);
+
+        // Check if user exists
+        const user = await User.findByPk(uuid);
+        if (!user) {
+            return res.status(404).json({ message: "You're not authorized" });
+        }
+
+        // Fetch staff data
+        const staffs = await Staff.findAll({
+            where: {
+                user_id: uuid,
+                [Op.or]: [
+                    { firstname: { [Op.like]: `%${search}%` } },
+                    { lastname: { [Op.like]: `%${search}%` } },
+                ],
+            },
+            limit,
+            offset,
+        });
+
+        const totalStaff = await Staff.count({
+            where: {
+                user_id: uuid,
+            },
+        });
+
+        res.status(200).json({ staff: staffs, totalStaff });
+    } catch (err: any) {
+        res.status(500).json({ message: `Error: ${err.message}` });
+    }
+};
+export const getRooms = async (req: any, res: Response) => {
+    try {
+        const { uuid } = req.user;
+        const user = await User.findByPk(uuid);
+        if (user) {
+            const rooms = await Room.findAll({
+                where: {
+                    [Op.or]: [
+                        { user_id_1: user.uuid },
+                        { user_id_2: user.uuid }]
+                },
+                include: [
+                    {
+                        model: User,
+                        as: 'doc1'
+                    },
+                    {
+                        model: User,
+                        as: 'doc2'
+                    },
+                    {
+                        model: Patient,
+                        as: 'patient'
+                    }
+                ]
+            });
+            res.status(200).json({ "room": rooms, "user": user });
+        } else {
+            res.status(404).json({ "message": "You're not authorized" });
+        }
+    }
+    catch (err) {
+        res.status(500).json({ "message": err });
+    }
+}

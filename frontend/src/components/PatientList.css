@@ -1,149 +1,116 @@
-/* PatientList.css  */
-.referral-container {
-    padding: 20px;
-}
-
-.main-header {
-    padding-top: 3%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.btn-add-referral {
-    padding: 8px 16px;
-    background-color: #35C0E4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px;
-    background: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    /* width: fit-content; */
-}
-
-.search-input {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 35%;
-    outline: none;
-    margin-right: 8px;
-}
-
-.search-input:focus {
-    border-color: #35C0E4;
-}
-
-.clear-btn {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 8px;
-    color: #555;
-}
-
-.clear-btn:hover {
-    color: #000;
-}
-
-.search-btn {
-    padding: 8px 16px;
-    background-color: #35C0E4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.search-btn:hover {
-    background-color: #2A99B6;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
+.table {
     width: 100%;
-    border-collapse: collapse;
     margin-bottom: 20px;
-    font-size: 14px;
-}
-
-thead tr {
-    background-color: #f4f4f4;
-    text-align: left;
-}
-
-th,
-td {
-    padding: 6px 8px;
+    border-collapse: collapse;
+    background-color: rgb(255, 255, 255);
+    /* Set background color to white */
     border: 1px solid #ddd;
+    /* Add a light border */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Optional: Add a shadow for better aesthetics */
 }
 
-tbody tr:hover {
-    background-color: #f9f9f9;
-}
-
-.status-box {
-    padding: 6px 10px;
-    border-radius: 4px;
+.table th {
+    text-align: left;
+    padding: 12px;
+    /* Increased padding for better spacing */
+    background-color: #ffffff;
+    /* Light gray background for headers */
     font-weight: bold;
-    display: inline-block;
+    border-bottom: 2px solid #ddd;
 }
 
-.status-pending {
-    background-color: #E8FAF4;
-    color: #16856D;
+.table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    /* Add border between rows and cells */
 }
 
-.status-scheduled {
-    background-color: #FFF9E4;
-    color: #B68A00;
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+    /* Light gray background for odd rows */
 }
 
-.status-completed {
-    background-color: #D8F5DD;
-    color: #3C763D;
+.table-striped tbody tr:nth-child(even) {
+    background-color: #ffffff;
+    /* White background for even rows */
+}
+
+.table-striped tbody tr:hover {
+    background-color: #f1f1f1;
+    /* Highlight row on hover */
+}
+
+.heading-patients {
+    padding-left: 4%;
+    padding-top: 4%;
+    color: #333;
+    /* Neutral dark text color for the heading */
+    font-size: 1.5rem;
+    /* Larger font size */
+    font-weight: bold;
+}
+
+.add-patient-btn {
+    padding: 8px 16px;
+    background-color: #35C0E4;
+    /* Primary blue color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 4%;
+    font-size: 1rem;
+    /* Slightly larger button text */
+}
+
+.add-patient-btn:hover {
+    background-color: #3498db;
+    /* Darker blue on hover */
 }
 
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     margin-top: 20px;
+    /* Add space above pagination */
 }
 
 .pagination-btn {
-    padding: 5px 10px;
-    margin: 0 5px;
-    /* background-color: #35C0E4; */
-    color: rgb(0, 0, 0);
-
+    padding: 5px 12px;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.pagination-btn:hover {
-    background-color: #2A99B6;
+    background-color: #007bff;
     color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
-.pagination-btn.active {
-    background-color: #2A99B6;
-    color: #ffffff;
+.pagination-btn:disabled {
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    /* Ensure spinner has space */
+    color: #007bff;
+    /* Match spinner color to primary theme */
+}
+
+.error-message {
+    text-align: center;
+    color: red;
     font-weight: bold;
+    margin-top: 20px;
 }

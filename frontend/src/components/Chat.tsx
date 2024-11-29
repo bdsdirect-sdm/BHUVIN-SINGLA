@@ -1,133 +1,230 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import './Chat.css';
 
-interface Message {
-    sender: string;
-    text: string;
-    time: string;
-}
 
-interface Patient {
-    name: string;
-    referredTo: string;
-    messages: Message[];
-}
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import io from "socket.io-client";
+import "../Styling/Chat.css";
+// import '../Styling/Dashboard.css';
+import { toast } from "react-toastify";
+import api from "../api/axiosInstance";
+import { Local } from "../environment/env";
+
+const socket = io("http://localhost:4000/");
 
 const Chat: React.FC = () => {
     const navigate = useNavigate();
-    const [patients, setPatients] = useState<Patient[]>([]);
-    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-    const [messageText, setMessageText] = useState('');
-
-    // Dummy data to simulate the patient data
-    const patientList: Patient[] = [
-        {
-            name: 'Ler',
-            referredTo: 'Bhuvin Singla',
-            messages: [
-                { sender: 'Rina Waller', text: 'Hello 555', time: '9 days ago' },
-                { sender: 'Sujal Anand', text: 'Hello', time: '11 days ago' },
-                { sender: 'Rina Waller', text: 'hii', time: '14 hours ago' },
-                { sender: 'Sujal Anand', text: 'hello', time: '14 hours ago' },
-            ],
-        },
-        {
-            name: 'park',
-            referredTo: 'Langles',
-            messages: [
-                { sender: 'Hedwig Clark', text: 'How are you?', time: '1 hour ago' },
-                { sender: 'Sidhu Mosse wala', text: 'I am fine, thank you.', time: '30 minutes ago' },
-            ],
-        },
-    ];
+    const token = localStorage.getItem("token");
+    var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
+    const [messages, setMessages] = useState<any[]>([]);
+    const [newMessage, setNewMessage] = useState("");
+    const direct = Object.keys(chatdata).length;
+    const pname = localStorage.getItem('pname');
 
     useEffect(() => {
-        setPatients(patientList);
+        if (!token) {
+            navigate("/login");
+        }
+
+        function fetchChats() {
+
+            socket.emit("joinchat", chatdata);
+
+            socket.on("prev_msg", async (data: any) => {
+                console.log("boom", data);
+                setMessages([]);
+                await data.map((metadata: any) =>
+                    setMessages((prev: any) => [...prev, metadata])
+                );
+            });
+        }
+        fetchChats();
+
+        return () => {
+            localStorage.removeItem("chatdata");
+            socket.off("prev_msg");
+        };
     }, []);
 
-    const handleSendMessage = (values: { message: string }) => {
-        if (selectedPatient) {
-            const newMessage: Message = {
-                sender: 'You',
-                text: values.message,
-                time: 'Just now',
+    const getRooms = async () => {
+        try {
+            const response = await api.get(`${Local.GET_ROOM}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        }
+        catch (err: any) {
+            toast.error(err.response.data.message)
+        }
+    }
+
+    const { data: rooms, error, isLoading, isError } = useQuery({
+        queryKey: ["rooms"],
+        queryFn: getRooms
+    })
+
+    useEffect(() => {
+        socket.on("getRoom", (getRoom) => {
+            localStorage.setItem("room", getRoom);
+        });
+    }, [socket]);
+
+    useEffect(() => {
+        socket.on("new_message", (data: any) => {
+            setMessages((prev: any) => [...prev, data]);
+        });
+    }, [socket]);
+
+
+    const openChat = (patient: any, doc1: any, doc2: any, user: any, pfirstname: string, plastname: string) => {
+        const chatData = { patient, user1: doc1, user2: doc2, user };
+        localStorage.setItem("chatdata", JSON.stringify(chatData));
+        const n = `${pfirstname} ${plastname}`;
+        localStorage.setItem("pname", n);
+
+        setMessages([]);
+
+        socket.emit("joinchat", chatData);
+    };
+
+
+
+    console.log("boom-------->", chatdata);
+
+    const sendMessage = async () => {
+        if (newMessage.trim() === "") {
+            toast.warn("Please Enter Message");
+        } else {
+            const receiver =
+                chatdata.user !== chatdata.user1 ? chatdata.user1 : chatdata.user2;
+
+            const data = {
+                sender: chatdata.user,
+                message: newMessage.trim(),
+                receiver: receiver,
+                room: localStorage.getItem("room"),
             };
-            const updatedPatient = {
-                ...selectedPatient,
-                messages: [...selectedPatient.messages, newMessage],
-            };
-            setPatients((prevPatients) =>
-                prevPatients.map((patient) =>
-                    patient.name === selectedPatient.name ? updatedPatient : patient
-                )
-            );
-            setMessageText('');
+            socket.emit("send_message", data);
+            setNewMessage("");
         }
     };
 
-    return (
-        <div className="chat-container">
-            <div className="chat-sidebar">
-                <h2>Search Patient</h2>
-                <input type="text" placeholder="Search Patient" />
-                <div className="patient-list">
-                    {patients.map((patient) => (
-                        <div
-                            key={patient.name}
-                            className={`patient-item ${selectedPatient?.name === patient.name ? 'selected' : ''}`}
-                            onClick={() => setSelectedPatient(patient)}
-                        >
-                            <span>{patient.name}</span>
-                            <span className="referred-to">Referred To: {patient.referredTo}</span>
-                        </div>
-                    ))}
+    if (isLoading) {
+        return (
+            <>
+                <div className='loading-icon'>
+                    <div className="spinner-border spinner text-primary me-2" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className='me-2 fs-2' >Loading...</div>
                 </div>
-            </div>
+            </>
+        )
+    }
 
-            <div className="chat-window">
-                {selectedPatient ? (
-                    <>
-                        <h3>{selectedPatient.name}</h3>
-                        <div className="messages">
-                            {selectedPatient.messages.map((message, index) => (
-                                <div
-                                    key={index}
-                                    className={`message ${message.sender === 'You' ? 'sent' : 'received'}`}
-                                >
-                                    <div className="message-text">{message.text}</div>
-                                    <div className="message-time">{message.time}</div>
+    if (isError) {
+        return (
+            <>
+                <div>Error: {error?.message}</div>
+            </>
+        )
+    }
+    console.log(pname);
+    console.log("ssss", messages);
+    console.log("------>", rooms);
+    return (
+        <>
+            <div className="chat-layout">
+                {/* Sidebar */}
+                <div className="chat-sidebar">
+                    <input
+                        type="text"
+                        className="search-bar"
+                        placeholder="Search Patient"
+                    />
+                    <div className="chat-patient-list">
+                        {rooms?.room?.map((room: any) => (
+                            <>
+                                <div className="patient-item active mb-2" onClick={() => {
+                                    openChat(room?.patient?.uuid, room?.doc1?.uuid, room?.doc2?.uuid, rooms?.user?.uuid, room?.patient?.firstname, room?.patient?.lastname)
+                                }} >
+                                    <h5>{room.name}</h5>
+                                    <p>{room.doc1.uuid != rooms.user.uuid && (
+                                        <>
+                                            {room.doc1.firstname} {room.doc1.lastname}
+                                        </>
+                                    )}
+
+                                        {room.doc2.uuid != rooms.user.uuid && (
+                                            <>
+                                                {room.doc2.firstname} {room.doc2.lastname}
+                                            </>
+                                        )}
+                                    </p>
                                 </div>
-                            ))}
+                            </>
+                        ))}
+
+                    </div>
+                </div>
+
+                {direct != 0 && (
+                    <>
+                        {/* Chatbar */}
+                        <div className="chat-main">
+                            {/* Header */}
+                            <div className="chat-header">
+                                <h4>{pname}</h4>
+                            </div>
+
+                            {/* Messages */}
+                            <div className="chat-messages mb-5">
+                                {messages.map((msg: any, index: number) => (
+                                    <>
+                                        <div
+                                            key={index}
+                                            className={`chat-bubble ${msg.sender_id === chatdata.user
+                                                ? "chat-sent"
+                                                : "chat-received"
+                                                }`}
+                                        >
+                                            <p>{msg.message}</p>
+                                            <span className="message-timestamp"> {msg.createdAt.split("T")[0]} </span>
+                                        </div>
+                                        <br />
+                                    </>
+                                ))}
+                            </div>
+
+                            {/* Input */}
+                            <div className="chat-input-container">
+                                <input
+                                    type="text"
+                                    className="chat-input"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    placeholder="Type a message..."
+                                />
+                                <button className="chat-send-button" onClick={sendMessage}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        className="bi bi-send"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <Formik
-                            initialValues={{ message: messageText }}
-                            onSubmit={handleSendMessage}
-                        >
-                            {({ values, handleChange, handleBlur }) => (
-                                <Form className="message-input-form">
-                                    <Field
-                                        name="message"
-                                        type="text"
-                                        placeholder="Type your message here..."
-                                        value={values.message}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className="message-input"
-                                    />
-                                    <button type="submit" className="send-btn">
-                                        Send
-                                    </button>
-                                </Form>
-                            )}
-                        </Formik>
                     </>
-                ) : (
-                    <div className="no-patient-selected">Select a patient to start chatting</div>
                 )}
             </div>
-        </div>
+        </>
     );
 };
 

@@ -1,303 +1,351 @@
-dont change above divs design and functionality 
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import io from "socket.io-client";
+import "../Styling/Chat.css";
+// import '../Styling/Dashboard.css';
+import { toast } from "react-toastify";
+import api from "../api/axiosInstance";
+import { Local } from "../environment/env";
 
-//Dashboard.tsx
-import React, { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axiosInstance';
-import { Local } from '../environment/env';
-import './Dashboard.css';
+const socket = io("http://localhost:4000/");
 
-import refferal_placed from '../Assets/5be148eb11e3f4de1fe4.svg';
-import refferal_completed from '../Assets/77540cee2e45a0c333cd.svg';
-import md from '../Assets/0685f1c668f1deb33e75.png';
-
-const Dashboard: React.FC = () => {
+const Chat: React.FC = () => {
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
+    var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
+    const [messages, setMessages] = useState<any[]>([]);
+    const [newMessage, setNewMessage] = useState("");
+    const direct = Object.keys(chatdata).length;
+    const pname = localStorage.getItem('pname');
 
-    // Redirect to login if token is missing
     useEffect(() => {
         if (!token) {
-            navigate('/login');
+            navigate("/login");
         }
-    }, [token, navigate]);
 
-    // Fetch user and referral patient data
-    const getUserData = async () => {
-        const response = await api.get(`${Local.GET_USER}`, {
-            headers: { Authorization: `Bearer ${token}` },
+        function fetchChats() {
+
+            socket.emit("joinchat", chatdata);
+
+            socket.on("prev_msg", async (data: any) => {
+                console.log("boom", data);
+                setMessages([]);
+                await data.map((metadata: any) =>
+                    setMessages((prev: any) => [...prev, metadata])
+                );
+            });
+        }
+        fetchChats();
+
+        return () => {
+            localStorage.removeItem("chatdata");
+            socket.off("prev_msg");
+        };
+    }, []);
+
+    const getRooms = async () => {
+        try {
+            const response = await api.get(`${Local.GET_ROOM}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        }
+        catch (err: any) {
+            toast.error(err.response.data.message)
+        }
+    }
+
+    const { data: rooms, error, isLoading, isError } = useQuery({
+        queryKey: ["rooms"],
+        queryFn: getRooms
+    })
+
+    useEffect(() => {
+        socket.on("getRoom", (getRoom) => {
+            localStorage.setItem("room", getRoom);
         });
-        return response.data;
+    }, [socket]);
+
+    useEffect(() => {
+        socket.on("new_message", (data: any) => {
+            setMessages((prev: any) => [...prev, data]);
+        });
+    }, [socket]);
+
+
+    const openChat = (patient: any, doc1: any, doc2: any, user: any, pfirstname: string, plastname: string) => {
+        const chatData = { patient, user1: doc1, user2: doc2, user };
+        localStorage.setItem("chatdata", JSON.stringify(chatData));
+        const n = `${pfirstname} ${plastname}`;
+        localStorage.setItem("pname", n);
+
+        setMessages([]);
+
+        socket.emit("joinchat", chatData);
     };
 
-    const { data, isError, error, isLoading } = useQuery({
-        queryKey: ['dashboard'],
-        queryFn: getUserData,
-    });
 
-    // Handle navigation to add referral
-    const handleAddReferral = () => {
-        navigate('/add-patient');
+
+    console.log("boom-------->", chatdata);
+
+    const sendMessage = async () => {
+        if (newMessage.trim() === "") {
+            toast.warn("Please Enter Message");
+        } else {
+            const receiver =
+                chatdata.user !== chatdata.user1 ? chatdata.user1 : chatdata.user2;
+
+            const data = {
+                sender: chatdata.user,
+                message: newMessage.trim(),
+                receiver: receiver,
+                room: localStorage.getItem("room"),
+            };
+            socket.emit("send_message", data);
+            setNewMessage("");
+        }
     };
 
     if (isLoading) {
         return (
-            <div className="loading-container">
-                <div>Loading...</div>
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
+            <>
+                <div className='loading-icon'>
+                    <div className="spinner-border spinner text-primary me-2" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className='me-2 fs-2' >Loading...</div>
                 </div>
-            </div>
-        );
+            </>
+        )
     }
 
     if (isError) {
-        return <div>Error: {error?.message || 'Failed to load data'}</div>;
+        return (
+            <>
+                <div>Error: {error?.message}</div>
+            </>
+        )
     }
-
+    console.log(pname);
+    console.log("ssss", messages);
+    console.log("------>", rooms);
     return (
-        <div>
-            <h5>Dashboard</h5>
-            <div className="row">
-                <div className="column">
-                    <div className="card">
-                        <div className="card-content">
-                            <div className="card-left">
-                                <img src={refferal_placed} alt="Referrals Placed" height="25px" width="25px" />
-                                <p className="card-text">Referrals Placed</p>
-                            </div>
-                            <div className="card-right">
-                                <p>{data?.referCount || 0}</p>
-                            </div>
-                        </div>
+        <>
+            <div className="chat-layout">
+                {/* Sidebar */}
+                <div className="chat-sidebar">
+                    <input
+                        type="text"
+                        className="search-bar"
+                        placeholder="Search Patient"
+                    />
+                    <div className="chat-patient-list">
+                        {rooms?.room?.map((room: any) => (
+                            <>
+                                <div className="patient-item active mb-2" onClick={() => {
+                                    openChat(room?.patient?.uuid, room?.doc1?.uuid, room?.doc2?.uuid, rooms?.user?.uuid, room?.patient?.firstname, room?.patient?.lastname)
+                                }} >
+                                    <h5>{room.name}</h5>
+                                    <p>{room.doc1.uuid != rooms.user.uuid && (
+                                        <>
+                                            {room.doc1.firstname} {room.doc1.lastname}
+                                        </>
+                                    )}
+
+                                        {room.doc2.uuid != rooms.user.uuid && (
+                                            <>
+                                                {room.doc2.firstname} {room.doc2.lastname}
+                                            </>
+                                        )}
+                                    </p>
+                                </div>
+                            </>
+                        ))}
+
                     </div>
                 </div>
 
-                <div className="column">
-                    <div className="card">
-                        <div className="card-content">
-                            <div className="card-left">
-                                <img src={refferal_completed} alt="Referrals Completed" height="25px" width="25px" />
-                                <p className="card-text">Referrals Completed</p>
+                {direct != 0 && (
+                    <>
+                        {/* Chatbar */}
+                        <div className="chat-main">
+                            {/* Header */}
+                            <div className="chat-header">
+                                <h4>{pname}</h4>
                             </div>
-                            <div className="card-right">
-                                <p>{data?.referCompleted || 0}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="column">
-                    <div className="card">
-                        <div className="card-content">
-                            <div className="card-left">
-                                <img src={md} alt="Doctor OD/MD" height="25px" width="25px" />
-                                <p className="card-text">Doctor OD/MD</p>
+                            {/* Messages */}
+                            <div className="chat-messages mb-5">
+                                {messages.map((msg: any, index: number) => (
+                                    <>
+                                        <div
+                                            key={index}
+                                            className={`chat-bubble ${msg.sender_id === chatdata.user
+                                                ? "chat-sent"
+                                                : "chat-received"
+                                                }`}
+                                        >
+                                            <p>{msg.message}</p>
+                                            <span className="message-timestamp"> {msg.createdAt.split("T")[0]} </span>
+                                        </div>
+                                        <br />
+                                    </>
+                                ))}
                             </div>
-                            <div className="card-right">
-                                <p>{data?.docCount || 0}</p>
+
+                            {/* Input */}
+                            <div className="chat-input-container">
+                                <input
+                                    type="text"
+                                    className="chat-input"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    placeholder="Type a message..."
+                                />
+                                <button className="chat-send-button" onClick={sendMessage}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        className="bi bi-send"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
             </div>
-
-            {/* Referral Patient Table */}
-            <div className="table-section">
-                <div className="header-container">
-                    <h6>Referral Patient Table</h6>
-                    <button onClick={handleAddReferral} className="btn-addrefer">
-                        + Add Referral Patient
-                    </button>
-                </div>
-                <div className="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Patient Name</th>
-                                <th>DOB</th>
-                                <th>Consult</th>
-                                <th>Date Sent</th>
-                                <th>Appointment Date</th>
-                                <th>Doctor OD/MD</th>
-                                <th>First Surgery</th>
-                                <th>Consult Note</th>
-                                <th>Ready To Return</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data?.referralPatients?.length > 0 ? (
-                                data.referralPatients.map((patient: any, index: number) => (
-                                    <tr key={index}>
-                                        <td>{patient.name}</td>
-                                        <td>{new Date(patient.dob).toLocaleDateString()}</td>
-                                        <td>{patient.consult}</td>
-                                        <td>{new Date(patient.dateSent).toLocaleDateString()}</td>
-                                        <td>{new Date(patient.appointmentDate).toLocaleDateString()}</td>
-                                        <td>{patient.doctor}</td>
-                                        <td>
-                                            <span
-                                                className={`status-box ${patient.firstSurgery === 'Completed'
-                                                    ? 'status-completed'
-                                                    : 'status-pending'
-                                                    }`}
-                                            >
-                                                {patient.firstSurgery || 'Pending'}
-                                            </span>
-                                        </td>
-                                        <td>{patient.consultNote || 'N/A'}</td>
-                                        <td>{patient.readyToReturn ? 'Yes' : 'No'}</td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={9} className="text-center">
-                                        No referral data available.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        </>
     );
 };
 
-export default Dashboard;
+export default Chat;
 
-/* Dassboard.css */
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-p {
-    font-size: xx-large;
-}
-
-.column {
-    float: left;
-    width: 33.33%;
-    /* Adjusted to fit 3 columns */
-    padding: 0 10px;
-}
-
-
-.row {
-    margin: 0 -5px;
-}
-
-
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-
-@media screen and (max-width: 600px) {
-    .column {
-        width: 100%;
-        display: block;
-        margin-bottom: 20px;
-    }
-}
-
-
-.card {
-    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
-    /* padding: 16px; */
-    border: none;
-    background-color: #ffffff;
-    margin-bottom: 20px;
-}
-
-.card-content {
+.chat-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    height: 100vh;
 }
 
-.card-left {
-    display: block;
-    /* Change to block to stack items vertically */
-    text-align: left;
+.chat-sidebar {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.card-left img {
-    background-image: linear-gradient(to right, #5BEBB3, #5AE1FA);
-    /* Light green transparent background */
-    padding: 5px;
-    /* Add padding around the image */
-    /* border-radius: 50%; */
-    /* Optional: Make the background circular */
+.chat-sidebar h2 {
+    font-size: 18px;
     margin-bottom: 10px;
-    /* Space between image and text */
 }
 
-.card-text {
-    margin: 0;
-    font-size: 14px;
-    font-weight: normal;
+.chat-sidebar input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
-.card-right {
-    font-size: 1.5em;
-    font-weight: bold;
+.patient-list {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
 }
 
-
-.header-container {
-    display: flex;
-    /* Enables flexbox layout */
-    justify-content: space-between;
-    /* Distribute items across the container */
-    align-items: center;
-    /* Align items vertically in the center */
-    margin-bottom: 20px;
-    /* Add some space below this section */
-}
-
-
-.btn-addrefer {
-    padding: 8px 16px;
-    background-color: #2A99B6;
-    /* Blue background color */
-    color: white;
-    border: none;
-    border-radius: 4px;
+.patient-item {
+    padding: 10px;
     cursor: pointer;
 }
 
-.btn-addrefer:hover {
-    background-color: #0056b3;
-
+.patient-item.selected {
+    background-color: #d1f1f1;
 }
 
-.status-box {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 4px;
+.referred-to {
+    display: block;
     font-size: 12px;
-    /* font-weight: bold;    */
+    color: #555;
+}
+
+.chat-window {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.chat-window h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.messages {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+
+.message.sent {
+    text-align: right;
+}
+
+.message.received {
+    text-align: left;
+}
+
+.message-text {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #e9e9e9;
+    border-radius: 15px;
+    max-width: 70%;
+    margin-bottom: 5px;
+}
+
+.message-time {
+    font-size: 10px;
+    color: #aaa;
+}
+
+.message-input-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.message-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.send-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.send-btn:hover {
+    background-color: #0056b3;
+}
+
+.no-patient-selected {
+    font-size: 18px;
     text-align: center;
-    white-space: nowrap;
-    color: #000;
-    /* Text color */
+    color: #888;
 }
 
-/* Specific colors for different statuses */
-.status-schedule {
-    background-color: #FFF9E4;
-    /* Yellowish background */
-}
 
-.status-pending {
-    background-color: #E8FAF4;
-    /* Light green background */
-}
+correct chat designing 

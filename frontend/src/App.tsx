@@ -1,5 +1,5 @@
-import react from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import react from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './components/Dashboard';
@@ -8,16 +8,17 @@ import AddPatient from './components/AddPatient';
 import DoctorList from './components/DoctorList';
 import StaffList from './components/StaffList';
 import AddStaff from './components/AddStaff';
-import Signup from './components/Signup'
+import Signup from './components/Signup';
 import Header from './components/Header';
-import Verify from './components/Verify'
-import Login from './components/Login'
-import Profile from './components/Profile'
+import Verify from './components/Verify';
+import Login from './components/Login';
+import Profile from './components/Profile';
 import EditProfile from './components/EditProfile.tsx'; // Add the new EditProfile route
 import ChangePassword from './components/ChangePassword'; // Add ChangePassword
-import Chat from './components/Chat.tsx'
-import './App.css'
+import Chat from './components/Chat.tsx';
+import './App.css';
 import AddAddress from './components/AddAddress.tsx';
+import Appointment from './components/Appointment.tsx';
 
 const App: react.FC = () => {
 
@@ -25,6 +26,10 @@ const App: react.FC = () => {
     {
       path: '/',
       element: <Signup />
+    },
+    {
+      path: '/chat',
+      element: <Chat />
     },
     {
       path: '/login',
@@ -75,12 +80,16 @@ const App: react.FC = () => {
           element: <EditProfile />
         },
         {
-          path: '/change-password',
-          element: <ChangePassword />
+          path: '/add-appointment',
+          element: <Appointment />
         },
         {
-          path: '/chat',
-          element: <Chat />
+          path: '/appointment',
+          element: <Appointment />
+        },
+        {
+          path: '/change-password',
+          element: <ChangePassword />
         }
       ]
     }

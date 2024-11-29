@@ -1,4 +1,7 @@
 interface config {
+    GET_ROOM: any;
+    GET_STAFF_LIST: any;
+    DELETE_STAFF: any;
     ADD_STAFF: string;
     UPDATE_USER: any;
     GET_DOCTOR_ADDRESSES: any;
@@ -23,7 +26,10 @@ export const Local: config = {
     GET_PATIENT_LIST: import.meta.env.VITE_GET_PATIENT_LIST,
     ADD_PATIENT: import.meta.env.VITE_ADD_PATIENT,
     ADD_ADDRESS: import.meta.env.VITE_ADD_ADDRESS,
-    GET_DOCTOR_ADDRESSES: undefined,
+    GET_DOCTOR_ADDRESSES: import.meta.env.VITE_GET_DOCTOR_ADDRESSES,
     UPDATE_USER: import.meta.env.VITE_UPDATE_USER,
-    ADD_STAFF: import.meta.env.VITE_ADD_STAFF
+    ADD_STAFF: import.meta.env.VITE_ADD_STAFF,
+    GET_STAFF_LIST: import.meta.env.GET_STAFF_LIST,
+    DELETE_STAFF: import.meta.env.DELETE_STAFF,
+    GET_ROOM: import.meta.env.VITE_GET_ROOM
 }

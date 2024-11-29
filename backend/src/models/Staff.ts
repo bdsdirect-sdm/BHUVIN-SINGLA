@@ -10,6 +10,7 @@ class Staff extends Model {
     public email!: string;
     public contact!: string;
     public gender!: string;
+    public user_id!: string;
 }
 
 Staff.init({
@@ -48,11 +49,8 @@ Staff.init({
     underscored: true, // Optional: To use snake_case instead of camelCase for column names
 })
 
-User.hasMany(Staff, { foreignKey: 'referedby', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Staff.belongsTo(User, { foreignKey: 'referedby', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-
-User.hasMany(Staff, { foreignKey: 'referedto', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Staff.belongsTo(User, { foreignKey: 'referedto', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+User.hasMany(Staff, { foreignKey: 'user_id', as: 'doc', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Staff.belongsTo(User, { foreignKey: 'user_id', as: 'doc', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
 export default Staff;
 

@@ -137,7 +137,9 @@
 }
 
 .page-number.active {
-    background-color: #3DCC91;
+    /* background-color: #3DCC91; */
+    background-color: #2A99B6;
+
     color: white;
     border: none;
     font-weight: bold;
