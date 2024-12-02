@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import api from '../api/axiosInstance'; // Make sure to replace with the correct path to your Axios instance
-import { Local } from '../environment/env'; // Your environment variable for endpoint
+import api from '../api/axiosInstance'; // Ensure correct path to Axios instance
+import { Local } from '../environment/env'; // Environment variable for endpoint
 import { useNavigate } from 'react-router-dom';
 import './DoctorList.css';
 
@@ -82,25 +82,25 @@ const DoctorList: React.FC = () => {
 
   return (
     <div>
-      {/* Doctor List Table */}
       <div className="table-section">
         <div className="header-container">
-          <h6>Doctors List</h6>
+          <h6>OD/MD</h6>
         </div>
 
         {/* Search Box */}
-        <div className="search-container">
+        <div className="search-container2">
+          <h5>Doctor</h5>
           <input
             type="text"
             placeholder="Search"
-            className="search-input"
+            className="search-input-doctor"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button className="clear-btn" onClick={() => setSearchQuery('')}>✕</button>
-          <button className="search-btn">Search</button>
         </div>
 
+
+        {/* Table */}
         <div className="table-container">
           <table>
             <thead>
@@ -112,7 +112,8 @@ const DoctorList: React.FC = () => {
                 <th>Avg Time of Consult</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th>Doctype</th> {/* Added new Doctype column */}
+                <th>Doctype</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -126,6 +127,9 @@ const DoctorList: React.FC = () => {
                   <td>{doctor.phone}</td>
                   <td>{doctor.email}</td>
                   <td>{doctor.doctype === 1 ? 'MD' : 'OD'}</td>
+                  <td>
+                    <button className="action-btn">Action</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

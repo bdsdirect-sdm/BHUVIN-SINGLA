@@ -453,44 +453,45 @@ export const addStaff = async (req: any, res: any) => {
 };
 
 // Get Staff List
-export const getStaffList = async (req: any, res: any) => {
-    try {
-        const { uuid } = req.user;
-        const page = parseInt(req.query.page as string) || 1;
-        const limit = parseInt(req.query.limit as string) || 10;
-        const search = req.query.find || '';
-        const offset = limit * (page - 1);
+// export const getStaffList = async (req: any, res: any) => {
+//     try {
+//         const { uuid } = req.user;
+//         const page = parseInt(req.query.page as string) || 1;
+//         const limit = parseInt(req.query.limit as string) || 10;
+//         const search = req.query.find || '';
+//         const offset = limit * (page - 1);
 
-        // Check if user exists
-        const user = await User.findByPk(uuid);
-        if (!user) {
-            return res.status(404).json({ message: "You're not authorized" });
-        }
+//         // Check if user exists
+//         const user = await User.findByPk(uuid);
+//         if (!user) {
+//             return res.status(404).json({ message: "You're not authorized" });
+//         }
 
-        // Fetch staff data
-        const staffs = await Staff.findAll({
-            where: {
-                user_id: uuid,
-                [Op.or]: [
-                    { firstname: { [Op.like]: `%${search}%` } },
-                    { lastname: { [Op.like]: `%${search}%` } },
-                ],
-            },
-            limit,
-            offset,
-        });
+//         // Fetch staff data
+//         const staffs = await Staff.findAll({
+//             where: {
+//                 user_id: uuid,
+//                 [Op.or]: [
+//                     { firstname: { [Op.like]: `%${search}%` } },
+//                     { lastname: { [Op.like]: `%${search}%` } },
+//                 ],
+//             },
+//             limit,
+//             offset,
+//         });
 
-        const totalStaff = await Staff.count({
-            where: {
-                user_id: uuid,
-            },
-        });
+//         const totalStaff = await Staff.count({
+//             where: {
+//                 user_id: uuid,
+//             },
+//         });
 
-        res.status(200).json({ staff: staffs, totalStaff });
-    } catch (err: any) {
-        res.status(500).json({ message: `Error: ${err.message}` });
-    }
-};
+//         res.status(200).json({ staff: staffs, totalStaff });
+//     } catch (err: any) {
+//         res.status(500).json({ message: `Error: ${err.message}` });
+//     }
+// };
+
 export const getRooms = async (req: any, res: Response) => {
     try {
         const { uuid } = req.user;
@@ -526,3 +527,12 @@ export const getRooms = async (req: any, res: Response) => {
         res.status(500).json({ "message": err });
     }
 }
+
+export const getStaffList = async (req: any, res: Response) => {
+    try {
+        const staffList = await Staff.findAll(); // Fetch all staff from the database
+        res.status(200).json({ staff: staffList });
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch staff data", error: err });
+    }
+};

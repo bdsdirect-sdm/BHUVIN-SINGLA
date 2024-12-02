@@ -23,9 +23,9 @@ const Header: React.FC = () => {
                 <li>
                   <Link to="/patient" className="nav-link">Patient</Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/appointment" className="nav-link">Appointments</Link>
-                </li>
+                </li> */}
                 <li>
                   <Link to="/doctor" className="nav-link">Doctors</Link>
                 </li>

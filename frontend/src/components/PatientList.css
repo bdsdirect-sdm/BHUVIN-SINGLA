@@ -66,7 +66,7 @@
 }
 
 .add-patient-btn:hover {
-    background-color: #3498db;
+    background-color: #2A99B6;
     /* Darker blue on hover */
 }
 
@@ -83,7 +83,7 @@
     padding: 5px 12px;
     border: none;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: #35C0E4;
     color: white;
     cursor: pointer;
     font-size: 0.9rem;
@@ -95,7 +95,7 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #2A99B6;
 }
 
 .spinner-container {
@@ -113,4 +113,37 @@
     color: red;
     font-weight: bold;
     margin-top: 20px;
+}
+
+.download-pdf-btn {
+    color: white;
+    background-color: #35C0E4;
+    padding: 8px;
+    border-radius: 3px;
+    border: 0px;
+
+}
+
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.download-pdf-btn {
+    margin-left: auto;
+    /* Push the button to the right */
+    color: white;
+    background-color: #35C0E4;
+    padding: 8px 16px;
+    border-radius: 3px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.download-pdf-btn:hover {
+    background-color: #2A99B6;
+    /* Slightly darker shade on hover */
 }

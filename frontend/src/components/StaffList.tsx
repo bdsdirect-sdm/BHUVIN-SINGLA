@@ -1,32 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import './Staff.css';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import "./Staff.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Staff: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [staffList, setStaffList] = useState<any[]>([]); // Ensure staffList is an array
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [staffList, setStaffList] = useState<any[]>([]); // Staff list state
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(""); // Error state
   const navigate = useNavigate();
 
-  // Fetch staff data from the backend API
+  // Fetch all staff data from the backend API
   useEffect(() => {
     const fetchStaffData = async () => {
       try {
-        const response = await axios.get('/staff-list?page=1&limit=10'); // Update with your endpoint
-        setStaffList(response.data.staff || []); // Safeguard in case data is undefined
+        const response = await axios.get("/api/staff"); // Replace with your API endpoint
+        setStaffList(response.data.staff || []); // Set the staff list data
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching staff data:', err);
-        setError('Failed to fetch staff data');
+        console.error("Error fetching staff data:", err);
+        setError("Failed to fetch staff data");
         setLoading(false);
       }
     };
+
     fetchStaffData();
   }, []);
 
-  // Filter the staff list based on the search query
+  // Filter staff list based on search query
   const filteredStaffList = staffList.filter((staff: any) =>
     staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     staff.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -35,38 +36,42 @@ const Staff: React.FC = () => {
   );
 
   const handleAddStaff = () => {
-    navigate('/add-staff');
+    navigate("/add-staff"); // Navigate to add staff page
   };
 
   if (loading) {
-    return <div>Loading staff list...</div>;
+    return <div>Loading staff list...</div>; // Display while loading
   }
 
   if (error) {
-    return <div className="text-danger">Error: {error}</div>;
+    return <div className="text-danger">Error: {error}</div>; // Display in case of an error
   }
 
   return (
     <div className="staff-container">
-      {/* Heading with Staff List and Add Staff Button */}
+      {/* Header Section */}
       <div className="header-container">
         <h6>Staff List</h6>
-        <button className="add-staff-btn" onClick={handleAddStaff}>+ Add Staff</button>
+        <button className="add-staff-btn" onClick={handleAddStaff}>
+          + Add Staff
+        </button>
       </div>
 
-      {/* Search Box */}
+      {/* Search Section */}
       <div className="search-container">
         <input
           type="text"
           placeholder="Search"
-          className="search-input"
+          className="search-input2"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button className="clear-btn" onClick={() => setSearchQuery('')}>✕</button>
+        <button className="clear-btn" onClick={() => setSearchQuery("")}>
+          ✕
+        </button>
       </div>
 
-      {/* Staff Table */}
+      {/* Staff Table Section */}
       <div className="table-container">
         <table>
           <thead>
@@ -93,7 +98,9 @@ const Staff: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} style={{ textAlign: 'center' }}>No staff found</td>
+                <td colSpan={5} style={{ textAlign: "center" }}>
+                  No staff found
+                </td>
               </tr>
             )}
           </tbody>
@@ -104,7 +111,6 @@ const Staff: React.FC = () => {
 };
 
 export default Staff;
-
 
 
 // import React, { useState } from 'react';

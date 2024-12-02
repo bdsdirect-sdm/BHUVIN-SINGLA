@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import io from "socket.io-client";
-import "../Styling/Chat.css";
+// import "../Styling/Chat.css";
 // import '../Styling/Dashboard.css';
 import { toast } from "react-toastify";
 import api from "../api/axiosInstance";
@@ -31,7 +31,7 @@ const Chat: React.FC = () => {
             socket.emit("joinchat", chatdata);
 
             socket.on("prev_msg", async (data: any) => {
-                console.log("boom", data);
+
                 setMessages([]);
                 await data.map((metadata: any) =>
                     setMessages((prev: any) => [...prev, metadata])
@@ -91,7 +91,7 @@ const Chat: React.FC = () => {
 
 
 
-    console.log("boom-------->", chatdata);
+    // console.log("check", chatdata);
 
     const sendMessage = async () => {
         if (newMessage.trim() === "") {
@@ -131,9 +131,9 @@ const Chat: React.FC = () => {
             </>
         )
     }
-    console.log(pname);
-    console.log("ssss", messages);
-    console.log("------>", rooms);
+    // console.log(pname);
+    // console.log("ssss", messages);
+    // console.log("------>", rooms);
     return (
         <>
             <div className="chat-layout">

@@ -59,7 +59,6 @@ const AddPatient: React.FC = () => {
   });
 
   const handleFormSubmit = (values: any) => {
-    // console.log("sxxxxx", values)
     patientMutate.mutate(values);
   };
 

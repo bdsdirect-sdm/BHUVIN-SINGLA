@@ -35,53 +35,38 @@
 }
 
 /* Search Box Styling */
-.search-container {
+.search-container2 {
     display: flex;
+    justify-content: flex-end;
+    /* Align search box to the right */
     align-items: center;
     margin-bottom: 20px;
     padding: 10px;
-    background: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background: #ffffff;
+    border-radius: 4px;
 }
 
-.search-input {
+.search-input-doctor {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 50%;
+    width: 300px;
     outline: none;
-    margin-right: 8px;
 }
 
-.search-input:focus {
-    border-color: #35C0E4;
-}
-
-.clear-btn {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 8px;
-    color: #555;
-}
-
-.clear-btn:hover {
-    color: #000;
-}
-
-.search-btn {
-    padding: 8px 16px;
-    background-color: #35C0E4;
+/* Action Button */
+.action-btn {
+    background-color: #42D69D;
     color: white;
+    padding: 5px 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 12px;
 }
 
-.search-btn:hover {
-    background-color: #2A99B6;
+.action-btn:hover {
+    background-color: #42D69D;
 }
 
 /* Pagination Styling */
@@ -92,7 +77,6 @@
     width: 100%;
     background-color: white;
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .pagination {
@@ -137,10 +121,33 @@
 }
 
 .page-number.active {
-    /* background-color: #3DCC91; */
-    background-color: #2A99B6;
-
+    background-color: #42D69D;
     color: white;
     border: none;
     font-weight: bold;
+}
+
+.search-container2 {
+    display: flex;
+    justify-content: space-between;
+    /* Space between items */
+    align-items: center;
+    /* Center items vertically */
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 4px;
+}
+
+.search-container2 h5 {
+    margin: 0;
+    /* Remove margin from the heading */
+}
+
+.search-input-doctor {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 300px;
+    outline: none;
 }
