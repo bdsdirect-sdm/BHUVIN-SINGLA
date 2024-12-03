@@ -530,9 +530,29 @@ export const getRooms = async (req: any, res: Response) => {
 
 export const getStaffList = async (req: any, res: Response) => {
     try {
-        const staffList = await Staff.findAll(); // Fetch all staff from the database
-        res.status(200).json({ staff: staffList });
-    } catch (err) {
-        res.status(500).json({ message: "Failed to fetch staff data", error: err });
+        const { uuid } = req.user;
+        const page = parseInt(req.query.page);
+        // const limit = parseInt(req.query.limit);
+        // const search = req.query.find;
+        // const offset = limit * (page - 1)
+
+        const user = await User.findByPk(uuid);
+        if (user) {
+            const staffs = await Staff.findAll({
+                where: {
+                    user_id: uuid
+                },
+
+            });
+
+            const totalStaff = await Staff.count({ where: { user_id: uuid } });
+
+            res.status(200).json({ "staff": staffs, "totalStaff": totalStaff });
+        } else {
+            res.status(404).json({ "message": "You're not authorized" });
+        }
     }
-};
+    catch (err) {
+        res.status(500).json({ "message": err });
+    }
+}

@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
 import "./Staff.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axiosInstance";
 
 const Staff: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [staffList, setStaffList] = useState<any[]>([]); // Staff list state
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(""); // Error state
+  const token = localStorage.getItem("token");
+  const [staffList, setStaffList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const navigate = useNavigate();
 
-  // Fetch all staff data from the backend API
   useEffect(() => {
     const fetchStaffData = async () => {
       try {
-        const response = await axios.get("/api/staff"); // Replace with your API endpoint
-        setStaffList(response.data.staff || []); // Set the staff list data
+        const response = await api.get("/staff", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setStaffList(response.data.staff || []);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching staff data:", err);
@@ -23,11 +29,9 @@ const Staff: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchStaffData();
   }, []);
 
-  // Filter staff list based on search query
   const filteredStaffList = staffList.filter((staff: any) =>
     staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     staff.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -35,21 +39,20 @@ const Staff: React.FC = () => {
     staff.gender.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleAddStaff = () => {
-    navigate("/add-staff"); // Navigate to add staff page
-  };
+  const totalPages = Math.ceil(filteredStaffList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentStaffList = filteredStaffList.slice(startIndex, startIndex + itemsPerPage);
 
-  if (loading) {
-    return <div>Loading staff list...</div>; // Display while loading
-  }
+  const handleAddStaff = () => navigate("/add-staff");
+  const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const handlePreviousPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handlePageClick = (page: number) => setCurrentPage(page);
 
-  if (error) {
-    return <div className="text-danger">Error: {error}</div>; // Display in case of an error
-  }
+  if (loading) return <div>Loading staff list...</div>;
+  if (error) return <div className="text-danger">Error: {error}</div>;
 
   return (
     <div className="staff-container">
-      {/* Header Section */}
       <div className="header-container">
         <h6>Staff List</h6>
         <button className="add-staff-btn" onClick={handleAddStaff}>
@@ -57,21 +60,14 @@ const Staff: React.FC = () => {
         </button>
       </div>
 
-      {/* Search Section */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search"
-          className="search-input2"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button className="clear-btn" onClick={() => setSearchQuery("")}>
-          ✕
-        </button>
-      </div>
+      <input
+        type="text"
+        placeholder="Search"
+        className="search-input2"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
-      {/* Staff Table Section */}
       <div className="table-container">
         <table>
           <thead>
@@ -84,9 +80,9 @@ const Staff: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredStaffList.length > 0 ? (
-              filteredStaffList.map((staff: any) => (
-                <tr key={staff.id}>
+            {currentStaffList.length > 0 ? (
+              currentStaffList.map((staff: any) => (
+                <tr key={staff.uuid.id}>
                   <td>
                     <input type="checkbox" />
                   </td>
@@ -106,89 +102,32 @@ const Staff: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      <div className="pagination">
+        <button onClick={() => handlePageClick(1)} disabled={currentPage === 1}>
+          «
+        </button>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          ‹
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index + 1}
+            className={`pagination-number ${currentPage === index + 1 ? "active" : ""}`}
+            onClick={() => handlePageClick(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          ›
+        </button>
+        <button onClick={() => handlePageClick(totalPages)} disabled={currentPage === totalPages}>
+          »
+        </button>
+      </div>
     </div>
   );
 };
 
 export default Staff;
-
-
-// import React, { useState } from 'react';
-// import './Staff.css';
-// import { useNavigate } from 'react-router-dom';
-// const Staff: React.FC = () => {
-//   const [searchQuery, setSearchQuery] = useState('');
-//   const [staffList] = useState([
-//     { id: 1, name: 'John Doe', email: 'john@example.com', contact: '123-456-7890', gender: 'Male' },
-//     { id: 2, name: 'Jane Smith', email: 'jane@example.com', contact: '987-654-3210', gender: 'Female' },
-//     { id: 3, name: 'Mark Wilson', email: 'mark@example.com', contact: '456-789-1234', gender: 'Male' },
-//     // Add more staff data as needed
-//   ]);
-
-//   const navigate = useNavigate();
-
-//   // Filter the staff list based on the search query
-//   const filteredStaffList = staffList.filter(staff =>
-//     staff.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//     staff.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//     staff.contact.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//     staff.gender.toLowerCase().includes(searchQuery.toLowerCase())
-//   );
-
-//   const handleAddStaff = () => {
-//     navigate('/add-staff');
-//   }
-
-//   return (
-//     <div className="staff-container">
-//       {/* Heading with Staff List and Add Staff Button */}
-//       <div className="header-container">
-//         <h6>Staff List</h6>
-//         <button className="add-staff-btn" onClick={handleAddStaff} >+ Add Staff</button>
-//       </div>
-
-//       {/* Search Box */}
-//       <div className="search-container">
-//         <input
-//           type="text"
-//           placeholder="Search"
-//           className="search-input"
-//           value={searchQuery}
-//           onChange={(e) => setSearchQuery(e.target.value)}
-//         />
-//         <button className="clear-btn" onClick={() => setSearchQuery('')}>✕</button>
-//         <button className="search-btn">Search</button>
-//       </div>
-
-//       {/* Staff Table */}
-//       <div className="table-container">
-//         <table>
-//           <thead>
-//             <tr>
-//               <th>Select</th>
-//               <th>Staff Name</th>
-//               <th>Email</th>
-//               <th>Contact</th>
-//               <th>Gender</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {filteredStaffList.map((staff) => (
-//               <tr key={staff.id}>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>{staff.name}</td>
-//                 <td>{staff.email}</td>
-//                 <td>{staff.contact}</td>
-//                 <td>{staff.gender}</td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Staff;

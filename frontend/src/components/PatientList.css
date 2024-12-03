@@ -1,3 +1,4 @@
+/* PatientList.css */
 .table {
     width: 100%;
     margin-bottom: 20px;
@@ -43,8 +44,8 @@
 }
 
 .heading-patients {
-    padding-left: 4%;
-    padding-top: 4%;
+    padding-left: 0%;
+    padding-top: 1%;
     color: #333;
     /* Neutral dark text color for the heading */
     font-size: 1.5rem;
@@ -52,23 +53,30 @@
     font-weight: bold;
 }
 
+.add-patient-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Align items to the right */
+    margin-bottom: 10px;
+    /* Optional: Add spacing */
+}
+
 .add-patient-btn {
     padding: 8px 16px;
     background-color: #35C0E4;
-    /* Primary blue color */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 4%;
     font-size: 1rem;
-    /* Slightly larger button text */
+    margin-left: auto;
+    /* Additional safeguard for alignment */
 }
 
 .add-patient-btn:hover {
     background-color: #2A99B6;
-    /* Darker blue on hover */
 }
+
 
 .pagination {
     display: flex;
@@ -124,7 +132,7 @@
 
 }
 
-.search-container {
+.search-input {
     display: flex;
     justify-content: space-between;
     align-items: center;

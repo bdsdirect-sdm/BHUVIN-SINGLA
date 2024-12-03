@@ -1,3 +1,4 @@
+/* General Styling */
 .staff-container {
     padding: 20px;
     font-family: Arial, sans-serif;
@@ -17,40 +18,22 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .add-staff-btn:hover {
-    background-color: #2A99B6;
-}
-
-.search-container {
-    display: flex;
-    margin-bottom: 20px;
-    width: 35%;
+    background-color: #2a99b6;
 }
 
 .search-input2 {
-    width: 80%;
+    width: 30%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #cccccc;
     border-radius: 5px;
-    margin-right: 10px;
+    margin-bottom: 20px;
 }
 
-.clear-btn {
-    /* background-color: #e74c3c; */
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.clear-btn:hover {
-    background-color: #2A99B6;
-    color: #ffffff;
-}
-
+/* Table Styling */
 .table-container {
     overflow-x: auto;
 }
@@ -58,20 +41,72 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    background-color: white;
+}
+
+thead tr {
+    border-bottom: 1px solid #cccccc;
+}
+
+tr {
+    border-bottom: 1px solid #cccccc;
+    /* Only row divisions */
 }
 
 th,
 td {
-    border: 1px solid #ddd;
     padding: 10px;
     text-align: left;
+    border: none;
+    /* No borders for individual cells */
 }
 
 th {
     background-color: #f4f4f4;
+    border: none;
 }
 
 tbody tr:hover {
     background-color: #f9f9f9;
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    /* Align pagination to the right */
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px;
+    /* Consistent spacing between elements */
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination button:disabled {
+    background-color: #f4f4f4;
+    cursor: not-allowed;
+}
+
+.pagination-number {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination-number.active {
+    background-color: #35c0e4;
+    color: white;
+    border: none;
+}
+
+.pagination button:hover:not(:disabled),
+.pagination-number:hover {
+    background-color: #f4f4f4;
 }

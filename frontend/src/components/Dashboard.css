@@ -1,4 +1,4 @@
-/* Dassboard.css */
+/* Dashboard.css */
 * {
     box-sizing: border-box;
 }
@@ -18,18 +18,15 @@ p {
     padding: 0 10px;
 }
 
-
 .row {
     margin: 0 -5px;
 }
-
 
 .row:after {
     content: "";
     display: table;
     clear: both;
 }
-
 
 @media screen and (max-width: 600px) {
     .column {
@@ -39,10 +36,7 @@ p {
     }
 }
 
-
 .card {
-    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); */
-    /* padding: 16px; */
     border: none;
     background-color: #ffffff;
     margin-bottom: 20px;
@@ -62,13 +56,8 @@ p {
 
 .card-left img {
     background-image: linear-gradient(to right, #5BEBB3, #5AE1FA);
-    /* Light green transparent background */
     padding: 5px;
-    /* Add padding around the image */
-    /* border-radius: 50%; */
-    /* Optional: Make the background circular */
     margin-bottom: 10px;
-    /* Space between image and text */
 }
 
 .card-text {
@@ -82,23 +71,16 @@ p {
     font-weight: bold;
 }
 
-
 .header-container {
     display: flex;
-    /* Enables flexbox layout */
     justify-content: space-between;
-    /* Distribute items across the container */
     align-items: center;
-    /* Align items vertically in the center */
     margin-bottom: 20px;
-    /* Add some space below this section */
 }
-
 
 .btn-addrefer {
     padding: 8px 16px;
     background-color: #2A99B6;
-    /* Blue background color */
     color: white;
     border: none;
     border-radius: 4px;
@@ -107,7 +89,6 @@ p {
 
 .btn-addrefer:hover {
     background-color: #0056b3;
-
 }
 
 .status-box {
@@ -115,20 +96,69 @@ p {
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 12px;
-    /* font-weight: bold;    */
     text-align: center;
     white-space: nowrap;
     color: #000;
-    /* Text color */
 }
 
 /* Specific colors for different statuses */
 .status-schedule {
     background-color: #FFF9E4;
-    /* Yellowish background */
 }
 
 .status-pending {
     background-color: #E8FAF4;
-    /* Light green background */
+}
+
+/* Patient Table Styles */
+.patient-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.patient-table thead tr {
+    background-color: #F5F5F5;
+    color: #3f3f3f;
+}
+
+.patient-table thead th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #F4F6F9;
+}
+
+.patient-table tbody tr {
+    background-color: white;
+}
+
+.patient-table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #F4F6F9;
+}
+
+/* Remove borders from the first column */
+.patient-table tbody td:first-child,
+.patient-table thead th:first-child {
+    border: none;
+}
+
+/* Hover effect for rows */
+.patient-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.heading-patients-dashboard {
+    margin-left: 3%;
+    margin-top: 3%;
+}
+
+.add-patient-btn-dashboard {
+    margin-right: 4%;
+    border: 0px;
+    padding: 6px 12px;
+
+    border-radius: 3px;
+    background-color: #2A99B6;
+    color: #ffffff;
 }

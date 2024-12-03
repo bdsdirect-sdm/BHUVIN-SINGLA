@@ -28,10 +28,6 @@ const App: react.FC = () => {
       element: <Signup />
     },
     {
-      path: '/chat',
-      element: <Chat />
-    },
-    {
       path: '/login',
       element: <Login />
     },
@@ -86,6 +82,10 @@ const App: react.FC = () => {
         {
           path: '/appointment',
           element: <Appointment />
+        },
+        {
+          path: '/chat',
+          element: <Chat />
         },
         {
           path: '/change-password',
