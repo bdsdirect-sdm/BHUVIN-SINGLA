@@ -124,29 +124,72 @@ export const getUser = async (req: any, res: Response) => {
     }
 };
 
+
 export const getDoctorAddresses = async (req: any, res: any) => {
     try {
-        const { uuid } = req.user; // Get the logged-in user's UUID from the token
-
-        // Find the logged-in doctor (user)
+        const { uuid } = req.user; // Extract the UUID from the authenticated user
+        console.log("dwefef88888888888888888888888888888", uuid)
+        // Find the logged-in user by UUID
         const user = await User.findOne({ where: { uuid } });
 
         if (!user) {
-            return res.status(404).json({ message: "User Not Found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        // Fetch all addresses for the logged-in user (doctor)
+        // Fetch the user's addresses
         const addresses = await Address.findAll({ where: { user_uuid: uuid } });
 
-        if (addresses.length > 0) {
-            return res.status(200).json({ addresses, message: "Doctor's addresses found" });
-        } else {
-            return res.status(404).json({ message: "No addresses found for this doctor" });
-        }
-    } catch (err) {
-        return res.status(500).json({ message: `Error: ${err}` });
+        return res.status(200).json({
+            user: {
+                firstname: user.firstname,
+                lastname: user.lastname,
+                gender: user.gender,
+                phone: user.phone,
+                email: user.email,
+                doctype: user.doctype, // Assuming this field determines 'MD' or 'OD'
+                address: addresses, // Add fetched addresses to the response
+            },
+            message: "Doctor profile and addresses fetched successfully",
+        });
+    } catch (err: any) {
+        return res.status(500).json({ message: `Error: ${err.message}` });
     }
 };
+
+export const getAddresses = async (req: any, res: any) => {
+    try {
+        const { uuid } = req.user; // Extract the UUID from the authenticated user
+        console.log("pakki baat", req.body);
+        // Fetch the logged-in user
+        const user = await User.findOne({ where: { uuid } });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Fetch addresses associated with the user
+        const addresses = await Address.findAll({ where: { user_uuid: uuid } });
+
+        if (!addresses.length) {
+            return res.status(404).json({ message: "No addresses found for this user" });
+        }
+
+        res.status(200).json({
+            user: {
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phone: user.phone,
+                doctype: user.doctype, // Optional field to denote doctor type
+            },
+            addresses, // List of user's addresses
+            message: "User profile and addresses fetched successfully",
+        });
+    } catch (err: any) {
+        res.status(500).json({ message: `Error: ${err.message}` });
+    }
+};
+
 
 
 export const getDocList = async (req: any, res: Response) => {

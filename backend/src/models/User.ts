@@ -2,10 +2,10 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/db";
 import { v4 as UUIDV4 } from "uuid";
 
-class User extends Model{
+class User extends Model {
     public uuid!: string;
     public profile_photo!: string;
-    public dob!:Date;
+    public dob!: Date;
     public phone!: string;
     public gender!: string;
     public firstname!: string;
@@ -18,22 +18,22 @@ class User extends Model{
     public is_deleted!: boolean;
     public deleted_at!: Date;
     public status!: boolean;
-    }
+}
 
 User.init({
-    uuid:{
+    uuid: {
         type: DataTypes.UUID,
         defaultValue: UUIDV4,
         primaryKey: true,
         allowNull: false
     },
-    firstname:{
+    firstname: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
-    lastname:{
+    lastname: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
     // fullname:{
     //     type: DataTypes.STRING,
@@ -42,47 +42,51 @@ User.init({
     //         return `${this.firstname} ${this.lastname}`;
     //     },
     // },
-    profile_photo:{
+    profile_photo: {
         type: DataTypes.STRING,
-        allowNull:true
+        allowNull: true
     },
-    doctype:{
+    gender: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    doctype: {
         type: DataTypes.INTEGER,
-        allowNull:false
+        allowNull: false
     },
-    email:{
+    email: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
-    password:{
+    password: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false
     },
-    dob:{
+    dob: {
         type: DataTypes.DATEONLY,
-        allowNull:true
+        allowNull: true
     },
-    phone:{
+    phone: {
         type: DataTypes.STRING,
     },
-    is_verified:{
+    is_verified: {
         type: DataTypes.BOOLEAN,
-        allowNull:true
+        allowNull: true
     },
-    is_deleted:{
+    is_deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
-    deleted_at:{
+    deleted_at: {
         type: DataTypes.DATE,
         allowNull: true
     },
-    status:{
+    status: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     }
-},{
-    sequelize, 
+}, {
+    sequelize,
     modelName: 'User'
 })
 
