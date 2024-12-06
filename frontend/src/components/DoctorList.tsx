@@ -1,3 +1,4 @@
+//DoctorList.tsx
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axiosInstance'; // Ensure correct path to Axios instance

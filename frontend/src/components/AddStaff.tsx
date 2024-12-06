@@ -1,4 +1,3 @@
-//AddStaff.tsx
 import React, { useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useMutation } from '@tanstack/react-query';
@@ -48,7 +47,11 @@ const AddStaff: React.FC = () => {
   const validationSchema = Yup.object().shape({
     staffName: Yup.string().required('Staff Name is required'),
     email: Yup.string().email('Invalid email format').required('Email is required'),
-    contact: Yup.string().required('Contact is required'),
+    contact: Yup.string()
+      .matches(/^\d+$/, 'Contact must contain only numbers') // Ensure only digits are allowed
+      .min(10, 'Contact must be at least 10 digits')
+      .max(15, 'Contact must be at most 15 digits')
+      .required('Contact is required'),
     gender: Yup.string().required('Gender is required'),
   });
 
@@ -102,6 +105,8 @@ const AddStaff: React.FC = () => {
                 name="contact"
                 placeholder="Enter Contact Number"
                 className="form-control"
+                inputMode="numeric" // Opens numeric keypad on mobile
+                pattern="\d*" // Ensures only numeric input is allowed
               />
               <ErrorMessage name="contact" component="div" className="text-danger" />
             </div>
@@ -113,7 +118,7 @@ const AddStaff: React.FC = () => {
                 <label>
                   <Field type="radio" name="gender" value="Male" /> Male
                 </label>
-                <label >
+                <label>
                   <Field type="radio" name="gender" value="Female" /> Female
                 </label>
                 <ErrorMessage name="gender" component="div" className="text-danger" />
