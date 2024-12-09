@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import logo from '../Assets/title_logo.webp';
-import './Header.css';
+import '../Styling/Header.css';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();

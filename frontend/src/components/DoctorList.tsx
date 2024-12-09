@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../api/axiosInstance'; // Ensure correct path to Axios instance
 import { Local } from '../environment/env'; // Environment variable for endpoint
 import { useNavigate } from 'react-router-dom';
-import './DoctorList.css';
+import '../Styling/DoctorList.css';
 
 const DoctorList: React.FC = () => {
   const navigate = useNavigate();

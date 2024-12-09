@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import api from '../api/axiosInstance';
 import { Local } from '../environment/env';
-// import './AddPatient.css';
+import '../Styling/AddPatient.css';
 
 const AddPatient: React.FC = () => {
   const navigate = useNavigate();

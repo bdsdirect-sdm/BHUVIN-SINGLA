@@ -8,7 +8,7 @@ import api from "../api/axiosInstance";
 import { Local } from "../environment/env";
 import eyeLogo from "../Assets/eye_logo.png";
 
-import "./PatientList.css";
+import "../Styling/PatientList.css";
 
 const PatientList: React.FC = () => {
   const navigate = useNavigate();

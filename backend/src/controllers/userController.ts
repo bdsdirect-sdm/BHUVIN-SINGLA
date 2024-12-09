@@ -39,7 +39,6 @@ export const registerUser = async (req: any, res: Response) => {
     }
 };
 
-
 export const verifyUser = async (req: any, res: Response) => {
     try {
         const { email } = req.body;
@@ -55,7 +54,6 @@ export const verifyUser = async (req: any, res: Response) => {
         res.status(500).json({ "message": err });
     }
 };
-
 
 export const loginUser = async (req: any, res: Response) => {
     try {
@@ -82,7 +80,6 @@ export const loginUser = async (req: any, res: Response) => {
         res.status(500).json({ "message": err });
     }
 };
-
 
 export const getUser = async (req: any, res: Response) => {
     try {
@@ -123,7 +120,6 @@ export const getUser = async (req: any, res: Response) => {
         res.status(500).json({ message: `Error: ${err}` });
     }
 };
-
 
 export const getDoctorAddresses = async (req: any, res: any) => {
     try {
@@ -168,7 +164,7 @@ export const getAddresses = async (req: any, res: any) => {
         }
 
         // Fetch addresses associated with the user
-        const addresses = await Address.findAll({ where: { user_uuid: uuid } });
+        const addresses = await Address.findAll({ where: { user: uuid } });
 
         if (!addresses.length) {
             return res.status(404).json({ message: "No addresses found for this user" });
@@ -189,8 +185,6 @@ export const getAddresses = async (req: any, res: any) => {
         res.status(500).json({ message: `Error: ${err.message}` });
     }
 };
-
-
 
 export const getDocList = async (req: any, res: Response) => {
     try {
@@ -221,7 +215,6 @@ export const getDocList = async (req: any, res: Response) => {
         res.status(500).json({ "message": `${err}` });
     }
 };
-
 
 export const getPatientList = async (req: any, res: Response) => {
     try {
@@ -268,7 +261,6 @@ export const getPatientList = async (req: any, res: Response) => {
         res.status(500).json({ "message": `${err}` });
     }
 };
-
 
 export const addPatient = async (req: any, res: any) => {
     try {
@@ -319,7 +311,6 @@ export const addAddress = async (req: any, res: Response) => {
         res.status(500).json({ message: `Error: ${err}` });
     }
 };
-
 
 export const changePassword = async (req: any, res: any) => {
     try {
@@ -405,70 +396,6 @@ export const updateUser = async (req: any, res: any) => {
     }
 };
 
-// export const addStaff = async (req: any, res: any) => {
-//     try {
-//         const { staffName, email, contact, gender } = req.body;
-//         const { uuid } = req.user;
-
-//         // Check if the email already exists
-//         const existingStaff = await Staff.findOne({ where: { email } });
-//         if (existingStaff) {
-//             return res.status(400).json({ message: "Staff with this email already exists" });
-//         }
-
-//         // Create the new staff record
-//         const staff = await Staff.create({
-//             staffName,
-//             email,
-//             contact,
-//             gender,
-//             user_id: uuid
-//         });
-
-//         res.status(201).json({ message: "Staff added successfully", staff });
-//     } catch (err: any) {
-//         res.status(500).json({ message: `Error: ${err.message}` });
-//     }
-// };
-
-// export const getStaffList = async (req: any, res: Response) => {
-//     try {
-//         const { uuid } = req.user;
-//         const page = parseInt(req.query.page);
-//         const limit = parseInt(req.query.limit);
-//         const search = req.query.find;
-//         const offset = limit * (page - 1)
-
-//         const user = await User.findByPk(uuid);
-//         if (user) {
-//             const staffs = await Staff.findAll({
-//                 where: {
-//                     [Op.and]: [
-//                         { user_id: uuid },
-//                         {
-//                             [Op.or]: [
-//                                 { firstname: { [Op.like]: `%${search}%` } },
-//                                 { lastname: { [Op.like]: `%${search}%` } },
-//                             ],
-//                         },
-//                     ],
-//                 },
-//                 limit,
-//                 offset,
-//             });
-
-//             const totalStaff = await Staff.count({ where: { user_id: uuid } });
-
-//             res.status(200).json({ "staff": staffs, "totalStaff": totalStaff });
-//         } else {
-//             res.status(404).json({ "message": "You're not authorized" });
-//         }
-//     }
-//     catch (err) {
-//         res.status(500).json({ "message": err });
-//     }
-// }
-
 export const addStaff = async (req: any, res: any) => {
     try {
         const { staffName, email, contact, gender } = req.body;
@@ -494,46 +421,6 @@ export const addStaff = async (req: any, res: any) => {
         res.status(500).json({ message: `Error: ${err.message}` });
     }
 };
-
-// Get Staff List
-// export const getStaffList = async (req: any, res: any) => {
-//     try {
-//         const { uuid } = req.user;
-//         const page = parseInt(req.query.page as string) || 1;
-//         const limit = parseInt(req.query.limit as string) || 10;
-//         const search = req.query.find || '';
-//         const offset = limit * (page - 1);
-
-//         // Check if user exists
-//         const user = await User.findByPk(uuid);
-//         if (!user) {
-//             return res.status(404).json({ message: "You're not authorized" });
-//         }
-
-//         // Fetch staff data
-//         const staffs = await Staff.findAll({
-//             where: {
-//                 user_id: uuid,
-//                 [Op.or]: [
-//                     { firstname: { [Op.like]: `%${search}%` } },
-//                     { lastname: { [Op.like]: `%${search}%` } },
-//                 ],
-//             },
-//             limit,
-//             offset,
-//         });
-
-//         const totalStaff = await Staff.count({
-//             where: {
-//                 user_id: uuid,
-//             },
-//         });
-
-//         res.status(200).json({ staff: staffs, totalStaff });
-//     } catch (err: any) {
-//         res.status(500).json({ message: `Error: ${err.message}` });
-//     }
-// };
 
 export const getRooms = async (req: any, res: Response) => {
     try {
@@ -599,3 +486,67 @@ export const getStaffList = async (req: any, res: Response) => {
         res.status(500).json({ "message": err });
     }
 }
+
+// export const deleteAddress = async (req: any, res: Response) => {
+//     try {
+//         const { id } = req.params; // Get the address ID from the URL parameter
+//         const { uuid } = req.user; // Extract user UUID from the authenticated token
+
+//         // Find the address to verify it belongs to the logged-in user
+//         const address = await Address.findOne({ where: { id, user: uuid } });
+
+//         if (!address) {
+//             return res.status(404).json({ message: "Address not found or unauthorized" });
+//         }
+
+//         // Delete the address
+//         await address.destroy();
+
+//         res.status(200).json({ message: "Address deleted successfully" });
+//     } catch (err: any) {
+//         res.status(500).json({ message: `Error: ${err.message}` });
+//     }
+// };
+
+// export const deleteAddress = async (req: any, res: Response) => {
+//     try {
+//         const { id } = req.params; // Address ID from URL
+//         const { uuid } = req.user; // User's UUID from the authenticated token
+
+//         // Find the address and ensure it belongs to the authenticated user
+//         const address = await Address.findOne({ where: { id, user: uuid } });
+
+//         if (!address) {
+//             return res.status(404).json({ message: "Address not found or unauthorized" });
+//         }
+
+//         // Delete the address
+//         await address.destroy();
+
+//         res.status(200).json({ message: "Address deleted successfully" });
+//     } catch (error: any) {
+//         res.status(500).json({ message: `Error: ${error.message}` });
+//     }
+// };
+
+export const deleteAddress = async (req: any, res: any) => {
+    try {
+        const { id } = req.params; // Get address ID from URL parameter
+        const { uuid } = req.user; // Get user UUID from authenticated token
+
+        // Check if the address exists and belongs to the user
+        const address = await Address.findOne({ where: { id, userUuid: uuid } });
+
+        if (!address) {
+            return res.status(404).json({ message: "Address not found or unauthorized" });
+        }
+
+        // Delete the address
+        await address.destroy();
+
+        res.status(200).json({ message: "Address deleted successfully" });
+    } catch (err: any) {
+        console.error("Error deleting address:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};

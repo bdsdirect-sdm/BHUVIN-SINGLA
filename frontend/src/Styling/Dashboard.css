@@ -189,3 +189,17 @@ p {
     width: 100% !important;
     height: 100% !important;
 }
+
+.chat-link {
+    color: rgb(32, 107, 248);
+    /* Optional: To style the link */
+    text-decoration: underline;
+    /* Optional: To make it look like a typical link */
+    cursor: pointer;
+    /* Ensures the pointer cursor appears on hover */
+}
+
+.chat-link:hover {
+    color: rgb(0, 65, 139);
+    /* Optional: Change color on hover */
+}

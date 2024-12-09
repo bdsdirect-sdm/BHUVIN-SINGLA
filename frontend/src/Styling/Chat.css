@@ -1,134 +1,146 @@
 .chat-layout {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 50px);
+    /* Adjusted height to fit the layout */
+    background-color: #e5ddd5;
 }
 
 .chat-sidebar {
-    width: 300px;
-    background-color: white;
-    /* Changed to white */
-    padding: 20px;
+    width: 25%;
+    background-color: #f6f6f6;
+    border-right: 1px solid #ddd;
     display: flex;
     flex-direction: column;
-    border: 1px solid #EEEEEE;
-    /* Added border */
+    overflow-y: auto;
 }
 
 .search-bar {
     padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #EEEEEE;
-    /* Updated border color */
-    margin-bottom: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ffffff;
+    outline: none;
+    font-size: 14px;
 }
 
 .chat-patient-list {
-    flex: 1;
+    padding: 0 10px;
     overflow-y: auto;
+    /* Enables scrolling for patient list */
+    max-height: calc(100vh - 110px);
+    /* Adjusted based on the layout */
 }
 
 .patient-item {
     padding: 10px;
-    border-radius: 5px;
-    background-color: white;
-    /* Changed to white */
-    margin-bottom: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    border: 1px solid #EEEEEE;
-    /* Added border */
+    transition: background 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .patient-item:hover {
-    background-color: #f7f7f7;
-    /* Slightly changed hover color for visibility */
+    background-color: #58EBB3;
+}
+
+.patient-item h5 {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.patient-item p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #555;
 }
 
 .chat-main {
-    flex: 1;
+    width: 75%;
     display: flex;
     flex-direction: column;
-    background-color: white;
-    /* Changed to white */
-    border: 1px solid #EEEEEE;
-    /* Added border */
+    background-color: #e5ddd5;
+    height: 83%;
 }
 
 .chat-header {
-    background-color: white;
-    /* Changed to white */
-    color: black;
-    padding: 10px;
-    font-size: 20px;
-    text-align: center;
-    border: 1px solid #EEEEEE;
-    /* Added border */
+    padding: 15px;
+    background-color: #38a3b1;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .chat-messages {
-    padding: 20px;
     flex: 1;
     overflow-y: auto;
-    background-color: white;
-    /* Changed to white */
-    border: 1px solid #EEEEEE;
-    /* Added border */
+    padding: 15px;
+    background: #fceded;
+    max-height: calc(100vh - 150px);
+    /* Adjusted height to prevent overflow */
 }
 
 .chat-bubble {
+    max-width: 70%;
+    padding: 10px 15px;
     margin: 10px 0;
-    padding: 10px;
     border-radius: 10px;
-    max-width: 80%;
     word-wrap: break-word;
 }
 
 .chat-sent {
-    background-color: #3f51b5;
-    color: white;
     margin-left: auto;
+    background-color: #58EBB3;
+    text-align: right;
 }
 
 .chat-received {
-    background-color: #e0e0e0;
-    color: #000;
+    margin-right: auto;
+    background-color: #fff;
+    text-align: left;
 }
 
 .message-timestamp {
-    font-size: 12px;
-    color: #888;
+    display: block;
+    font-size: 10px;
     margin-top: 5px;
+    color: #666;
 }
 
 .chat-input-container {
     display: flex;
+    align-items: center;
     padding: 10px;
-    background-color: white;
-    /* Changed to white */
-    border-top: 1px solid #EEEEEE;
-    /* Updated border color */
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
 }
 
 .chat-input {
     flex: 1;
     padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #EEEEEE;
-    /* Updated border color */
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    outline: none;
+    font-size: 14px;
+    margin-right: 10px;
 }
 
 .chat-send-button {
-    background-color: #3f51b5;
-    color: white;
+    background: none;
     border: none;
-    padding: 10px;
-    border-radius: 50%;
-    margin-left: 10px;
+    outline: none;
     cursor: pointer;
+    color: #128c7e;
+    font-size: 16px;
+    transition: color 0.3s ease;
 }
 
-.chat-send-button svg {
-    width: 16px;
-    height: 16px;
+.chat-send-button:hover {
+    color: #075e54;
 }

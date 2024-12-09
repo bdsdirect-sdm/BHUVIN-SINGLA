@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosInstance'; // Axios instance for API calls
-import './Appointment.css';
+import '../Styling/Appointment.css';
 
 const ITEMS_PER_PAGE = 5; // Define items per page
 

@@ -1,0 +1,131 @@
+/* Container for the form */
+form {
+    width: 100%;
+    /* Make the form span the full width */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: inherit;
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Labels */
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Input fields and dropdowns */
+form input[type="text"],
+form input[type="email"],
+form select {
+    width: 100%;
+    /* Ensure inputs span the full width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    /* Prevent overflowing issues */
+}
+
+/* Error messages */
+.text-danger {
+    font-size: 14px;
+    color: red;
+    margin-top: 5px;
+}
+
+/* Radio buttons */
+form label input[type="radio"] {
+    margin-right: 8px;
+}
+
+form .form-group div {
+    margin-top: 10px;
+}
+
+/* Button */
+button[type="submit"] {
+    width: 100%;
+    /* Make the button span the full width */
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #2A99B6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #1296b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+
+    button[type="submit"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+/* Gender section container */
+.gender-section {
+    margin-bottom: 20px;
+}
+
+/* Gender label */
+.gender-section label {
+    display: inline-block;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+/* Radio button container for alignment */
+.gender-radio-group {
+    display: flex;
+    gap: 20px;
+    /* Space between radio options */
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Radio button styles */
+.gender-radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Space between the radio button and label text */
+    font-size: 16px;
+    color: #555;
+}
+
+/* Error message styling */
+.gender-section .text-danger {
+    margin-top: 5px;
+    font-size: 14px;
+    color: red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gender-radio-group {
+        flex-direction: column;
+        /* Stack radio options vertically on smaller screens */
+        gap: 10px;
+    }
+}

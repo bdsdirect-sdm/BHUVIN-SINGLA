@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Staff.css";
+import "../Styling/Staff.css";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 

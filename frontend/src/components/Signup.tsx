@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import api from '../api/axiosInstance';
 import * as Yup from 'yup';
-import './Signup.css'; // Make sure this CSS file is in the same folder
+import '../Styling/Signup.css'; // Make sure this CSS file is in the same folder
 import logo from '../Assets/3716f6b2e790fb345b25.png';
 
 const Signup: React.FC = () => {

@@ -1,544 +1,196 @@
-    import React, { useEffect, useState } from "react";
-    import { useNavigate } from "react-router-dom";
-    import { useQuery } from "@tanstack/react-query";
-    import { toast } from "react-toastify";
-    import jsPDF from "jspdf";
-    import "jspdf-autotable";
-    import api from "../api/axiosInstance";
-    import { Local } from "../environment/env";
-    import './PatientList.css';
+all my adresses are shown under address information inside Profile.tsx component with endpoint "/profile" 
+i want to delete particular address when click on delete button . so create an api for that 
 
-    const PatientList: React.FC = () => {
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import io from "socket.io-client";
+import { toast } from "react-toastify";
+import api from "../api/axiosInstance";
+import { Local } from "../environment/env";
+import "../Styling/Chat.css";
+
+const socket = io("http://localhost:4000/");
+
+const Chat: React.FC = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    const doctype = localStorage.getItem("doctype");
-    const [page, setPage] = useState<number>(1);
-    const [search, setSearch] = useState<string>("");
+    var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
+    const [messages, setMessages] = useState<any[]>([]);
+    const [newMessage, setNewMessage] = useState("");
+    const direct = Object.keys(chatdata).length;
+    const pname = localStorage.getItem('pname');
 
     useEffect(() => {
-        if (!token) navigate("/login");
-    }, [token, navigate]);
+        if (!token) {
+            navigate("/login");
+        }
 
-    // Fetch patients API call
-    const fetchPatient = async (pageno: number, searchQuery: string) => {
+        function fetchChats() {
+            socket.emit("joinchat", chatdata);
+            socket.on("prev_msg", async (data: any) => {
+                setMessages([]);
+                await data.map((metadata: any) =>
+                    setMessages((prev: any) => [...prev, metadata])
+                );
+            });
+        }
+        fetchChats();
+
+        return () => {
+            localStorage.removeItem("chatdata");
+            socket.off("prev_msg");
+        };
+    }, []);
+
+    const getRooms = async () => {
         try {
-        const response = await api.get(
-            `${Local.GET_PATIENT_LIST}?page=${pageno}&limit=10&find=${searchQuery}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-        return response.data;
-        } catch (err) {
-        toast.error(`Error fetching patients: ${err}`);
+            const response = await api.get(`${Local.GET_ROOM}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (err: any) {
+            toast.error(err.response.data.message)
+        }
+    }
+
+    const { data: rooms, error, isLoading, isError } = useQuery({
+        queryKey: ["rooms"],
+        queryFn: getRooms
+    });
+
+    useEffect(() => {
+        socket.on("getRoom", (getRoom) => {
+            localStorage.setItem("room", getRoom);
+        });
+    }, [socket]);
+
+    useEffect(() => {
+        socket.on("new_message", (data: any) => {
+            setMessages((prev: any) => [...prev, data]);
+        });
+    }, [socket]);
+
+    const openChat = (patient: any, doc1: any, doc2: any, user: any, pfirstname: string, plastname: string) => {
+        const chatData = { patient, user1: doc1, user2: doc2, user };
+        localStorage.setItem("chatdata", JSON.stringify(chatData));
+        const n = `${pfirstname} ${plastname}`;
+        localStorage.setItem("pname", n);
+
+        setMessages([]);
+
+        socket.emit("joinchat", chatData);
+    };
+
+    const sendMessage = async () => {
+        if (newMessage.trim() === "") {
+            toast.warn("Please Enter Message");
+        } else {
+            const receiver = chatdata.user !== chatdata.user1 ? chatdata.user1 : chatdata.user2;
+
+            const data = {
+                sender: chatdata.user,
+                message: newMessage.trim(),
+                receiver: receiver,
+                room: localStorage.getItem("room"),
+            };
+            socket.emit("send_message", data);
+            setNewMessage("");
         }
     };
 
-    const { data: Patients, error, isLoading, isError } = useQuery({
-        queryKey: ["patient", page, search], // Dependencies include `search`
-        queryFn: () => fetchPatient(page, search),
-    });
-
-    // PDF generation
-    const generatePDF = () => {
-        const doc = new jsPDF();
-
-        doc.text("Patient List", 14, 20);
-        doc.setFontSize(12);
-        doc.text(`Page: ${page}`, 14, 28);
-
-        const tableData = Patients?.patientList?.map((patient: any, index: number) => [
-        index + 1,
-        `${patient?.firstname} ${patient?.lastname}`,
-        patient?.disease,
-        `${patient?.referedby?.firstname} ${patient?.referedby?.lastname}`,
-        `${patient?.referedto?.firstname} ${patient?.referedto?.lastname}`,
-        patient?.referback ? "Yes" : "No",
-        patient?.referalstatus ? "Completed" : "Pending",
-        ]);
-
-        doc.autoTable({
-        head: [["#", "Patient Name", "Disease", "Referred By", "Referred To", "Refer Back", "Status"]],
-        body: tableData,
-        startY: 35,
-        });
-
-        doc.save("Patient_List.pdf");
-    };
-
-    // Error handling
     if (isLoading) {
         return (
-        <div className="spinner-container">
-            <p>Loading...</p>
-        </div>
+            <>
+                <div className='loading-icon'>
+                    <div className="spinner-border spinner text-primary me-2" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className='me-2 fs-2' >Loading...</div>
+                </div>
+            </>
         );
     }
 
     if (isError) {
-        return <div className="error-message">Error: {error.message}</div>;
+        return (
+            <>
+                <div>Error: {error?.message}</div>
+            </>
+        );
     }
 
     return (
-        <div className="patient-list-container">
-        {/* Header Section */}
-        <header className="header">
-            <h4 className="heading-patients">Referral Patients</h4>
-        </header>
+        <>
+            <div className="chat-layout">
+                <div className="chat-sidebar">
+                    <input
+                        type="text"
+                        className="search-bar"
+                        placeholder="Search Patient"
+                    />
+                    <div className="chat-patient-list">
+                        {rooms?.room?.map((room: any) => (
+                            <div key={room.patient.uuid} className="patient-item active mb-2" onClick={() => {
+                                openChat(room?.patient?.uuid, room?.doc1?.uuid, room?.doc2?.uuid, rooms?.user?.uuid, room?.patient?.firstname, room?.patient?.lastname);
+                            }}>
+                                <h5>{room.name}</h5>
+                                <p>
+                                    {room.doc1.uuid !== rooms.user.uuid && (
+                                        <>
+                                            {room.doc1.firstname} {room.doc1.lastname}
+                                        </>
+                                    )}
+                                    {room.doc2.uuid !== rooms.user.uuid && (
+                                        <>
+                                            {room.doc2.firstname} {room.doc2.lastname}
+                                        </>
+                                    )}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-        {/* Add Patient Button */}
-        {doctype === "1" && (
-            <div className="add-patient-btn-container">
-            <button className="add-patient-btn" onClick={() => navigate("/add-patient")}>
-                + Add Referral Patient
-            </button>
+                {direct !== 0 && (
+                    <div className="chat-main">
+                        <div className="chat-header">
+                            <h4>{pname}</h4>
+                        </div>
+
+                        <div className="chat-messages mb-5">
+                            {messages.map((msg: any, index: number) => (
+                                <div key={index} className={`chat-bubble ${msg.sender_id === chatdata.user ? "chat-sent" : "chat-received"}`}>
+                                    <p>{msg.message}</p>
+                                    <span className="message-timestamp"> {msg.createdAt.split("T")[0]} </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="chat-input-container">
+                            <input
+                                type="text"
+                                className="chat-input"
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="Type a message..."
+                            />
+                            <button className="chat-send-button" onClick={sendMessage}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+                                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
-        )}
-
-        {/* Search Input */}
-        <div className="search-container">
-            <input
-            className="search-input"
-            type="text"
-            value={search}
-            placeholder="Search patients..."
-            onChange={(e) => setSearch(e.target.value)}
-            />
-            <button className="download-pdf-btn" onClick={generatePDF}>
-            Download PDF
-            </button>
-        </div>
-
-        {/* Patient Table */}
-        <table className="patient-table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Patient Name</th>
-                <th>Disease</th>
-                <th>Referred By</th>
-                <th>Referred To</th>
-                <th>Refer Back</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {Patients?.patientList?.map((patient: any, index: number) => (
-                <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{`${patient?.firstname} ${patient?.lastname}`}</td>
-                <td>{patient?.disease}</td>
-                <td>{`${patient?.referedby?.firstname} ${patient?.referedby?.lastname}`}</td>
-                <td>{`${patient?.referedto?.firstname} ${patient?.referedto?.lastname}`}</td>
-                <td>{patient?.referback ? "Yes" : "No"}</td>
-                <td>
-                    <span
-                    className={`status-tag ${patient?.referalstatus ? "status-completed" : "status-pending"
-                        }`}
-                    >
-                    {patient?.referalstatus ? "Completed" : "Pending"}
-                    </span>
-                </td>
-                <td>
-                    <button
-                    className="eye-btn"
-                    onClick={() => navigate(`/view-patient/${patient.id}`)}
-                    >
-                    👁️
-                    </button>
-                </td>
-                </tr>
-            ))}
-            </tbody>
-        </table>
-        </div>
+        </>
     );
-    };
-
-    export default PatientList;
-
-
-    align search box , add refferal paient and download pdf in one line
-
-    and remove border around search box it doesnot need 
-    give me full file 
-
-    .patient-list-container {
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-    }
-
-    .header {
-        margin-bottom: 10px;
-    }
-
-    .heading-patients {
-        font-size: 1.8rem;
-        color: #333;
-    }
-
-    .add-patient-btn-container {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 20px;
-    }
-
-    .add-patient-btn {
-        background-color: #35c0e4;
-        color: white;
-        padding: 10px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .add-patient-btn:hover {
-        background-color: #2a99b6;
-    }
-
-    .search-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-        border: 0px;
-        box-shadow: none;
-    }
-
-    .search-input {
-        padding: 8px;
-        width: 60%;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .download-pdf-btn {
-        padding: 10px 16px;
-        background-color: #35c0e4;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .download-pdf-btn:hover {
-        background-color: #2a99b6;
-    }
-
-    .patient-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    .patient-table th,
-    .patient-table td {
-        padding: 10px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
-
-    .patient-table th {
-        background-color: #f2f2f2;
-    }
-
-    .patient-table tr:nth-child(odd) {
-        background-color: #fafafa;
-    }
-
-    .patient-table tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    .eye-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 6px 12px;
-        cursor: pointer;
-    }
-
-    .eye-btn:hover {
-        background-color: #0056b3;
-    }
-
-    .status-tag {
-        padding: 4px 8px;
-        border-radius: 4px;
-        color: white;
-        font-size: 0.9rem;
-    }
-
-    .status-completed {
-        background-color: #28a745;
-    }
-
-    .status-pending {
-        background-color: #ffc107;
-    }
-
-    like above doctorlisting component just add same ui pagination in below file and make search box smooothly working as above component
-
-    give me full files 
-
-    import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import api from "../api/axiosInstance";
-import { Local } from "../environment/env";
-import eyeLogo from "../Assets/eye_logo.png";
-
-import "./PatientList.css";
-
-const PatientList: React.FC = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const doctype = localStorage.getItem("doctype");
-  const [page, setPage] = useState<number>(1);
-  const [search, setSearch] = useState<string>("");
-
-  useEffect(() => {
-    if (!token) navigate("/login");
-  }, [token, navigate]);
-
-  const fetchPatient = async (pageno: number, searchQuery: string) => {
-    try {
-      const response = await api.get(
-        `${Local.GET_PATIENT_LIST}?page=${pageno}&limit=10&find=${searchQuery}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return response.data;
-    } catch (err) {
-      toast.error(`Error fetching patients: ${err}`);
-    }
-  };
-
-  const { data: Patients, error, isLoading, isError } = useQuery({
-    queryKey: ["patient", page, search],
-    queryFn: () => fetchPatient(page, search),
-  });
-
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    doc.text("Patient List", 14, 20);
-    doc.setFontSize(12);
-    doc.text(`Page: ${page}`, 14, 28);
-
-    const tableData = Patients?.patientList?.map((patient: any, index: number) => [
-      index + 1,
-      `${patient?.firstname} ${patient?.lastname}`,
-      patient?.disease,
-      `${patient?.referedby?.firstname} ${patient?.referedby?.lastname}`,
-      `${patient?.referedto?.firstname} ${patient?.referedto?.lastname}`,
-      patient?.referback ? "Yes" : "No",
-      patient?.referalstatus ? "Completed" : "Pending",
-    ]);
-
-    doc.autoTable({
-      head: [["#", "Patient Name", "Disease", "Referred By", "Referred To", "Refer Back", "Status"]],
-      body: tableData,
-      startY: 35,
-    });
-
-    doc.save("Patient_List.pdf");
-  };
-
-  if (isLoading) {
-    return (
-      <div className="spinner-container">
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return <div className="error-message">Error: {error.message}</div>;
-  }
-
-  return (
-    <div className="patient-list-container">
-      <header className="header">
-        <h4 className="heading-patients">Referral Patients</h4>
-      </header>
-
-      <div className="actions-container">
-
-        <input
-          className="search-input"
-          type="text"
-          value={search}
-          placeholder="Search patients..."
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        {doctype === "1" && (
-          <button className="add-patient-btn" onClick={() => navigate("/add-patient")}>
-            + Add Referral Patient
-          </button>
-        )}
-
-        <button className="download-pdf-btn" onClick={generatePDF}>
-          Download PDF
-        </button>
-      </div>
-
-      <table className="patient-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Patient Name</th>
-            <th>Disease</th>
-            <th>Referred By</th>
-            <th>Referred To</th>
-            <th>Refer Back</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Patients?.patientList?.map((patient: any, index: number) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{`${patient?.firstname} ${patient?.lastname}`}</td>
-              <td>{patient?.disease}</td>
-              <td>{`${patient?.referedby?.firstname} ${patient?.referedby?.lastname}`}</td>
-              <td>{`${patient?.referedto?.firstname} ${patient?.referedto?.lastname}`}</td>
-              <td>{patient?.referback ? "Yes" : "No"}</td>
-              <td>
-                <span
-                  className={`status-tag ${patient?.referalstatus ? "status-completed" : "status-pending"}`}
-                >
-                  {patient?.referalstatus ? "Completed" : "Pending"}
-                </span>
-              </td>
-              <td>
-                <button
-                  className="eye-btn"
-                  onClick={() => navigate(`/view-patient/${patient.id}`)}
-                >
-                  <img src={eyeLogo} alt="View Patient" className="eye-logo" height="25px" width="25px" />
-
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
 };
 
-export default PatientList;
+export default Chat;
 
-.patient-list-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-}
 
-.header {
-    margin-bottom: 10px;
-}
 
-.heading-patients {
-    font-size: 1.8rem;
-    color: #333;
-}
-
-.actions-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.add-patient-btn {
-    background-color: #35c0e4;
-    color: white;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 250px;
-}
-
-.add-patient-btn:hover {
-    background-color: #2a99b6;
-}
-
-.search-input {
-    padding: 8px;
-    width: 60%;
-    border: none;
-    border-radius: 4px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.download-pdf-btn {
-    padding: 10px 16px;
-    background-color: #35c0e4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.download-pdf-btn:hover {
-    background-color: #2a99b6;
-}
-
-.patient-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.patient-table th,
-.patient-table td {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
-
-.patient-table th {
-    background-color: #f2f2f2;
-}
-
-.patient-table tr:nth-child(odd) {
-    background-color: #fafafa;
-}
-
-.patient-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-.eye-btn {
-    background-color: #42D69D;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-}
-
-.eye-btn:hover {
-    background-color: #ffffff;
-}
-
-.status-tag {
-    padding: 4px 8px;
-    border-radius: 4px;
-    color: white;
-    font-size: 0.9rem;
-}
-
-.status-completed {
-    background-color: #28a745;
-}
-
-.status-pending {
-    background-color: #ffc107;
-}

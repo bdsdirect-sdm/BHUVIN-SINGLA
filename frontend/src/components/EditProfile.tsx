@@ -119,7 +119,7 @@ const EditProfile: React.FC = () => {
                         </div>
 
                         {/* Address Details */}
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Address Line 1</label>
                             <Field type="text" name="street" className="form-control" />
                             <ErrorMessage name="street" component="div" className="text-danger" />
@@ -147,9 +147,12 @@ const EditProfile: React.FC = () => {
                             <label>Pincode</label>
                             <Field type="text" name="pincode" className="form-control" maxLength={6} />
                             <ErrorMessage name="pincode" component="div" className="text-danger" />
-                        </div>
+                        </div> */}
 
-                        <button type="submit" className="btn btn-outline-dark">Save Details</button>
+                        <button type="submit" style={{ backgroundColor: '#2a99b6', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                            Save Details
+                        </button>
+
                     </Form>
                 )}
             </Formik>

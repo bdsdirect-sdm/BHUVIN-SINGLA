@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import api from '../api/axiosInstance';
 import { Local } from '../environment/env';
-import './AddStaff.css';
+import '../Styling/AddStaff.css';
 
 const AddStaff: React.FC = () => {
   const navigate = useNavigate();
@@ -112,27 +112,30 @@ const AddStaff: React.FC = () => {
             </div>
             <br />
 
-            <div className="form-group">
+            <div className="form-group gender-section">
               <label>Gender:</label>
-              <div>
+              <div className="gender-radio-group">
                 <label>
-                  <Field type="radio" name="gender" value="Male" /> Male
+                  <Field type="radio" name="gender" value="Male" />
+                  &nbsp; &nbsp;&nbsp; Male
                 </label>
                 <label>
-                  <Field type="radio" name="gender" value="Female" /> Female
+                  <Field type="radio" name="gender" value="Female" />
+                  &nbsp; &nbsp;&nbsp;Female
                 </label>
-                <ErrorMessage name="gender" component="div" className="text-danger" />
               </div>
+              <ErrorMessage name="gender" component="div" className="text-danger" />
             </div>
+
             <br />
 
             <button type="submit" className="btn btn-outline-primary">
               Add Staff
             </button>
-          </Form>
+          </Form >
         )}
-      </Formik>
-    </div>
+      </Formik >
+    </div >
   );
 };
 
