@@ -7,10 +7,6 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-p {
-    font-size: xx-large;
-}
-
 .main-content-dashboard {
     height: max-content;
     background-color: #f4f6f9;
@@ -83,7 +79,7 @@ p {
 
 .btn-addrefer {
     padding: 8px 16px;
-    background-color: #2A99B6;
+    background-color: #269ab8;
     color: white;
     border: none;
     border-radius: 4px;
@@ -91,7 +87,7 @@ p {
 }
 
 .btn-addrefer:hover {
-    background-color: #0056b3;
+    background-color: #0055b1;
 }
 
 .status-box {

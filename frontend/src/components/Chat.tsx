@@ -157,7 +157,7 @@ const Chat: React.FC = () => {
                             <h4>{pname}</h4>
                         </div>
 
-                        <div className="chat-messages mb-5">
+                        <div className="chat-messages">
                             {messages.map((msg: any, index: number) => (
                                 <div key={index} className={`chat-bubble ${msg.sender_id === chatdata.user ? "chat-sent" : "chat-received"}`}>
                                     <p>{msg.message}</p>

@@ -1,6 +1,6 @@
 .chat-layout {
     display: flex;
-    height: calc(100vh - 50px);
+    height: calc(100vh);
     /* Adjusted height to fit the layout */
     background-color: #e5ddd5;
 }

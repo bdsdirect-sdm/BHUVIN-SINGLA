@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import greenImage from '../Assets/green.jpg'; // Import the image
 import '../Styling/Profile.css';
 import { toast } from 'react-toastify';
+
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
