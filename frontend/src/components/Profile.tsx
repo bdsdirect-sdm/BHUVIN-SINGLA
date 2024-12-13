@@ -34,20 +34,26 @@ const Profile: React.FC = () => {
     }
   };
 
+
   const deleteAddress = async (addressId: string) => {
+    console.log("Deleting address with ID:", addressId); // Debugging log
     try {
-      await api.delete(`http://localhost:4000/address/${addressId}`, {
+      const response = await api.delete(`http://localhost:4000/addresses/${addressId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("<<<<<<<<<Response>>>>>>>>>>>>>>>>>>>", response.data)
+
       toast.success("Address deleted successfully");
-      refetch(); // Refetch the profile data to update the list of addresses
+      refetch(); // Refresh data after deletion
     } catch (error: any) {
       toast.error("Error deleting address");
       console.error("Error:", error);
     }
   };
+
+
 
   const { data, isError, error, isLoading, refetch } = useQuery({
     queryKey: ['dashboard'],
@@ -151,15 +157,11 @@ const Profile: React.FC = () => {
                   <p><b>Country:</b> {address.country || 'N/A'}</p>
                   <button
                     className="btn-deleteaddress"
-                    onClick={() => deleteAddress(address.id)}
-                    style={{
+                    onClick={() => {
+                      deleteAddress(address.uuid)
+                    }
 
-                      color: '#fff',
-                      border: 'none',
-                      padding: '5px 10px',
-                      borderRadius: '4px',
-                      cursor: 'pointer'
-                    }}
+                    }
                   >
                     Delete Address
                   </button>

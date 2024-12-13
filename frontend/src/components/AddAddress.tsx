@@ -49,6 +49,7 @@ const AddAddress: React.FC = () => {
   })
 
   const addressHandler = (values: any) => {
+    console.log("values", values);
     addressMutation.mutate(values);
     console.log("Address Saved------->", addressMutation.data);
   }

@@ -154,6 +154,7 @@ export const getDoctorAddresses = async (req: any, res: any) => {
 
 export const getAddresses = async (req: any, res: any) => {
     try {
+
         const { uuid } = req.user; // Extract the UUID from the authenticated user
         console.log("pakki baat", req.body);
         // Fetch the logged-in user
@@ -166,9 +167,9 @@ export const getAddresses = async (req: any, res: any) => {
         // Fetch addresses associated with the user
         const addresses = await Address.findAll({ where: { user: uuid } });
 
-        if (!addresses.length) {
-            return res.status(404).json({ message: "No addresses found for this user" });
-        }
+        // if (addresses.length === 0) {
+        //     return res.status(200).json({ message: "No addresses found for this user" });
+        // }
 
         res.status(200).json({
             user: {
@@ -531,22 +532,46 @@ export const getStaffList = async (req: any, res: Response) => {
 
 export const deleteAddress = async (req: any, res: any) => {
     try {
-        const { id } = req.params; // Get address ID from URL parameter
-        const { uuid } = req.user; // Get user UUID from authenticated token
+        console.log("tarun", req.body)
+        const { id } = req.params; // Address UUID from the request parameters
 
-        // Check if the address exists and belongs to the user
-        const address = await Address.findOne({ where: { id, userUuid: uuid } });
 
-        if (!address) {
-            return res.status(404).json({ message: "Address not found or unauthorized" });
+        // Perform the deletion using Address.destroy
+        const deletedCount = await Address.destroy({ where: { uuid: id } });
+        console.log("<<<<<<<<<<<deletedCount>>>>>>>>>>>>>>>", deletedCount)
+
+        // Check if any rows were affected
+        if (deletedCount === 0) {
+            return res.status(201).json({ message: "Address can't be deleted" });
         }
 
-        // Delete the address
-        await address.destroy();
-
+        // Respond with success if the deletion occurred
         res.status(200).json({ message: "Address deleted successfully" });
-    } catch (err: any) {
-        console.error("Error deleting address:", err);
+    } catch (error) {
+        console.error("Error deleting address:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+// export const deleteAddress = async (req: any, res: any) => {
+//     try {
+//         const { id } = req.params; // Address ID from the request parameters
+
+//         // Check if the address exists and belongs to the authenticated user
+//         const { uuid } = req.user; // Extract user UUID from the token
+//         const deletedCount = await Address.destroy({
+//             where: { uuid: id, userUuid: uuid }, // Match address by UUID and user UUID
+//         });
+
+//         // Check if any rows were deleted
+//         if (deletedCount === 0) {
+//             return res.status(404).json({ message: "Address not found or unauthorized" });
+//         }
+
+//         // Respond with success if the deletion occurred
+//         res.status(200).json({ message: "Address deleted successfully" });
+//     } catch (error) {
+//         console.error("Error deleting address:", error);
+//         res.status(500).json({ message: "Internal Server Error" });
+//     }
+// };

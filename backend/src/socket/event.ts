@@ -63,7 +63,7 @@ export const sendMessage = async (socket: any, message: any) => {
         });
 
         io.to(`room-${message.room}`).emit('new_message', chat);
-        io.to;
+
     }
     catch (err) {
         console.log(err);

@@ -22,7 +22,7 @@ router.post('/add-staff', userAuthMiddleware, addStaff);
 router.get('/staff', userAuthMiddleware, getStaffList);
 router.get('/profile', userAuthMiddleware, getAddresses);
 router.get('/room-list', userAuthMiddleware, getRooms);
-// router.delete('/address/:id', userAuthMiddleware, deleteAddress);
-router.delete('/address/:id', userAuthMiddleware, deleteAddress);
+
+router.delete('/addresses/:id', userAuthMiddleware, deleteAddress);
 
 export default router;
