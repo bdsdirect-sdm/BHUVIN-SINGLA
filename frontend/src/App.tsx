@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,13 +19,17 @@ import Chat from './components/Chat.tsx';
 import './App.css';
 import AddAddress from './components/AddAddress.tsx';
 import Appointment from './components/Appointment.tsx';
+import AddAppointment from './components/AddAppointment.tsx';
 
-const App: react.FC = () => {
-
+const App: React.FC = () => {
   const router = createBrowserRouter([
     {
       path: '/',
       element: <Signup />
+    },
+    {
+      path: '/add-appointment',
+      element: <AddAppointment />
     },
     {
       path: '/login',

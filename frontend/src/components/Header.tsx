@@ -7,6 +7,8 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const userFirstName = localStorage.getItem('user_firstname');
+  const doctype = localStorage.getItem('doctype'); // Retrieve doctype from local storage
+
   const fullName = userFirstName ? `${userFirstName}` : 'User'; // Fallback to 'User' if not available
 
   return (
@@ -23,9 +25,11 @@ const Header: React.FC = () => {
                 <li>
                   <Link to="/patient" className="nav-link">Patient</Link>
                 </li>
-                {/* <li>
-                  <Link to="/appointment" className="nav-link">Appointments</Link>
-                </li> */}
+                {doctype === '1' && ( // Conditionally render the Appointments link
+                  <li>
+                    <Link to="/appointment" className="nav-link">Appointments</Link>
+                  </li>
+                )}
                 <li>
                   <Link to="/doctor" className="nav-link">Doctors</Link>
                 </li>

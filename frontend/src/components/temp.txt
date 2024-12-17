@@ -1,196 +1,137 @@
-all my adresses are shown under address information inside Profile.tsx component with endpoint "/profile" 
-i want to delete particular address when click on delete button . so create an api for that 
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import "../Styling/Staff.css";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import io from "socket.io-client";
-import { toast } from "react-toastify";
 import api from "../api/axiosInstance";
-import { Local } from "../environment/env";
-import "../Styling/Chat.css";
 
-const socket = io("http://localhost:4000/");
+const Staff: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const token = localStorage.getItem("token");
+  const [staffList, setStaffList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const navigate = useNavigate();
 
-const Chat: React.FC = () => {
-    const navigate = useNavigate();
-    const token = localStorage.getItem("token");
-    var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
-    const [messages, setMessages] = useState<any[]>([]);
-    const [newMessage, setNewMessage] = useState("");
-    const direct = Object.keys(chatdata).length;
-    const pname = localStorage.getItem('pname');
-
-    useEffect(() => {
-        if (!token) {
-            navigate("/login");
-        }
-
-        function fetchChats() {
-            socket.emit("joinchat", chatdata);
-            socket.on("prev_msg", async (data: any) => {
-                setMessages([]);
-                await data.map((metadata: any) =>
-                    setMessages((prev: any) => [...prev, metadata])
-                );
-            });
-        }
-        fetchChats();
-
-        return () => {
-            localStorage.removeItem("chatdata");
-            socket.off("prev_msg");
-        };
-    }, []);
-
-    const getRooms = async () => {
-        try {
-            const response = await api.get(`${Local.GET_ROOM}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            return response.data;
-        } catch (err: any) {
-            toast.error(err.response.data.message)
-        }
-    }
-
-    const { data: rooms, error, isLoading, isError } = useQuery({
-        queryKey: ["rooms"],
-        queryFn: getRooms
-    });
-
-    useEffect(() => {
-        socket.on("getRoom", (getRoom) => {
-            localStorage.setItem("room", getRoom);
+  useEffect(() => {
+    const fetchStaffData = async () => {
+      try {
+        const response = await api.get("/staff", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-    }, [socket]);
-
-    useEffect(() => {
-        socket.on("new_message", (data: any) => {
-            setMessages((prev: any) => [...prev, data]);
-        });
-    }, [socket]);
-
-    const openChat = (patient: any, doc1: any, doc2: any, user: any, pfirstname: string, plastname: string) => {
-        const chatData = { patient, user1: doc1, user2: doc2, user };
-        localStorage.setItem("chatdata", JSON.stringify(chatData));
-        const n = `${pfirstname} ${plastname}`;
-        localStorage.setItem("pname", n);
-
-        setMessages([]);
-
-        socket.emit("joinchat", chatData);
+        setStaffList(response.data.staff || []);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching staff data:", err);
+        setError("Failed to fetch staff data");
+        setLoading(false);
+      }
     };
+    fetchStaffData();
+  }, []);
 
-    const sendMessage = async () => {
-        if (newMessage.trim() === "") {
-            toast.warn("Please Enter Message");
-        } else {
-            const receiver = chatdata.user !== chatdata.user1 ? chatdata.user1 : chatdata.user2;
+  const filteredStaffList = staffList.filter((staff: any) =>
+    staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    staff.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    staff.contact.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    staff.gender.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-            const data = {
-                sender: chatdata.user,
-                message: newMessage.trim(),
-                receiver: receiver,
-                room: localStorage.getItem("room"),
-            };
-            socket.emit("send_message", data);
-            setNewMessage("");
-        }
-    };
+  const totalPages = Math.ceil(filteredStaffList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentStaffList = filteredStaffList.slice(startIndex, startIndex + itemsPerPage);
 
-    if (isLoading) {
-        return (
-            <>
-                <div className='loading-icon'>
-                    <div className="spinner-border spinner text-primary me-2" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                    <div className='me-2 fs-2' >Loading...</div>
-                </div>
-            </>
-        );
-    }
+  const handleAddStaff = () => navigate("/add-staff");
+  const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const handlePreviousPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handlePageClick = (page: number) => setCurrentPage(page);
 
-    if (isError) {
-        return (
-            <>
-                <div>Error: {error?.message}</div>
-            </>
-        );
-    }
+  if (loading) return <div>Loading staff list...</div>;
+  if (error) return <div className="text-danger">Error: {error}</div>;
 
-    return (
-        <>
-            <div className="chat-layout">
-                <div className="chat-sidebar">
-                    <input
-                        type="text"
-                        className="search-bar"
-                        placeholder="Search Patient"
-                    />
-                    <div className="chat-patient-list">
-                        {rooms?.room?.map((room: any) => (
-                            <div key={room.patient.uuid} className="patient-item active mb-2" onClick={() => {
-                                openChat(room?.patient?.uuid, room?.doc1?.uuid, room?.doc2?.uuid, rooms?.user?.uuid, room?.patient?.firstname, room?.patient?.lastname);
-                            }}>
-                                <h5>{room.name}</h5>
-                                <p>
-                                    {room.doc1.uuid !== rooms.user.uuid && (
-                                        <>
-                                            {room.doc1.firstname} {room.doc1.lastname}
-                                        </>
-                                    )}
-                                    {room.doc2.uuid !== rooms.user.uuid && (
-                                        <>
-                                            {room.doc2.firstname} {room.doc2.lastname}
-                                        </>
-                                    )}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+  return (
+    <div className="staff-container">
+      <div className="header-container">
+        <h6>Staff List</h6>
+        <button className="add-staff-btn" onClick={handleAddStaff}>
+          + Add Staff
+        </button>
+      </div>
 
-                {direct !== 0 && (
-                    <div className="chat-main">
-                        <div className="chat-header">
-                            <h4>{pname}</h4>
-                        </div>
+      <input
+        type="text"
+        placeholder="Search"
+        className="search-input2"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
-                        <div className="chat-messages mb-5">
-                            {messages.map((msg: any, index: number) => (
-                                <div key={index} className={`chat-bubble ${msg.sender_id === chatdata.user ? "chat-sent" : "chat-received"}`}>
-                                    <p>{msg.message}</p>
-                                    <span className="message-timestamp"> {msg.createdAt.split("T")[0]} </span>
-                                </div>
-                            ))}
-                        </div>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>Staff Name</th>
+              <th>Email</th>
+              <th>Contact</th>
+              <th>Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentStaffList.length > 0 ? (
+              currentStaffList.map((staff: any) => (
+                <tr key={staff.uuid.id}>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+                  <td>{staff.staffName}</td>
+                  <td>{staff.email}</td>
+                  <td>{staff.contact}</td>
+                  <td>{staff.gender}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} style={{ textAlign: "center" }}>
+                  No staff found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
-                        <div className="chat-input-container">
-                            <input
-                                type="text"
-                                className="chat-input"
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="Type a message..."
-                            />
-                            <button className="chat-send-button" onClick={sendMessage}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
-                                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </>
-    );
+      <div className="pagination">
+        <button onClick={() => handlePageClick(1)} disabled={currentPage === 1}>
+          «
+        </button>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          ‹
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index + 1}
+            className={`pagination-number ${currentPage === index + 1 ? "active" : ""}`}
+            onClick={() => handlePageClick(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          ›
+        </button>
+        <button onClick={() => handlePageClick(totalPages)} disabled={currentPage === totalPages}>
+          »
+        </button>
+      </div>
+    </div>
+  );
 };
 
-export default Chat;
+export default Staff;
 
 
+like this file for staffList , create same form for AddAppointment.tsx 
 

@@ -191,3 +191,36 @@ h5 {
 .profile-subheading {
     color: #000000;
 }
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.address-content {
+    flex: 1;
+}
+
+.btn-deleteaddress {
+    padding: 8px 16px;
+    background-color: #44A5BF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
+    /* Add spacing from content */
+}
+
+.btn-deleteaddress:hover {
+    background-color: #1e9ec2;
+    transform: translateY(-2px);
+}

@@ -92,7 +92,7 @@ const PatientList: React.FC = () => {
           placeholder="Search patients..."
           onChange={(e) => setSearch(e.target.value)}
         />
-        {doctype === "1" && (
+        {doctype === "2" && (
           <button className="add-patient-btn" onClick={() => navigate("/add-patient")}>
             + Add Referral Patient
           </button>
