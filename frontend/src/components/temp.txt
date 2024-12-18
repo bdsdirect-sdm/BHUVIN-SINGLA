@@ -1,137 +1,249 @@
-import React, { useState, useEffect } from "react";
-import "../Styling/Staff.css";
-import { useNavigate } from "react-router-dom";
-import api from "../api/axiosInstance";
+import React, { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate, Link } from 'react-router-dom';
+import { Local } from '../environment/env';
+import api from '../api/axiosInstance';
+import '../Styling/Dashboard.css';
 
-const Staff: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const token = localStorage.getItem("token");
-  const [staffList, setStaffList] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const navigate = useNavigate();
+// Image Imports
+import refferal_placed from "../Assets/img1.svg";
+import refferal_completed from "../Assets/img2.svg";
+import md from "../Assets/img3.png";
 
-  useEffect(() => {
-    const fetchStaffData = async () => {
-      try {
-        const response = await api.get("/staff", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setStaffList(response.data.staff || []);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching staff data:", err);
-        setError("Failed to fetch staff data");
-        setLoading(false);
-      }
+const Dashboard: React.FC = () => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+    const [page, setPage] = useState<number>(1);
+    const search = '';
+    let totalPages: number;
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+        }
+    }, [token, navigate]);
+
+    const getUser = async () => {
+        try {
+            const response = await api.get(`${Local.GET_USER}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            return response;
+        } catch (err) {
+            console.error('Error fetching user:', err);
+        }
     };
-    fetchStaffData();
-  }, []);
 
-  const filteredStaffList = staffList.filter((staff: any) =>
-    staff.staffName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    staff.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    staff.contact.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    staff.gender.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    const fetchPatients = async (pageno: number, search: string) => {
+        try {
+            const response = await api.get(
+                `${Local.GET_PATIENT_LIST}?page=${pageno}&limit=10&find=${search}`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            return response.data;
+        } catch (err: any) {
+            console.error('Error fetching patients:', err.response?.data?.message);
+        }
+    };
 
-  const totalPages = Math.ceil(filteredStaffList.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentStaffList = filteredStaffList.slice(startIndex, startIndex + itemsPerPage);
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ['user'],
+        queryFn: getUser,
+    });
 
-  const handleAddStaff = () => navigate("/add-staff");
-  const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
-  const handlePreviousPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
-  const handlePageClick = (page: number) => setCurrentPage(page);
+    const {
+        data: patientList,
+        isLoading: patientLoading,
+        isError: patientError,
+    } = useQuery({
+        queryKey: ['patient', page, search],
+        queryFn: () => fetchPatients(page, search),
+    });
 
-  if (loading) return <div>Loading staff list...</div>;
-  if (error) return <div className="text-danger">Error: {error}</div>;
+    const viewNavigator = (patientUUID: string) => {
+        localStorage.setItem('patientId', patientUUID);
+        navigate('/view-patient');
+    };
 
-  return (
-    <div className="staff-container">
-      <div className="header-container">
-        <h6>Staff List</h6>
-        <button className="add-staff-btn" onClick={handleAddStaff}>
-          + Add Staff
-        </button>
-      </div>
+    const directChat = (
+        patient: any,
+        user1: any,
+        user2: any,
+        user: any,
+        firstname: string,
+        lastname: string
+    ) => {
+        const chatData = {
+            patient,
+            user1,
+            user2,
+            user,
+            roomname: `${firstname} ${lastname}`,
+        };
+        localStorage.setItem('pname', chatData.roomname);
+        localStorage.setItem('chatdata', JSON.stringify(chatData));
+        navigate('/chat');
+    };
 
-      <input
-        type="text"
-        placeholder="Search"
-        className="search-input2"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
+    if (isLoading || patientLoading) {
+        return (
+            <div className="loading-icon">
+                <div className="spinner-border text-primary me-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+                <div className="fs-2">Loading...</div>
+            </div>
+        );
+    }
 
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Select</th>
-              <th>Staff Name</th>
-              <th>Email</th>
-              <th>Contact</th>
-              <th>Gender</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentStaffList.length > 0 ? (
-              currentStaffList.map((staff: any) => (
-                <tr key={staff.uuid.id}>
-                  <td>
-                    <input type="checkbox" />
-                  </td>
-                  <td>{staff.staffName}</td>
-                  <td>{staff.email}</td>
-                  <td>{staff.contact}</td>
-                  <td>{staff.gender}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5} style={{ textAlign: "center" }}>
-                  No staff found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+    if (isError || patientError) {
+        return (
+            <>
+                <div>Error: {error?.message}</div>
+            </>
+        );
+    }
 
-      <div className="pagination">
-        <button onClick={() => handlePageClick(1)} disabled={currentPage === 1}>
-          «
-        </button>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          ‹
-        </button>
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index + 1}
-            className={`pagination-number ${currentPage === index + 1 ? "active" : ""}`}
-            onClick={() => handlePageClick(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          ›
-        </button>
-        <button onClick={() => handlePageClick(totalPages)} disabled={currentPage === totalPages}>
-          »
-        </button>
-      </div>
-    </div>
-  );
+    totalPages = Math.ceil((patientList?.totalpatients || 0) / 10);
+
+    return (
+        <div className="dashboard-container">
+            <h3 className="dashboard-title">Dashboard</h3>
+
+            {/* Cards Section */}
+            <div className="dashboard-cards">
+                {/* Referrals Placed Card */}
+                <div className="card" onClick={() => navigate('/patient')}>
+                    <div className="card-content">
+                        <div className="card-left">
+                            <p>Referrals Placed</p>
+                            <div className="image-container">
+                                <img
+                                    src={refferal_placed}
+                                    alt="Referrals Placed"
+                                    height="50px"
+                                    width="50px"
+                                />
+                            </div>
+                            <h3>{data?.data.referCount ?? 0}</h3>
+                        </div>
+                        <p className="card-text text-secondary">Last update: 17 Dec</p>
+                    </div>
+                </div>
+
+                {/* Referrals Completed Card */}
+                <div className="card" onClick={() => navigate('/patient')}>
+                    <div className="card-content">
+                        <div className="card-left">
+                            <p>Referrals Completed</p>
+                            <div className="image-container">
+                                <img
+                                    src={refferal_completed}
+                                    alt="Referrals Completed"
+                                    height="50px"
+                                    width="50px"
+                                />
+                            </div>
+                            <h3>{data?.data.referCompleted ?? 0}</h3>
+                        </div>
+                        <p className="card-text text-secondary">Last update: 17 Dec</p>
+                    </div>
+                </div>
+
+                {/* Doctor OD/MD Card */}
+                <div className="card" onClick={() => navigate('/doctor')}>
+                    <div className="card-content">
+                        <div className="card-left">
+                            <p>
+                                {localStorage.getItem('doctype') === '1'
+                                    ? 'Doctor OD/MD'
+                                    : 'Doctor MD'}
+                            </p>
+                            <div className="image-container">
+                                <img src={md} alt="Doctor OD/MD" height="50px" width="50px" />
+                            </div>
+                            <h3>{data?.data.docCount ?? 0}</h3>
+                        </div>
+                        <p className="card-text text-secondary">Last update: 17 Dec</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Referral Patients Table */}
+            <div className="patients-section">
+                <div className="header-container">
+                    <h5>Referral Patients</h5>
+                    {localStorage.getItem('doctype') === '2' && (
+                        <button
+                            className="btn-addrefer"
+                            onClick={() => navigate('/add-patient')}
+                        >
+                            + Add Referral Patient
+                        </button>
+                    )}
+                </div>
+
+                <table className="patient-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>DOB</th>
+                            <th>Disease</th>
+                            <th>Date Sent</th>
+                            <th>Appointment Date</th>
+                            <th>Referred To</th>
+                            <th>Status</th>
+                            <th>Consult Note</th>
+                            <th>Ready to Return</th>
+                            <th>Direct Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {patientList?.patientList?.map((patient: any) => (
+                            <tr key={patient.uuid}>
+                                <td>{`${patient.firstname} ${patient.lastname}`}</td>
+                                <td>Nov-21-2024</td>
+                                <td>{patient.disease || '--'}</td>
+                                <td>Nov-11-2024</td>
+                                <td>{patient.patientId?.date || '--'}</td>
+                                <td>{`${patient.referedto?.firstname || ''} ${patient.referedto?.lastname || ''}`}</td>
+                                <td>
+                                    {patient.referalstatus === 1
+                                        ? 'Completed'
+                                        : 'Pending'}
+                                </td>
+                                <td>
+                                    <Link to="#" onClick={() => alert('Under Process')}>
+                                        Yes
+                                    </Link>
+                                </td>
+                                <td>{patient.referback ? 'Yes' : 'No'}</td>
+                                <td
+                                    className="chat-link"
+                                    onClick={() =>
+                                        directChat(
+                                            patient.uuid,
+                                            patient.referedby?.uuid,
+                                            patient.referedto?.uuid,
+                                            data?.data.user.uuid,
+                                            patient.firstname,
+                                            patient.lastname
+                                        )
+                                    }
+                                >
+                                    Link
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
 };
 
-export default Staff;
+export default Dashboard;
 
+change above 3 section styling as shown in picture above same ui + look wise but dont change a single functionality .
 
-like this file for staffList , create same form for AddAppointment.tsx 
-
+here below is my current css file . change it and give me full upadated files 

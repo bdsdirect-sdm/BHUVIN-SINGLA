@@ -97,9 +97,9 @@ const PatientList: React.FC = () => {
             + Add Referral Patient
           </button>
         )}
-        <button className="download-pdf-btn" onClick={generatePDF}>
-          Download PDF
-        </button>
+        {/* <button className="download-pdf-btn" onClick={generatePDF}>
+            Download PDF
+          </button> */}
       </div>
 
       {/* Patients Table */}
@@ -113,7 +113,7 @@ const PatientList: React.FC = () => {
             <th>Referred To</th>
             <th>Refer Back</th>
             <th>Status</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
         <tbody>
@@ -132,14 +132,14 @@ const PatientList: React.FC = () => {
                   {patient?.referalstatus ? "Completed" : "Pending"}
                 </span>
               </td>
-              <td>
+              {/* <td>
                 <button
                   className="eye-btn"
                   onClick={() => navigate(`/view-patient/${patient.id}`)}
                 >
                   <img src={eyeLogo} alt="View Patient" className="eye-logo" height="25px" width="25px" />
                 </button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

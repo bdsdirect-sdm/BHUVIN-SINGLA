@@ -114,7 +114,7 @@ const DoctorList: React.FC = () => {
                   <th>Phone</th>
                   <th>Email</th>
                   <th>Doctype</th>
-                  <th>Action</th>
+                  {/* <th>Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -128,9 +128,9 @@ const DoctorList: React.FC = () => {
                     <td>{doctor.phone}</td>
                     <td>{doctor.email}</td>
                     <td>{doctor.doctype === 1 ? 'MD' : 'OD'}</td>
-                    <td>
+                    {/* <td>
                       <button className="action-btn"> &#58393; </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

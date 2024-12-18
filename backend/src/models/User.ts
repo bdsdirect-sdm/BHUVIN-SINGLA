@@ -18,6 +18,7 @@ class User extends Model {
     public is_deleted!: boolean;
     public deleted_at!: Date;
     public status!: boolean;
+    country: any;
 }
 
 User.init({

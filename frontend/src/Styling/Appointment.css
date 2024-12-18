@@ -1,132 +1,138 @@
-.appointment-container {
-    padding: 20px;
-}
-
-.main-header {
-    padding-top: 3%;
+/* Container Styling */
+.header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.btn-add-appointment {
-    padding: 8px 16px;
+.header-container h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+/* Add Appointment Button */
+.btn-addrefer {
+    background-color: #35C0E4;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-addrefer:hover {
+    background-color: #2a99b6;
+}
+
+/* Search Bar Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* background-color: #f9f9f9; */
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    outline: none;
+    max-width: 30%;
+}
+
+.search-container input:focus {
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 1px #63b3ed;
+}
+
+.search-button {
     background-color: #35C0E4;
     color: white;
     border: none;
     border-radius: 4px;
+    padding: 8px 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.search-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px;
-    background: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+.search-button:hover {
+    background-color: #2a99b6;
 }
 
-.search-input {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 35%;
-    outline: none;
-    margin-right: 8px;
-}
-
-.search-input:focus {
-    border-color: #35C0E4;
-}
-
-.clear-btn {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 8px;
-    color: #555;
-}
-
-.clear-btn:hover {
-    color: #000;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
+/* Table Styling */
+.appointment-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 14px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.9rem;
+    color: #2d3748;
 }
 
-thead tr {
-    background-color: #f4f4f4;
+.appointment-table th {
+    background-color: #f7fafc;
+    font-weight: 600;
     text-align: left;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
 }
 
-th,
-td {
-    padding: 6px 8px;
-    border: 1px solid #ddd;
+.appointment-table td {
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
 }
 
-tbody tr:hover {
-    background-color: #f9f9f9;
+.appointment-table tbody tr:hover {
+    background-color: #edf2f7;
 }
 
-.status-box {
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-weight: bold;
-    display: inline-block;
-}
-
-.status-pending {
-    background-color: #E8FAF4;
-    color: #16856D;
-}
-
-.status-scheduled {
-    background-color: #FFF9E4;
-    color: #B68A00;
-}
-
-.status-completed {
-    background-color: #D8F5DD;
-    color: #3C763D;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.pagination-btn {
-    padding: 5px 10px;
-    margin: 0 5px;
-    color: rgb(0, 0, 0);
+/* Buttons in Table */
+.complete-btn,
+.cancel-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.pagination-btn:hover {
-    background-color: #2A99B6;
+.complete-btn {
+    /* background-color: #48bb78; */
+    background-color: #3bc2e4;
+
     color: white;
 }
 
-.pagination-btn.active {
-    background-color: #2A99B6;
-    color: #ffffff;
-    font-weight: bold;
+.complete-btn:hover {
+    background-color: rgb(40, 171, 204);
+}
+
+.cancel-btn {
+    background-color: #e53e3e;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #c53030;
+}
+
+/* Empty Data Styling */
+.appointment-table tbody tr td[colspan="6"] {
+    text-align: center;
+    color: #718096;
+    font-size: 0.9rem;
+    padding: 20px 0;
 }

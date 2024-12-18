@@ -73,8 +73,8 @@ const Login: React.FC = () => {
       </div>
 
       <div className="right-section">
-        <h2 className='main-heading'>Eye Refer</h2><br />
-        <h2 className='heading-signin'>Sign in</h2>
+        <h2 className='main-heading'>Log In</h2><br />
+
         <Formik
           initialValues={{
             email: '',
@@ -85,12 +85,12 @@ const Login: React.FC = () => {
           {() => (
             <Form>
               <div className="form-group">
-                <label>Enter your username or email address</label>
-                <Field name="email" type="email" placeholder="Username or email address" className="form-control" />
+                <label>User email</label>
+                <Field name="email" type="email" placeholder="User email" className="form-control" />
                 <ErrorMessage name="email" component="div" className="text-danger" />
               </div>
               <div className="form-group">
-                <label>Enter your password</label>
+                <label>Password</label>
                 <Field name="password" type="password" placeholder="Password" className="form-control" />
                 <ErrorMessage name="password" component="div" className="text-danger" />
               </div>
@@ -100,7 +100,10 @@ const Login: React.FC = () => {
           )}
         </Formik>
 
-        <Link to={'/'}>Don't have an Account? <span className="login">Sign Up</span></Link>
+        <Link to={'/'}>
+          <span className='login-span'> Don't have an Account? </span>
+          <span className="login">Sign Up</span>
+        </Link>
       </div>
     </div>
   )

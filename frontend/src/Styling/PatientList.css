@@ -59,13 +59,14 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    border: 0px;
 }
 
 .patient-table th,
 .patient-table td {
     padding: 10px;
     text-align: left;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
 }
 
 .pagination {

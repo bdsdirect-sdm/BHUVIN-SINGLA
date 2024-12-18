@@ -7,6 +7,7 @@ import api from "../api/axiosInstance";
 import { Local } from "../environment/env";
 import "../Styling/Chat.css";
 
+
 const socket = io("http://localhost:4000/");
 
 const Chat: React.FC = () => {

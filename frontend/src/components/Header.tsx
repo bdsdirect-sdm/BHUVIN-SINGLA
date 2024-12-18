@@ -1,15 +1,19 @@
-import React from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
-import logo from '../Assets/title_logo.webp';
-import '../Styling/Header.css';
+import { GoHome, GoHomeFill } from "react-icons/go";
+import { MdOutlinePersonalInjury, MdOutlinePersonPin, MdOutlineMarkChatRead } from "react-icons/md";
+import { BiBookReader } from "react-icons/bi";
+import { GrGroup } from "react-icons/gr";
+import React from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import logo from "../Assets/title_logo.webp";
+import "../Styling/Header.css";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-  const userFirstName = localStorage.getItem('user_firstname');
-  const doctype = localStorage.getItem('doctype'); // Retrieve doctype from local storage
+  const token = localStorage.getItem("token");
+  const userFirstName = localStorage.getItem("user_firstname");
+  const doctype = localStorage.getItem("doctype"); // Retrieve doctype from local storage
 
-  const fullName = userFirstName ? `${userFirstName}` : 'User'; // Fallback to 'User' if not available
+  const fullName = userFirstName ? `${userFirstName}` : "User"; // Fallback to 'User' if not available
 
   return (
     <>
@@ -17,27 +21,49 @@ const Header: React.FC = () => {
         {/* Sidebar */}
         <div className="sidebar">
           <ul className="nav-list">
+            <li>
+              <Link to="/" className="nav-link home-icon">
+              </Link>
+            </li>
             {token && (
               <>
                 <li>
-                  <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                  <Link to="/dashboard" className="nav-link">
+                    <GoHome size={20} style={{ marginRight: "8px" }} /> {/* Icon before text */}
+                    Dashboard
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/patient" className="nav-link">Patient</Link>
+                  <Link to="/patient" className="nav-link">
+                    <MdOutlinePersonalInjury size={20} style={{ marginRight: "8px" }} /> {/* Icon before text */}
+                    Patient
+                  </Link>
                 </li>
-                {doctype === '1' && ( // Conditionally render the Appointments link
+                {doctype === "1" && (
                   <li>
-                    <Link to="/appointment" className="nav-link">Appointments</Link>
+                    <Link to="/appointment" className="nav-link">
+                      <BiBookReader size={20} style={{ marginRight: "8px" }} /> {/* Icon before text */}
+                      Appointments
+                    </Link>
                   </li>
                 )}
                 <li>
-                  <Link to="/doctor" className="nav-link">Doctors</Link>
+                  <Link to="/doctor" className="nav-link">
+                    <MdOutlinePersonPin size={20} style={{ marginRight: "8px" }} /> {/* Icon before text */}
+                    Doctors
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/chat" className="nav-link">Chat</Link>
+                  <Link to="/chat" className="nav-link">
+                    <MdOutlineMarkChatRead size={20} style={{ marginRight: "8px" }} /> {/* Icon before text */}
+                    Chat
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/staff" className="nav-link">Staff</Link>
+                  <Link to="/staff" className="nav-link">
+                    <GrGroup size={20} style={{ marginRight: "8px" }} /> {/* Icon before text */}
+                    Staff
+                  </Link>
                 </li>
               </>
             )}
@@ -78,7 +104,7 @@ const Header: React.FC = () => {
                           className="dropdown-item"
                           onClick={() => {
                             localStorage.clear();
-                            navigate('/login');
+                            navigate("/login");
                           }}
                         >
                           Logout
@@ -105,6 +131,8 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+
+
 
 
 // import React from 'react';

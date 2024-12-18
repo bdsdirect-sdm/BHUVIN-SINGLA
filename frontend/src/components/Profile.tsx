@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../api/axiosInstance';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import greenImage from '../Assets/green.jpg'; // Import the image
+import greenImage from '../Assets/green.jpg';
 import '../Styling/Profile.css';
 import { toast } from 'react-toastify';
 
@@ -49,7 +49,7 @@ const Profile: React.FC = () => {
     queryKey: ['dashboard'],
     queryFn: getUser,
   });
-
+  // console.log("xxxx", data);
   if (isLoading) {
     return (
       <div>
@@ -124,7 +124,7 @@ const Profile: React.FC = () => {
                     <p><b>Street:</b> {address.street || 'N/A'}</p>
                     <p><b>City:</b> {address.city || 'N/A'}</p>
                     <p><b>State:</b> {address.state || 'N/A'}</p>
-                    <p><b>Country:</b> {address.country || 'N/A'}</p>
+                    <p><b>Pincode:</b> {address.pincode || 'N/A'}</p>
                   </div>
                   <button
                     className="btn-deleteaddress"

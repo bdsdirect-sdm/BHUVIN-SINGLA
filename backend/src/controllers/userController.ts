@@ -178,6 +178,7 @@ export const getAddresses = async (req: any, res: any) => {
                 email: user.email,
                 phone: user.phone,
                 doctype: user.doctype, // Optional field to denote doctor type
+                gender: user.gender
             },
             addresses, // List of user's addresses
             message: "User profile and addresses fetched successfully",
@@ -287,7 +288,7 @@ export const addPatient = async (req: any, res: any) => {
 
 export const addAddress = async (req: any, res: any) => {
     try {
-        const { addressLine, city, street, state, country } = req.body;
+        const { addressLine, city, street, state, country, district, phone, pincode } = req.body;
         const { uuid } = req.user; // Get user UUID from token
 
         // Create or update address for the user
@@ -298,7 +299,10 @@ export const addAddress = async (req: any, res: any) => {
                 city,
                 state,
                 country,
-                user: uuid, // Associate address with the current user
+                district,
+                phone,
+                pincode,
+                user: uuid,
             },
             { returning: true }
         );
