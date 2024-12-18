@@ -121,7 +121,7 @@ const Profile: React.FC = () => {
               addressList.map((address: any, index: number) => (
                 <div key={index} className="address-item">
                   <div className="address-content">
-                    <p><b>Street:</b> {address.addressLine || 'N/A'}</p>
+                    <p><b>Street:</b> {address.street || 'N/A'}</p>
                     <p><b>City:</b> {address.city || 'N/A'}</p>
                     <p><b>State:</b> {address.state || 'N/A'}</p>
                     <p><b>Country:</b> {address.country || 'N/A'}</p>

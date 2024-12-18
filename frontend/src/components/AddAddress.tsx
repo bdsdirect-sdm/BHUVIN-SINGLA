@@ -84,6 +84,13 @@ const AddAddress: React.FC = () => {
             <br />
 
             <div className="form-group">
+              <label>City</label>
+              <Field type="text" name="city" className="form-control" />
+              <ErrorMessage name="city" component="div" className="text-danger" />
+            </div>
+            <br />
+
+            <div className="form-group">
               <label>State</label>
               <Field type="text" name="state" className="form-control" />
               <ErrorMessage name="state" component="div" className="text-danger" />
@@ -91,11 +98,12 @@ const AddAddress: React.FC = () => {
             <br />
 
             <div className="form-group">
-              <label>City</label>
-              <Field type="text" name="city" className="form-control" />
-              <ErrorMessage name="city" component="div" className="text-danger" />
+              <label>Country</label>
+              <Field type="text" name="country" className="form-control" />
+              <ErrorMessage name="country" component="div" className="text-danger" />
             </div>
             <br />
+
 
             <div className="form-group">
               <label>Phone</label>

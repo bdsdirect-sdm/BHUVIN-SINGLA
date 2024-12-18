@@ -285,15 +285,15 @@ export const addPatient = async (req: any, res: any) => {
     }
 };
 
-export const addAddress = async (req: any, res: Response) => {
+export const addAddress = async (req: any, res: any) => {
     try {
-        const { addressLine, city, state, country } = req.body;
+        const { addressLine, city, street, state, country } = req.body;
         const { uuid } = req.user; // Get user UUID from token
 
         // Create or update address for the user
         const [address, created] = await Address.upsert(
             {
-
+                street,
                 addressLine,
                 city,
                 state,
