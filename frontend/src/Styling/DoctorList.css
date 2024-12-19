@@ -1,110 +1,126 @@
-/* DoctorList.css */
-* {
-    box-sizing: border-box;
-}
-
 body {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.main-div {
-    background-color: white;
-    padding: 20px;
-}
-
-.search-container2 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.search-container2 h5 {
+    font-family: Arial, sans-serif;
     margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
 }
 
-.search-input-doctor {
-    padding: 8px;
-    width: 250px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+.doctor-list-container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.search-section {
+    padding: 15px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    background-color: #ECF1F3;
+}
+
+.search-box {
+    padding: 10px 15px;
+    width: 50%;
+    border: 1px solid #d1d1d1;
+    border-radius: 5%;
     font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.table-container {
-    margin-top: 20px;
+
+.search-button {
+    padding: 10px 20px;
+    background-color: #35c0e4;
+    color: white;
+    font-size: 16px;
+    border: 1px solid grey;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+    background-color: #2fb786;
+}
+
+.table-section {
     overflow-x: auto;
 }
 
-.table-container table {
+table {
     width: 100%;
     border-collapse: collapse;
 }
 
-table th,
+table th {
+    background-color: #ffffff;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+}
+
 table td {
     padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #f1f1f1;
 }
 
-table th {
-    background-color: #f4f4f4;
+table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.pagination-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    background-color: white;
+    border-top: 1px solid #eaeaea;
+}
+
+.pagination-button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    background-color: white;
     color: #333;
-}
-
-.table-container tr:hover {
-    background-color: #f1f1f1;
-}
-
-.action-btn {
-    background-color: #43D79E;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    font-size: 14px;
     cursor: pointer;
     border-radius: 4px;
 }
 
-.action-btn:hover {
-    background-color: #43D79E;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.page-arrow,
-.page-number {
-    padding: 10px;
-    margin: 0 5px;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    background-color: #fff;
-}
-
-.page-number.active {
+.pagination-button.active {
     background-color: #43D79E;
     color: white;
+    border-color: #43D79E;
 }
 
-.page-arrow:disabled,
-.page-number:disabled {
-    background-color: #f1f1f1;
+.pagination-button:disabled {
+    background-color: #eaeaea;
+    color: #aaa;
     cursor: not-allowed;
 }
 
-.page-arrow {
-    font-size: 18px;
+.search-clear-button {
+    background-color: transparent;
+    border: 0px;
+    margin: 0 2%;
 }
 
-.page-number {
-    font-size: 14px;
-}
-
-.header-container h6 {
-    font-size: 20px;
-    font-weight: bold;
+.search-submit-button {
+    background-color: #35c0e4;
+    color: white;
+    border: 0px;
+    border-radius: 5%;
+    padding: 1% 2%;
+    font-weight: 700;
 }

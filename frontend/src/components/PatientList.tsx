@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import api from "../api/axiosInstance";
 import { Local } from "../environment/env";
@@ -39,32 +38,6 @@ const PatientList: React.FC = () => {
     queryFn: () => fetchPatient(page, search),
   });
 
-  // Generate PDF
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    doc.text("Patient List", 14, 20);
-    doc.setFontSize(12);
-    doc.text(`Page: ${page}`, 14, 28);
-
-    const tableData = Patients?.patientList?.map((patient: any, index: number) => [
-      index + 1,
-      `${patient?.firstname} ${patient?.lastname}`,
-      patient?.disease,
-      `${patient?.referedby?.firstname} ${patient?.referedby?.lastname}`,
-      `${patient?.referedto?.firstname} ${patient?.referedto?.lastname}`,
-      patient?.referback ? "Yes" : "No",
-      patient?.referalstatus ? "Completed" : "Pending",
-    ]);
-
-    doc.autoTable({
-      head: [["#", "Patient Name", "Disease", "Referred By", "Referred To", "Refer Back", "Status"]],
-      body: tableData,
-      startY: 35,
-    });
-
-    doc.save("Patient_List.pdf");
-  };
-
   if (isLoading) {
     return (
       <div className="spinner-container">
@@ -79,9 +52,18 @@ const PatientList: React.FC = () => {
 
   return (
     <div className="patient-list-container">
-      <header className="header">
-        <h4 className="heading-patients">Referral Patients</h4>
-      </header>
+      <div className="patient-list-main-header">
+        <header className="header">
+          <h4 className="heading-patients">Referred Patients</h4>
+        </header>
+
+        {doctype === "2" && (
+          <button className="add-patient-btn" onClick={() => navigate("/add-patient")}>
+            + Add Referral Patient
+          </button>
+        )}
+
+      </div>
 
       {/* Actions Section */}
       <div className="actions-container">
@@ -92,15 +74,9 @@ const PatientList: React.FC = () => {
           placeholder="Search patients..."
           onChange={(e) => setSearch(e.target.value)}
         />
-        {doctype === "2" && (
-          <button className="add-patient-btn" onClick={() => navigate("/add-patient")}>
-            + Add Referral Patient
-          </button>
-        )}
-        {/* <button className="download-pdf-btn" onClick={generatePDF}>
-            Download PDF
-          </button> */}
+        <button className="patient-list-search-button">Search</button>
       </div>
+
 
       {/* Patients Table */}
       <table className="patient-table">
@@ -146,7 +122,7 @@ const PatientList: React.FC = () => {
       </table>
 
       {/* Pagination */}
-      <div className="pagination">
+      {/* <div className="pagination">
         <button
           className="pagination-btn"
           disabled={page === 1}
@@ -162,7 +138,7 @@ const PatientList: React.FC = () => {
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

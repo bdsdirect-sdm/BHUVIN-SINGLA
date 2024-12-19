@@ -110,3 +110,9 @@ tbody tr:hover {
 .pagination-number:hover {
     background-color: #f4f4f4;
 }
+
+.stafflist-delete-button {
+    border: 0px;
+    background-color: transparent;
+    color: rgb(250, 67, 67);
+}

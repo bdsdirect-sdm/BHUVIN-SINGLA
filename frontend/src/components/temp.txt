@@ -1,102 +1,319 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useNavigate, Link } from 'react-router-dom';
-import { Local } from '../environment/env';
-import api from '../api/axiosInstance';
-import '../Styling/Dashboard.css';
+show time below message rather than date . 
 
-// Image Imports
-import refferal_placed from "../Assets/img1.svg";
-import refferal_completed from "../Assets/img2.svg";
-import md from "../Assets/img3.png";
+for new date , like whatsapp show today , yesterday and then date . 
 
-const Dashboard: React.FC = () => {
+in below code 
+
+give me full updated file with full functionality working 
+
+
+// import React, { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useQuery } from "@tanstack/react-query";
+// import io from "socket.io-client";
+// import { toast } from "react-toastify";
+// import api from "../api/axiosInstance";
+// import { Local } from "../environment/env";
+// import "../Styling/Chat.css";
+
+
+// const socket = io("http://localhost:4000/");
+
+// const Chat: React.FC = () => {
+//     const navigate = useNavigate();
+//     const token = localStorage.getItem("token");
+//     var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
+//     const [messages, setMessages] = useState<any[]>([]);
+//     const [newMessage, setNewMessage] = useState("");
+//     const direct = Object.keys(chatdata).length;
+//     const pname = localStorage.getItem('pname');
+
+//     useEffect(() => {
+//         if (!token) {
+//             navigate("/login");
+//         }
+
+//         function fetchChats() {
+//             socket.emit("joinchat", chatdata);
+//             socket.on("prev_msg", async (data: any) => {
+//                 setMessages([]);
+//                 await data.map((metadata: any) =>
+//                     setMessages((prev: any) => [...prev, metadata])
+//                 );
+//             });
+//         }
+//         fetchChats();
+
+//         return () => {
+//             localStorage.removeItem("chatdata");
+//             socket.off("prev_msg");
+//         };
+//     }, []);
+
+//     const getRooms = async () => {
+//         try {
+//             const response = await api.get(`${Local.GET_ROOM}`, {
+//                 headers: {
+//                     Authorization: `Bearer ${token}`
+//                 }
+//             });
+//             return response.data;
+//         } catch (err: any) {
+//             toast.error(err.response.data.message)
+//         }
+//     }
+
+//     const { data: rooms, error, isLoading, isError } = useQuery({
+//         queryKey: ["rooms"],
+//         queryFn: getRooms
+//     });
+
+//     useEffect(() => {
+//         socket.on("getRoom", (getRoom) => {
+//             localStorage.setItem("room", getRoom);
+//         });
+//     }, [socket]);
+
+//     useEffect(() => {
+//         socket.on("new_message", (data: any) => {
+//             setMessages((prev: any) => [...prev, data]);
+//         });
+//     }, [socket]);
+
+//     const openChat = (patient: any, doc1: any, doc2: any, user: any, pfirstname: string, plastname: string) => {
+//         const chatData = { patient, user1: doc1, user2: doc2, user };
+//         localStorage.setItem("chatdata", JSON.stringify(chatData));
+//         const n = `${pfirstname} ${plastname}`;
+//         localStorage.setItem("pname", n);
+
+//         setMessages([]);
+
+//         socket.emit("joinchat", chatData);
+//     };
+
+//     const sendMessage = async () => {
+//         if (newMessage.trim() === "") {
+//             toast.warn("Please Enter Message");
+//         } else {
+//             const receiver = chatdata.user !== chatdata.user1 ? chatdata.user1 : chatdata.user2;
+
+//             const data = {
+//                 sender: chatdata.user,
+//                 message: newMessage.trim(),
+//                 receiver: receiver,
+//                 room: localStorage.getItem("room"),
+//             };
+//             socket.emit("send_message", data);
+//             setNewMessage("");
+//         }
+//     };
+
+//     if (isLoading) {
+//         return (
+//             <>
+//                 <div className='loading-icon'>
+//                     <div className="spinner-border spinner text-primary me-2" role="status">
+//                         <span className="visually-hidden">Loading...</span>
+//                     </div>
+//                     <div className='me-2 fs-2' >Loading...</div>
+//                 </div>
+//             </>
+//         );
+//     }
+
+//     if (isError) {
+//         return (
+//             <>
+//                 <div>Error: {error?.message}</div>
+//             </>
+//         );
+//     }
+
+//     return (
+//         <>
+//             <div className="chat-layout">
+//                 <div className="chat-sidebar">
+//                     <input
+//                         type="text"
+//                         className="search-bar"
+//                         placeholder="Search Patient"
+//                     />
+//                     <div className="chat-patient-list">
+//                         {rooms?.room?.map((room: any) => (
+//                             <div key={room.patient.uuid} className="patient-item active mb-2" onClick={() => {
+//                                 openChat(room?.patient?.uuid, room?.doc1?.uuid, room?.doc2?.uuid, rooms?.user?.uuid, room?.patient?.firstname, room?.patient?.lastname);
+//                             }}>
+//                                 <h5>{room.name}</h5>
+//                                 <p>
+//                                     {room.doc1.uuid !== rooms.user.uuid && (
+//                                         <>
+//                                             {room.doc1.firstname} {room.doc1.lastname}
+//                                         </>
+//                                     )}
+//                                     {room.doc2.uuid !== rooms.user.uuid && (
+//                                         <>
+//                                             {room.doc2.firstname} {room.doc2.lastname}
+//                                         </>
+//                                     )}
+//                                 </p>
+//                             </div>
+//                         ))}
+//                     </div>
+//                 </div>
+
+//                 {direct !== 0 && (
+//                     <div className="chat-main">
+//                         <div className="chat-header">
+//                             <h4>{pname}</h4>
+//                         </div>
+
+//                         <div className="chat-messages">
+//                             {messages.map((msg: any, index: number) => (
+//                                 <div key={index} className={`chat-bubble ${msg.sender_id === chatdata.user ? "chat-sent" : "chat-received"}`}>
+//                                     <p>{msg.message}</p>
+//                                     <span className="message-timestamp"> {msg.createdAt.split("T")[0]} </span>
+//                                 </div>
+//                             ))}
+//                         </div>
+
+//                         <div className="chat-input-container">
+//                             <input
+//                                 type="text"
+//                                 className="chat-input"
+//                                 value={newMessage}
+//                                 onChange={(e) => setNewMessage(e.target.value)}
+//                                 placeholder="Type a message..."
+//                             />
+//                             <button className="chat-send-button" onClick={sendMessage}>
+//                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+//                                     <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+//                                 </svg>
+//                             </button>
+//                         </div>
+//                     </div>
+//                 )}
+//             </div>
+//         </>
+//     );
+// };
+
+// export default Chat;
+
+
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import io from "socket.io-client";
+import { toast } from "react-toastify";
+import api from "../api/axiosInstance";
+import { Local } from "../environment/env";
+import "../Styling/Chat.css";
+
+const socket = io("http://localhost:4000/");
+
+const Chat: React.FC = () => {
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-    const [page, setPage] = useState<number>(1);
-    const search = '';
-    let totalPages: number;
+    const token = localStorage.getItem("token");
+    var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
+    const [messages, setMessages] = useState<any[]>([]);
+    const [newMessage, setNewMessage] = useState("");
+    const direct = Object.keys(chatdata).length;
+    const pname = localStorage.getItem('pname');
 
     useEffect(() => {
         if (!token) {
-            navigate('/login');
+            navigate("/login");
         }
-    }, [token, navigate]);
 
-    const getUser = async () => {
-        try {
-            const response = await api.get(`${Local.GET_USER}`, {
-                headers: { Authorization: `Bearer ${token}` },
+        function fetchChats() {
+            socket.emit("joinchat", chatdata);
+            socket.on("prev_msg", async (data: any) => {
+                setMessages([]);
+                await data.map((metadata: any) =>
+                    setMessages((prev: any) => [...prev, metadata])
+                );
             });
-            return response;
-        } catch (err) {
-            console.error('Error fetching user:', err);
         }
-    };
+        fetchChats();
 
-    const fetchPatients = async (pageno: number, search: string) => {
+        return () => {
+            localStorage.removeItem("chatdata");
+            socket.off("prev_msg");
+        };
+    }, []);
+
+    const getRooms = async () => {
         try {
-            const response = await api.get(
-                `${Local.GET_PATIENT_LIST}?page=${pageno}&limit=10&find=${search}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const response = await api.get(`${Local.GET_ROOM}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         } catch (err: any) {
-            console.error('Error fetching patients:', err.response?.data?.message);
+            toast.error(err.response.data.message);
         }
     };
 
-    const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['user'],
-        queryFn: getUser,
+    const { data: rooms, error, isLoading, isError } = useQuery({
+        queryKey: ["rooms"],
+        queryFn: getRooms
     });
 
-    const {
-        data: patientList,
-        isLoading: patientLoading,
-        isError: patientError,
-    } = useQuery({
-        queryKey: ['patient', page, search],
-        queryFn: () => fetchPatients(page, search),
-    });
+    useEffect(() => {
+        socket.on("getRoom", (getRoom) => {
+            localStorage.setItem("room", getRoom);
+        });
+    }, [socket]);
 
-    const viewNavigator = (patientUUID: string) => {
-        localStorage.setItem('patientId', patientUUID);
-        navigate('/view-patient');
+    useEffect(() => {
+        socket.on("new_message", (data: any) => {
+            setMessages((prev: any) => [...prev, data]);
+        });
+    }, [socket]);
+
+    const openChat = (patient: any, doc1: any, doc2: any, user: any, pfirstname: string, plastname: string) => {
+        const chatData = { patient, user1: doc1, user2: doc2, user };
+        localStorage.setItem("chatdata", JSON.stringify(chatData));
+        const n = `${pfirstname} ${plastname}`;
+        localStorage.setItem("pname", n);
+
+        setMessages([]);
+
+        socket.emit("joinchat", chatData);
     };
 
-    const directChat = (
-        patient: any,
-        user1: any,
-        user2: any,
-        user: any,
-        firstname: string,
-        lastname: string
-    ) => {
-        const chatData = {
-            patient,
-            user1,
-            user2,
-            user,
-            roomname: `${firstname} ${lastname}`,
-        };
-        localStorage.setItem('pname', chatData.roomname);
-        localStorage.setItem('chatdata', JSON.stringify(chatData));
-        navigate('/chat');
+    const sendMessage = async () => {
+        if (newMessage.trim() === "") {
+            toast.warn("Please Enter Message");
+        } else {
+            const receiver = chatdata.user !== chatdata.user1 ? chatdata.user1 : chatdata.user2;
+
+            const data = {
+                sender: chatdata.user,
+                message: newMessage.trim(),
+                receiver: receiver,
+                room: localStorage.getItem("room"),
+            };
+            socket.emit("send_message", data);
+            setNewMessage("");
+        }
     };
 
-    if (isLoading || patientLoading) {
+    if (isLoading) {
         return (
-            <div className="loading-icon">
-                <div className="spinner-border text-primary me-2" role="status">
-                    <span className="visually-hidden">Loading...</span>
+            <>
+                <div className='loading-icon'>
+                    <div className="spinner-border spinner text-primary me-2" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div className='me-2 fs-2'>Loading...</div>
                 </div>
-                <div className="fs-2">Loading...</div>
-            </div>
+            </>
         );
     }
 
-    if (isError || patientError) {
+    if (isError) {
         return (
             <>
                 <div>Error: {error?.message}</div>
@@ -104,146 +321,223 @@ const Dashboard: React.FC = () => {
         );
     }
 
-    totalPages = Math.ceil((patientList?.totalpatients || 0) / 10);
-
     return (
-        <div className="dashboard-container">
-            <h3 className="dashboard-title">Dashboard</h3>
-
-            {/* Cards Section */}
-            <div className="dashboard-cards">
-                {/* Referrals Placed Card */}
-                <div className="card" onClick={() => navigate('/patient')}>
-                    <div className="card-content">
-                        <div className="card-left">
-                            <p>Referrals Placed</p>
-                            <div className="image-container">
-                                <img
-                                    src={refferal_placed}
-                                    alt="Referrals Placed"
-                                    height="50px"
-                                    width="50px"
-                                />
+        <>
+            <div className="chat-layout">
+                <div className="chat-sidebar">
+                    <input
+                        type="text"
+                        className="search-bar"
+                        placeholder="Search Patient"
+                    />
+                    <div className="chat-patient-list">
+                        {rooms?.room?.map((room: any) => (
+                            <div
+                                key={room.patient.uuid}
+                                className="patient-item active mb-2"
+                                onClick={() => openChat(room.patient.uuid, room.doc1.uuid, room.doc2.uuid, rooms.user.uuid, room.patient.firstname, room.patient.lastname)}
+                            >
+                                <h5>{room.name}</h5>
+                                <p>
+                                    {room.doc1.uuid !== rooms.user.uuid && (
+                                        <>
+                                            {room.doc1.firstname} {room.doc1.lastname}
+                                        </>
+                                    )}
+                                    {room.doc2.uuid !== rooms.user.uuid && (
+                                        <>
+                                            {room.doc2.firstname} {room.doc2.lastname}
+                                        </>
+                                    )}
+                                </p>
                             </div>
-                            <h3>{data?.data.referCount ?? 0}</h3>
-                        </div>
-                        <p className="card-text text-secondary">Last update: 17 Dec</p>
-                    </div>
-                </div>
-
-                {/* Referrals Completed Card */}
-                <div className="card" onClick={() => navigate('/patient')}>
-                    <div className="card-content">
-                        <div className="card-left">
-                            <p>Referrals Completed</p>
-                            <div className="image-container">
-                                <img
-                                    src={refferal_completed}
-                                    alt="Referrals Completed"
-                                    height="50px"
-                                    width="50px"
-                                />
-                            </div>
-                            <h3>{data?.data.referCompleted ?? 0}</h3>
-                        </div>
-                        <p className="card-text text-secondary">Last update: 17 Dec</p>
-                    </div>
-                </div>
-
-                {/* Doctor OD/MD Card */}
-                <div className="card" onClick={() => navigate('/doctor')}>
-                    <div className="card-content">
-                        <div className="card-left">
-                            <p>
-                                {localStorage.getItem('doctype') === '1'
-                                    ? 'Doctor OD/MD'
-                                    : 'Doctor MD'}
-                            </p>
-                            <div className="image-container">
-                                <img src={md} alt="Doctor OD/MD" height="50px" width="50px" />
-                            </div>
-                            <h3>{data?.data.docCount ?? 0}</h3>
-                        </div>
-                        <p className="card-text text-secondary">Last update: 17 Dec</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Referral Patients Table */}
-            <div className="patients-section">
-                <div className="header-container">
-                    <h5>Referral Patients</h5>
-                    {localStorage.getItem('doctype') === '2' && (
-                        <button
-                            className="btn-addrefer"
-                            onClick={() => navigate('/add-patient')}
-                        >
-                            + Add Referral Patient
-                        </button>
-                    )}
-                </div>
-
-                <table className="patient-table">
-                    <thead>
-                        <tr>
-                            <th>Patient Name</th>
-                            <th>DOB</th>
-                            <th>Disease</th>
-                            <th>Date Sent</th>
-                            <th>Appointment Date</th>
-                            <th>Referred To</th>
-                            <th>Status</th>
-                            <th>Consult Note</th>
-                            <th>Ready to Return</th>
-                            <th>Direct Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {patientList?.patientList?.map((patient: any) => (
-                            <tr key={patient.uuid}>
-                                <td>{`${patient.firstname} ${patient.lastname}`}</td>
-                                <td>Nov-21-2024</td>
-                                <td>{patient.disease || '--'}</td>
-                                <td>Nov-11-2024</td>
-                                <td>{patient.patientId?.date || '--'}</td>
-                                <td>{`${patient.referedto?.firstname || ''} ${patient.referedto?.lastname || ''}`}</td>
-                                <td>
-                                    {patient.referalstatus === 1
-                                        ? 'Completed'
-                                        : 'Pending'}
-                                </td>
-                                <td>
-                                    <Link to="#" onClick={() => alert('Under Process')}>
-                                        Yes
-                                    </Link>
-                                </td>
-                                <td>{patient.referback ? 'Yes' : 'No'}</td>
-                                <td
-                                    className="chat-link"
-                                    onClick={() =>
-                                        directChat(
-                                            patient.uuid,
-                                            patient.referedby?.uuid,
-                                            patient.referedto?.uuid,
-                                            data?.data.user.uuid,
-                                            patient.firstname,
-                                            patient.lastname
-                                        )
-                                    }
-                                >
-                                    Link
-                                </td>
-                            </tr>
                         ))}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+
+                {direct !== 0 && (
+                    <div className="chat-main">
+                        <div className="chat-header">
+                            <h4>{pname}</h4>
+                        </div>
+
+                        <div className="chat-messages">
+                            {messages.map((msg: any, index: number) => (
+                                <div key={index} className={`chat-bubble ${msg.sender_id === chatdata.user ? "chat-sent" : "chat-received"}`}>
+                                    <p>{msg.message}</p>
+                                    <span className="message-timestamp">{msg.createdAt.split("T")[0]}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="chat-input-container">
+                            <input
+                                type="text"
+                                className="chat-input"
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="Type a message..."
+                            />
+                            <button className="chat-send-button" onClick={sendMessage}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
+                                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
-        </div>
+        </>
     );
 };
 
-export default Dashboard;
+export default Chat;
 
-change above 3 section styling as shown in picture above same ui + look wise but dont change a single functionality .
 
-here below is my current css file . change it and give me full upadated files 
+.chat-layout {
+    display: flex;
+    height: calc(100vh);
+    /* Adjusted height to fit the layout */
+    background-color: #e5ddd5;
+}
+
+.chat-sidebar {
+    width: 25%;
+    background-color: #f6f6f6;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.search-bar {
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ffffff;
+    outline: none;
+    font-size: 14px;
+}
+
+.chat-patient-list {
+    padding: 0 10px;
+    overflow-y: auto;
+    /* Enables scrolling for patient list */
+    max-height: calc(100vh - 110px);
+    /* Adjusted based on the layout */
+}
+
+.patient-item {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-item:hover {
+    background-color: #58EBB3;
+}
+
+.patient-item h5 {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.patient-item p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #555;
+}
+
+.chat-main {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    background-color: #e5ddd5;
+    height: 83%;
+}
+
+.chat-header {
+    padding: 15px;
+    background-color: #38a3b1;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: #fceded;
+    max-height: calc(100vh - 150px);
+    /* Adjusted height to prevent overflow */
+}
+
+.chat-bubble {
+    max-width: 70%;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    word-wrap: break-word;
+    width: fit-content;
+}
+
+.chat-sent {
+    margin-left: auto;
+    background-color: #58EBB3;
+    text-align: right;
+}
+
+.chat-received {
+    margin-right: auto;
+    background-color: #fff;
+    text-align: left;
+}
+
+.message-timestamp {
+    display: block;
+    font-size: 10px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    outline: none;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.chat-send-button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #128c7e;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.chat-send-button:hover {
+    color: #075e54;
+}

@@ -128,8 +128,7 @@ const Profile: React.FC = () => {
                   </div>
                   <button
                     className="btn-deleteaddress"
-                    onClick={() => deleteAddress(address.uuid)}
-                  >
+                    onClick={() => deleteAddress(address.uuid)}>
                     Delete
                   </button>
                 </div>

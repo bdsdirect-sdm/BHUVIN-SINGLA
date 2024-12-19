@@ -1,33 +1,31 @@
 .patient-list-container {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #ECF1F3;
     border-radius: 8px;
 }
 
-.header {
-    margin-bottom: 10px;
-}
-
-.heading-patients {
-    font-size: 1.8rem;
-    color: #333;
-}
-
-.actions-container {
+/* Header Section */
+.patient-list-main-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
     margin-bottom: 20px;
 }
 
-.search-input {
-    padding: 8px;
-    width: 60%;
-    border: none;
-    border-radius: 4px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+.header {
+    margin: 0;
 }
 
+.heading-patients {
+    font-size: large;
+    color: #333;
+    padding: 2%;
+    min-width: 105%;
+    margin-left: 15%;
+    font-weight: 600;
+}
+
+/* Add Patient Button */
 .add-patient-btn {
     background-color: #35c0e4;
     color: white;
@@ -35,40 +33,60 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-left: 260px
 }
 
 .add-patient-btn:hover {
     background-color: #2a99b6;
 }
 
-.download-pdf-btn {
-    padding: 10px 16px;
-    background-color: #35c0e4;
+.actions-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+    padding: 10px;
+    width: 45%;
+    border: 1px solid rgb(212, 212, 212);
+    border-radius: 4px;
+}
+
+.patient-list-search-button {
     color: white;
+    background-color: #35c0e4;
     border: none;
+    padding: 10px 16px;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.download-pdf-btn:hover {
+.patient-list-search-button:hover {
     background-color: #2a99b6;
 }
 
+
+/* Patient Table */
 .patient-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    border: 0px;
 }
 
 .patient-table th,
 .patient-table td {
     padding: 10px;
     text-align: left;
-    /* border: 1px solid #ddd; */
 }
 
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;

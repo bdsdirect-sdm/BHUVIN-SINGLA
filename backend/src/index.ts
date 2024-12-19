@@ -16,7 +16,7 @@ export const httpServer = createServer(app);
 setSocket(httpServer)
 app.use(express.json());
 app.use("/", userRouter);
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ alter: false }).then(() => {
     console.log('Database connected');
 
     httpServer.listen(Local.SERVER_PORT, () => {

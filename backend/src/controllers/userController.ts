@@ -536,7 +536,7 @@ export const getStaffList = async (req: any, res: Response) => {
 
 export const deleteAddress = async (req: any, res: any) => {
     try {
-        console.log("tarun", req.body)
+        console.log("data ==============>", req.body)
         const { id } = req.params; // Address UUID from the request parameters
 
 
@@ -556,6 +556,33 @@ export const deleteAddress = async (req: any, res: any) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+export const deleteStaff = async (req: any, res: any) => {
+    try {
+        console.log("Request to delete staff:", req.body);
+
+
+        const { id } = req.params; // Staff UUID from the request parameters
+
+        // Perform the deletion using Staff.destroy
+        const deletedCount = await Staff.destroy({ where: { uuid: id } });
+        console.log("Deleted staff count:", deletedCount);
+
+        // Check if any rows were affected
+        if (deletedCount === 0) {
+            return res.status(404).json({ message: "Staff not found or could not be deleted" });
+        }
+
+        // Respond with success if the deletion occurred
+        res.status(200).json({ message: "Staff deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting staff:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+
 
 // export const deleteAddress = async (req: any, res: any) => {
 //     try {

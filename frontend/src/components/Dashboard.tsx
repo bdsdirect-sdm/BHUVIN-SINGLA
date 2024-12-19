@@ -160,20 +160,11 @@ const Dashboard: React.FC = () => {
                 </div>
             </div>
 
-
-            <h5>Referrals Placed</h5>
-
-
-            {/* Referral Patients Table */}
-
-
             <div className="header-container">
+                <h5>Referrals Placed</h5>
 
                 {localStorage.getItem('doctype') === '2' && (
-                    <button
-                        className="btn-addrefer"
-                        onClick={() => navigate('/add-patient')}
-                    >
+                    <button className="btn-addrefer" onClick={() => navigate('/add-patient')}>
                         + Add Referral Patient
                     </button>
                 )}
