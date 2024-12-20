@@ -347,22 +347,21 @@ export const changePassword = async (req: any, res: any) => {
 
 export const updateUser = async (req: any, res: any) => {
     try {
-        const { uuid } = req.user; // Get the user UUID from the token
+        const { uuid } = req.user;
         const {
             firstname,
             lastname,
             gender,
             phone,
-            address, // Array of address objects
+            address,
         } = req.body;
 
-        // Update user details
+
         const user = await User.findOne({ where: { uuid } });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Update user fields
         await user.update({
             firstname,
             lastname,
@@ -370,19 +369,16 @@ export const updateUser = async (req: any, res: any) => {
             phone,
         });
 
-        // Update or create addresses
         if (address && Array.isArray(address)) {
             for (const addr of address) {
                 const { id, street, district, city, state, pincode } = addr;
 
                 if (id) {
-                    // Update existing address
                     await Address.update(
                         { street, district, city, state, pincode },
                         { where: { id, userId: user.uuid } }
                     );
                 } else {
-                    // Create new address
                     await Address.create({
                         street,
                         district,
