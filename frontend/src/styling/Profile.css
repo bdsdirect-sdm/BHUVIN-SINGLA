@@ -6,33 +6,78 @@
 }
 
 .profile-header {
+    position: relative;
+    background-color: #b49867;
+    /* Light golden background */
+    padding: 20px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-    border: 2px solid black;
+    justify-content: space-between;
+    /* Push elements apart */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 5%;
+}
+
+.profile-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    color: #aa8b55;
+    /* Light golden text */
+    font-weight: bold;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .profile-image {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ddd;
+    z-index: 1;
+    margin-right: 20px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    flex-grow: 1;
+    /* Allow the text section to expand */
+    margin-right: 20px;
+    /* Add spacing before the button */
+}
+
+.profile-text {
+    font-size: 1.2rem;
+    color: #ffffff;
+    /* White text */
+    margin: 0;
 }
 
 .change-picture-button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
+    background-color: #ffffff;
+    /* White background */
     border: none;
-    border-radius: 5px;
+    color: #000;
+    /* Black text */
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
     cursor: pointer;
+    max-width: 20%;
+    align-self: flex-end;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .change-picture-button:hover {
-    background-color: #0056b3;
+    background-color: #ddd;
+    /* Slightly darker on hover */
+    color: #333;
 }
+
 
 .form-section {
     background-color: #f9f9f9;

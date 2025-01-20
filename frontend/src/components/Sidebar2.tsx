@@ -21,11 +21,22 @@ const Sidebar2: React.FC = () => {
     }
   }
 
+  const formatTime = () => {
+    const date = new Date();
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12 || 12; // Convert 0 (midnight) or 12 (noon) to 12-hour format
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes; // Ensure two-digit minutes
+    return `${hours}:${formattedMinutes}${ampm}`;
+  };
+
   const getGreeting = () => {
     const hours = new Date().getHours();
-    if (hours < 12) return "Good Morning";
-    else if (hours < 18) return "Good Afternoon";
-    return "Good Evening";
+    // if (hours < 12) return `Good Morning, the time is ${formatTime()}`;
+    if (hours < 12) return `Good Morning`;
+    else if (hours < 18) return `Good Afternoon`;
+    return `Good Evening`;
   };
 
   return (
