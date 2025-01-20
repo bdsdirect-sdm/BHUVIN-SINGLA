@@ -489,16 +489,9 @@ export const getProfileData = async (req: any, res: Response): Promise<any> => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        const preference = await Preference.findOne({ where: { userId: uuid } });
-
-        // Return the profile data as JSON
-        return res.status(200).json({
-            message: "Profile data fetched successfully",
-            user,
-            preference,
-        });
     } catch (err) {
         console.error("Error fetching profile data:", err);
         return res.status(500).json({ message: "Something went wrong", error: err });
     }
 };
+
