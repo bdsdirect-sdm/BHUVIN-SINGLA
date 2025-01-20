@@ -42,7 +42,7 @@ const Sidebar2: React.FC = () => {
   return (
     <div className="d-flex vh-100">
       {/* Sidebar */}
-      <div className="cmn-bg text-white d-flex flex-column p-3 z-auto" style={{ width: "250px", height: '111%' }}>
+      <div className="cmn-bg text-white d-flex flex-column p-3 z-auto" style={{ width: "250px", height: '114%' }}>
         <div className="mb-4 ms-5">
           <svg width="81" height="73" viewBox="0 0 81 73" fill="none" className="mt-3" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_1418_393)">
