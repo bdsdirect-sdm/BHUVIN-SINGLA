@@ -1,0 +1,123 @@
+/* Profile.css */
+.profile-container {
+    /* max-width: 800px; */
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.change-picture-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.change-picture-button:hover {
+    background-color: #0056b3;
+}
+
+.form-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.tab {
+    padding: 10px 15px;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    color: rgb(51, 51, 51);
+
+
+}
+
+.tab.active {
+    color: rgb(51, 51, 51);
+    border-bottom: 5px solid #3D5576;
+    padding-bottom: 5px;
+    max-width: fit-content;
+    border-radius: 1px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Add this for the button alignment */
+.update-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.update-button {
+    padding: 10px 20px;
+    background-color: #3D5576;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 20%;
+}
+
+.update-button:hover {
+    background-color: #2a3f5a;
+    /* Slightly darker on hover */
+}
