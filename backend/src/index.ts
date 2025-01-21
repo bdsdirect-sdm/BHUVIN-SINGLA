@@ -7,12 +7,12 @@ import Request from './models/Request';
 
 const app = express();
 
-app.use('/uploads', express.static('uploads'));
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 app.use('/', userRouter);
 
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ alter: false }).then(() => {
     console.log('Database connected');
 
     app.listen(Local.SERVER_PORT, () => {

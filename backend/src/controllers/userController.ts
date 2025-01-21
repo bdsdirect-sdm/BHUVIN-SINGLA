@@ -483,13 +483,17 @@ export const deleteComment = async (req: any, res: Response): Promise<any> => {
 
 export const getProfileData = async (req: any, res: Response): Promise<any> => {
     try {
-
+        console.log('====================================');
+        console.log("flkdjfl fldjfkldjklfj");
+        console.log('====================================');
         const { uuid } = req.user;
         const user = await User.findOne({ where: { uuid } });
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        console.log(user, "UUUUUUUu")
+        return res.status(200).json({ message: "User found successfully", user });
 
     } catch (err) {
         console.error("Error fetching profile data:", err);

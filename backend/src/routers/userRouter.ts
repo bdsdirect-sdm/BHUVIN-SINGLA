@@ -34,7 +34,7 @@ router.get('/getlatestwaves', userAuthMiddleware, getLatestWaves);
 router.get('/getcomments', userAuthMiddleware, getComments);
 router.get('/getpreference', userAuthMiddleware, getUserPreference);
 router.get('/getfriendlist', userAuthMiddleware, userList);
-router.get('/getprofile', userAuthMiddleware, getProfileData);
+// router.get('/getprofile', userAuthMiddleware, getProfileData);
 router.get('/getprofiledata', userAuthMiddleware, getProfileData);
 
 router.put('/updatepassword', userAuthMiddleware, updateUserPassword);

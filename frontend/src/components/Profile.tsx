@@ -25,16 +25,21 @@ const Profile: React.FC = () => {
     },
   });
 
+  console.log("daaaaaaaaata", profileData.user);
   // Fetch profile data on component mount
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch("/api/profile/get", {
+        console.log("hello");
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:4000/getprofiledata", { // Corrected URL
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response);
 
         const data = await response.json();
         if (response.ok) {
@@ -47,7 +52,6 @@ const Profile: React.FC = () => {
       }
     };
 
-    fetchProfileData();
   }, []);
 
   // Handle field input changes
@@ -64,7 +68,7 @@ const Profile: React.FC = () => {
   // Save updated profile data
   const handleSaveChanges = async () => {
     try {
-      const response = await fetch("/api/profile/update", {
+      const response = await fetch("http://localhost:4000/updateprofiledata", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,6 +88,8 @@ const Profile: React.FC = () => {
       alert("An error occurred while saving your profile.");
     }
   };
+
+  console.log("daaaaaaaaaaata", profileData.user);
 
   return (
     <div className="profile-container">
