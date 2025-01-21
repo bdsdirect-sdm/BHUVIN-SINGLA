@@ -1,3 +1,5 @@
+//userRouter.ts
+
 import { Router } from "express";
 import {
     userLogin, userList, Register, addorUpdatePreference, getUserPreference,
@@ -24,7 +26,7 @@ router.post('/addwave', userAuthMiddleware, uploadWave.single('photo'), createWa
 router.post('/invite-friend', userAuthMiddleware, inviteFriend);
 router.post('/updatepreference', userAuthMiddleware, addorUpdatePreference);
 router.post('/addcomment', userAuthMiddleware, addComment);
-// router.post('/addprofile', userAuthMiddleware, addProfile);
+router.post('/updateprofilephoto', userAuthMiddleware, updateProfilePhoto);
 
 router.get('/getmywave', userAuthMiddleware, getMyWaves);
 router.get('/getrequests', userAuthMiddleware, getRequests);
@@ -32,13 +34,13 @@ router.get('/getlatestwaves', userAuthMiddleware, getLatestWaves);
 router.get('/getcomments', userAuthMiddleware, getComments);
 router.get('/getpreference', userAuthMiddleware, getUserPreference);
 router.get('/getfriendlist', userAuthMiddleware, userList);
-router.get('/getprofile', userAuthMiddleware, getProfileData)
+router.get('/getprofile', userAuthMiddleware, getProfileData);
+router.get('/getprofiledata', userAuthMiddleware, getProfileData);
 
 router.put('/updatepassword', userAuthMiddleware, updateUserPassword);
 router.put('/editcomment', userAuthMiddleware, updateComment);
 router.put('/deletecomment/:commentId', userAuthMiddleware, deleteComment);
+router.put('/updateuserprofile', userAuthMiddleware, updateUser);
 
-
-// router.get("/user-list", userList);
 
 export default router;

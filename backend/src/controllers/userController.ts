@@ -1,3 +1,5 @@
+//userController.ts
+
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -155,35 +157,35 @@ export const Register = async (req: any, res: any) => {
     }
 }
 
-export const updateUser = async (req: any, res: Response) => {
-    try {
-        const { uuid } = req.user;
-        const { firstname, lastname, email, social_security, phone, address, address_one,
-            address_two, city, state, zip_code, dob, gender, martial_status, social, kids } = req.body;
+// export const updateUser = async (req: any, res: Response) => {
+//     try {
+//         const { uuid } = req.user;
+//         const { firstname, lastname, email, social_security, phone, address, address_one,
+//             address_two, city, state, zip_code, dob, gender, martial_status, social, kids } = req.body;
 
-        const user = await User.findByPk(uuid);
+//         const user = await User.findByPk(uuid);
 
-        const updatedUser = await user?.update({
-            firstname, lastname, email, social_security, phone, address, address_one,
-            address_two, city, state, zip_code, dob, gender, martial_status, social, kids
-        });
-        res.status(200).json({ "message": "User updated successfully" });
-    }
-    catch (err) {
-        res.status(500).json({ 'message': 'Something went wrong' });
-    }
-}
+//         const updatedUser = await user?.update({
+//             firstname, lastname, email, social_security, phone, address, address_one,
+//             address_two, city, state, zip_code, dob, gender, martial_status, social, kids
+//         });
+//         res.status(200).json({ "message": "User updated successfully" });
+//     }
+//     catch (err) {
+//         res.status(500).json({ 'message': 'Something went wrong' });
+//     }
+// }
 
-export const updateProfilePhoto = async (req: any, res: Response) => {
-    try {
-        const { uuid } = req.user;
+// export const updateProfilePhoto = async (req: any, res: Response) => {
+//     try {
+//         const { uuid } = req.user;
 
 
-    }
-    catch (err) {
-        res.status(500).json({ 'message': 'Something went wrong' });
-    }
-}
+//     }
+//     catch (err) {
+//         res.status(500).json({ 'message': 'Something went wrong' });
+//     }
+// }
 
 export const addorUpdatePreference = async (req: any, res: Response) => {
     try {
@@ -495,3 +497,74 @@ export const getProfileData = async (req: any, res: Response): Promise<any> => {
     }
 };
 
+export const updateUser = async (req: any, res: Response): Promise<any> => {
+    try {
+        const { uuid } = req.user;
+        const {
+            firstname,
+            lastname,
+            email,
+            phone,
+            address,
+            city,
+            state,
+            zip_code,
+            dob,
+            gender,
+            marital_status,
+            social
+        } = req.body;
+
+        const user = await User.findOne({ where: { uuid } });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        await user.update({
+            firstname,
+            lastname,
+            email,
+            phone,
+            address,
+            city,
+            state,
+            zip_code,
+            dob,
+            gender,
+            marital_status,
+            social
+        });
+
+        return res.status(200).json({ message: "Profile updated successfully", user });
+    } catch (err) {
+        console.error("Error updating profile:", err);
+        return res.status(500).json({ message: "Something went wrong", error: err });
+    }
+};
+
+import { uploadWave } from "../utils/uploadWave"; // Adjust import if using another uploader
+
+export const updateProfilePhoto = async (req: any, res: Response): Promise<any> => {
+    try {
+        const { uuid } = req.user;
+        const photoPath = req.file?.path;
+
+        if (!photoPath) {
+            return res.status(400).json({ message: "No photo uploaded" });
+        }
+
+        const user = await User.findOne({ where: { uuid } });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        await user.update({ profilePhoto: photoPath });
+
+        return res.status(200).json({ message: "Profile photo updated successfully", photoPath });
+    } catch (err) {
+        console.error("Error updating profile photo:", err);
+        return res.status(500).json({ message: "Something went wrong", error: err });
+    }
+};
