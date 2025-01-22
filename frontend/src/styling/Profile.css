@@ -1,168 +1,144 @@
-/* Profile.css */
+/* Profile Page Styling */
+
 .profile-container {
-    /* max-width: 800px; */
-    margin: 0 auto;
     font-family: Arial, sans-serif;
+    background-color: #f8f9fc;
+    padding: 20px;
+    border-radius: 10px;
+    /* width: 80%; */
+    margin: 0 auto;
 }
 
 .profile-header {
-    position: relative;
-    background-color: #b49867;
-    /* Light golden background */
-    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* Push elements apart */
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 5%;
+    background-color: #d1b886;
+    padding: 15px;
+    border-radius: 10px;
+    position: relative;
 }
 
 .profile-bg-text {
+    font-size: 400%;
+    color: rgba(0, 0, 0, 0.1);
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4rem;
-    color: #aa8b55;
-    /* Light golden text */
     font-weight: bold;
     z-index: 0;
-    pointer-events: none;
 }
 
 .profile-image {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
+    border: 3px solid #fff;
     z-index: 1;
-    margin-right: 20px;
 }
 
 .profile-info {
-    display: flex;
-    flex-direction: column;
+    text-align: right;
     z-index: 1;
-    flex-grow: 1;
-    /* Allow the text section to expand */
-    margin-right: 20px;
-    /* Add spacing before the button */
 }
 
 .profile-text {
-    font-size: 1.2rem;
-    color: #ffffff;
-    /* White text */
-    margin: 0;
+    font-size: 14px;
+    margin: 5px 0;
+    color: #333;
 }
 
 .change-picture-button {
     background-color: #ffffff;
-    /* White background */
+    color: #3E5677;
     border: none;
-    color: #000;
-    /* Black text */
-    padding: 8px 16px;
-    font-size: 1rem;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border-radius: 5px;
     cursor: pointer;
-    max-width: 20%;
-    align-self: flex-end;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 700;
 }
 
 .change-picture-button:hover {
-    background-color: #ddd;
-    /* Slightly darker on hover */
+    /* background-color: #0056b3; */
+}
+
+h5 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 18px;
     color: #333;
-}
-
-
-.form-section {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.form-section h2 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
 }
 
 .tabs {
     display: flex;
-    margin-bottom: 20px;
-    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .tab {
-    padding: 10px 15px;
-    border: none;
-    background-color: transparent;
-    border-radius: 5px;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-bottom: none;
     cursor: pointer;
-    color: rgb(51, 51, 51);
-
-
+    background-color: #f8f9fc;
+    font-size: 14px;
+    color: #555;
 }
 
 .tab.active {
-    color: rgb(51, 51, 51);
-    border-bottom: 5px solid #3D5576;
-    padding-bottom: 5px;
-    max-width: fit-content;
-    border-radius: 1px;
+    background-color: #fff;
+    font-weight: bold;
+    color: #333;
 }
 
 .profile-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .form-row {
     display: flex;
-    gap: 20px;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
 .form-group {
     flex: 1;
-    display: flex;
-    flex-direction: column;
 }
 
-.form-group label {
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+label {
+    display: block;
+    font-size: 14px;
     font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
 }
 
-.form-group input {
-    padding: 10px;
+input {
+    width: 100%;
+    padding: 8px 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 14px;
+    color: #333;
 }
 
-/* Add this for the button alignment */
 .update-button-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
+    text-align: right;
+    margin-top: 20px;
 }
 
 .update-button {
-    padding: 10px 20px;
-    background-color: #3D5576;
-    color: white;
+    background-color: #3E5677;
+    color: #fff;
     border: none;
+    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    width: 20%;
 }
 
 .update-button:hover {
-    background-color: #2a3f5a;
-    /* Slightly darker on hover */
+    /* background-color: #218838; */
 }

@@ -96,7 +96,7 @@ const Profile: React.FC = () => {
           className="profile-image"
         />
         <div className="profile-info">
-          <p className="profile-text">Upload a New Photo</p>
+          {/* <p className="profile-text">Upload a New Photo</p> */}
           <button className="change-picture-button">Change Picture</button>
         </div>
       </div>
