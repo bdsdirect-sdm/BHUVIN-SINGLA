@@ -14,6 +14,7 @@ import { signupTemplate } from "../mailTemplate/signuptemplate";
 import Friend from "../models/Friend";
 import { Op } from "sequelize";
 import Comment from "../models/Comment";
+import { uploadWave } from "../utils/uploadWave"; // Adjust import if using another uploader
 
 const SECRET_KEY: any = Local.SECRET_KEY
 
@@ -501,53 +502,86 @@ export const getProfileData = async (req: any, res: Response): Promise<any> => {
     }
 };
 
-export const updateUser = async (req: any, res: Response): Promise<any> => {
+export const addOrUpdateUser = async (req: any, res: any): Promise<any> => {
     try {
         const { uuid } = req.user;
+        console.log("qwer", uuid);
+
         const {
             firstname,
             lastname,
             email,
             phone,
+            address_one,
+            address_two,
             address,
             city,
             state,
             zip_code,
             dob,
             gender,
-            marital_status,
-            social
+            martial_status,
+            social_security,
+            social,
+            kids
         } = req.body;
 
+        // Find the existing user by uuid
         const user = await User.findOne({ where: { uuid } });
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        if (user) {
+            // If user exists, update their details
+            await user.update({
+                firstname,
+                lastname,
+                email,
+                phone,
+                address_one,
+                address_two,
+                address,
+                city,
+                state,
+                zip_code,
+                dob,
+                gender,
+                martial_status,
+                social_security,
+                social,
+                kids
+            });
+            return res.status(200).json({ message: "Profile updated successfully", user });
         }
 
-        await user.update({
-            firstname,
-            lastname,
-            email,
-            phone,
-            address,
-            city,
-            state,
-            zip_code,
-            dob,
-            gender,
-            marital_status,
-            social
-        });
+        else {
+            // If user does not exist, create a new user
+            const newUser = await User.create({
+                uuid,
+                firstname,
+                lastname,
+                email,
+                phone,
+                address_one,
+                address_two,
+                address,
+                city,
+                state,
+                zip_code,
+                dob,
+                gender,
+                martial_status,
+                social_security,
+                social,
+                kids
+            });
 
-        return res.status(200).json({ message: "Profile updated successfully", user });
-    } catch (err) {
-        console.error("Error updating profile:", err);
+            return res.status(201).json({ message: "Profile created successfully", user: newUser });
+        }
+    }
+    catch (err) {
+        console.error("Error updating or creating profile:", err);
         return res.status(500).json({ message: "Something went wrong", error: err });
     }
 };
-
-import { uploadWave } from "../utils/uploadWave"; // Adjust import if using another uploader
 
 export const updateProfilePhoto = async (req: any, res: Response): Promise<any> => {
     try {

@@ -1,4 +1,5 @@
-interface config{
+interface config {
+    UPDATE_PROFILE: string;
     BASE_URL: string;
     CREATE_USER: string;
     AUTH_USER: string;
@@ -16,9 +17,10 @@ interface config{
     ADD_COMMENT: string;
     EDIT_COMMENT: string;
     DELETE_COMMENT: string;
+    GET_PROFILE: string;
 }
 // console.log("--------->", import.meta.env.VITE_BASE_URL)
-const Local:config = {
+const Local: config = {
     BASE_URL: import.meta.env.VITE_BASE_URL,
     CREATE_USER: import.meta.env.VITE_CREATE_USER,
     AUTH_USER: import.meta.env.VITE_AUTH_USER,
@@ -35,7 +37,10 @@ const Local:config = {
     GET_FRIENDS: import.meta.env.VITE_GET_FRIENDS,
     ADD_COMMENT: import.meta.env.VITE_ADD_COMMENT,
     EDIT_COMMENT: import.meta.env.VITE_EDIT_COMMENT,
-    DELETE_COMMENT: import.meta.env.VITE_DELETE_COMMENT
+    DELETE_COMMENT: import.meta.env.VITE_DELETE_COMMENT,
+    GET_PROFILE: import.meta.env.VITE_GET_PROFILE,
+    UPDATE_PROFILE: import.meta.env.VITE_UPDATE_PROFILE,
+
 }
 
 export default Local
