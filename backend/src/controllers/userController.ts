@@ -15,6 +15,7 @@ import Friend from "../models/Friend";
 import { Op } from "sequelize";
 import Comment from "../models/Comment";
 import { uploadWave } from "../utils/uploadWave"; // Adjust import if using another uploader
+import Admin from "../models/Admin";
 
 const SECRET_KEY: any = Local.SECRET_KEY
 
@@ -604,5 +605,37 @@ export const updateProfilePhoto = async (req: any, res: Response): Promise<any> 
     } catch (err) {
         console.error("Error updating profile photo:", err);
         return res.status(500).json({ message: "Something went wrong", error: err });
+    }
+};
+
+export const registerAdmin = async (req: any, res: any) => {
+    try {
+        const { firstname, lastname, email, password, status } = req.body;
+
+        // Check if the admin already exists
+        const isExist = await Admin.findOne({ where: { email } });
+        if (isExist) {
+            return res.status(400).json({ message: "Admin already exists" });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new admin
+        const admin = await Admin.create({
+            firstname,
+            lastname,
+            email,
+            password: hashedPassword,
+            status,
+        });
+
+        return res.status(200).json({
+            message: "Admin registered successfully",
+            admin,
+        });
+    } catch (error) {
+        console.error("Error during admin registration:", error);
+        return res.status(500).json({ message: "Something went wrong, please try again later" });
     }
 };

@@ -18,7 +18,7 @@ const AdminRegister: React.FC = () => {
 
     const registerAdmin = async (formData: any) => {
         try {
-            const response = await api.post(`${"/"}`, formData);
+            const response = await api.post(`${Local.CREATE_ADMIN_USER}`, formData);
             toast.success(response.data.message);
             navigate('/admin/login');
         } catch (err: any) {

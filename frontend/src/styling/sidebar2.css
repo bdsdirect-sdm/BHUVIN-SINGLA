@@ -3,20 +3,20 @@
   border-radius: 5px;
 }
 
-.cmn-bg{
+.cmn-bg {
   background-color: #3E5677;
 }
 
-.cmn-clr{
+.cmn-clr {
   color: #3E5677;
 }
 
-.foot{
-  
+.foot {
+
   /* margin-top: auto; */
-  width: 83.7%;
+  /* width: 83.7%; */
 }
 
-.hh{
+.hh {
   height: 83vh;
 }

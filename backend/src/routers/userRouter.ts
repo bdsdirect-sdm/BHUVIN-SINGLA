@@ -12,7 +12,8 @@ import {
     addComment,
     deleteComment,
     updateComment,
-    getProfileData
+    getProfileData,
+    registerAdmin
     // addProfile
 } from "../controllers/userController";
 
@@ -30,6 +31,7 @@ router.post('/updatepreference', userAuthMiddleware, addorUpdatePreference);
 router.post('/addcomment', userAuthMiddleware, addComment);
 router.post('/updateprofilephoto', userAuthMiddleware, updateProfilePhoto);
 router.post('/updateuserprofile', userAuthMiddleware, addOrUpdateUser);
+router.post('/admin-register', registerAdmin);
 
 
 router.get('/getmywave', userAuthMiddleware, getMyWaves);

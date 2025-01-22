@@ -1,4 +1,5 @@
 interface config {
+    CREATE_ADMIN_USER: any;
     UPDATE_PROFILE: string;
     BASE_URL: string;
     CREATE_USER: string;
@@ -40,6 +41,8 @@ const Local: config = {
     DELETE_COMMENT: import.meta.env.VITE_DELETE_COMMENT,
     GET_PROFILE: import.meta.env.VITE_GET_PROFILE,
     UPDATE_PROFILE: import.meta.env.VITE_UPDATE_PROFILE,
+    CREATE_ADMIN_USER: import.meta.env.VITE_CREATE_ADMIN_USER,
+
 
 }
 
