@@ -14,12 +14,14 @@ import CreateWave from './components/CreateWave';
 import Friends from './components/Friends';
 import ChangePassword from './components/ChangePassword';
 import InviteFriend from './components/InviteFriend';
+import AdminRegister from './components/AdminRegister';
+import AdminLogin from './components/AdminLogin';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
 
   const router = createBrowserRouter([
     {
-      path:'/',
+      path: '/',
       element: <Sidebar1 />,
       children: [
         {
@@ -37,13 +39,21 @@ const App:React.FC = () => {
         {
           path: '/login/:url',
           element: <Login />
+        },
+        {
+          path: '/admin/register',
+          element: <AdminRegister />
+        },
+        {
+          path: '/admin/login',
+          element: < AdminLogin />
         }
       ]
     },
     {
       path: '/app',
       element: <Sidebar2 />,
-      children:[
+      children: [
         {
           path: '/app/dashboard',
           element: <Dashboard />
@@ -78,8 +88,8 @@ const App:React.FC = () => {
 
   return (
     <>
-    <RouterProvider router={router} />
-    <ToastContainer newestOnTop={false} closeOnClick />
+      <RouterProvider router={router} />
+      <ToastContainer newestOnTop={false} closeOnClick />
     </>
   )
 }

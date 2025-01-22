@@ -91,8 +91,9 @@ const Profile: React.FC = () => {
       <div className="profile-header">
         <div className="profile-bg-text">My Profile</div>
         <img
-          src="https://via.placeholder.com/100"
-          alt="Profile"
+          // src="https://via.placeholder.com/100"
+          src="https://placehold.co/400"
+          alt="profile"
           className="profile-image"
         />
         <div className="profile-info">
