@@ -1,0 +1,65 @@
+.rightbar {
+    width: 47.9vw;
+}
+
+.sideimg {
+    height: 117vh;
+    margin: 0;
+    padding: 0;
+}
+
+.foot {
+    width: 120.8vw;
+}
+
+hr {
+    color: #B18D4BCC;
+    width: 7%;
+    border: 2px solid #B18D4BCC;
+}
+
+.pass:focus {
+    outline: none;
+}
+
+.lc {
+    position: absolute;
+}
+
+.Link {
+    color: #B18D4BCC;
+    text-decoration: none;
+}
+
+.form-container {
+    margin: 0;
+    padding: 20px;
+    margin-left: 10%;
+    /* Leave 10% margin from the left of the form container */
+    width: 80%;
+    /* Ensure the form takes up 80% of the remaining width */
+}
+
+
+
+.form-label {
+    font-weight: 600;
+}
+
+.row .col {
+    margin-bottom: 15px;
+}
+
+@media screen and (max-width: 892px) {
+    .sideimg {
+        display: none;
+    }
+
+    .lc {
+        position: fixed;
+    }
+
+    .form-container {
+        padding: 10px;
+    }
+}

@@ -610,7 +610,8 @@ export const updateProfilePhoto = async (req: any, res: Response): Promise<any> 
 
 export const registerAdmin = async (req: any, res: any) => {
     try {
-        const { firstname, lastname, email, password, status } = req.body;
+        const { firstname, lastname, email, password } = req.body;
+        console.log("XXXXXXXxx", req.body);
 
         // Check if the admin already exists
         const isExist = await Admin.findOne({ where: { email } });
@@ -618,24 +619,21 @@ export const registerAdmin = async (req: any, res: any) => {
             return res.status(400).json({ message: "Admin already exists" });
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         // Create a new admin
         const admin = await Admin.create({
             firstname,
             lastname,
             email,
-            password: hashedPassword,
-            status,
+            password
         });
 
-        return res.status(200).json({
-            message: "Admin registered successfully",
+        return res.status(201).json({
+            message: "Admin created successfully",
             admin,
         });
     } catch (error) {
-        console.error("Error during admin registration:", error);
-        return res.status(500).json({ message: "Something went wrong, please try again later" });
+        console.error("Error creating admin:", error);
+        return res.status(500).json({ message: "Something went wrong, please try again later." });
     }
 };
+

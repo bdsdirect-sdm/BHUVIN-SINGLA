@@ -16,7 +16,7 @@ const AdminLogin: React.FC = () => {
 
     const loginAdmin = async (formData: any) => {
         try {
-            const response = await api.post(`${"/"}`, formData);
+            const response = await api.post(`${Local.AUTH_ADMIN_USER}`, formData);
             toast.success(response.data.message);
             navigate('/admin/dashboard');
         } catch (err: any) {
