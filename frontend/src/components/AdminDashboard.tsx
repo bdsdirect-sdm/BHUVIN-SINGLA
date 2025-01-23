@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styling/AdminDashboard.css'
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -19,12 +20,47 @@ const AdminDashboard: React.FC = () => {
                     <p className="text-center">Manage your platform settings and view analytics here.</p>
                 </div>
             </div>
+
+            {/* Four boxes in one line */}
+            <div className="row mt-5">
+                <div className="col-md-3">
+                    <div className="card text-white bg-primary mb-3">
+                        <div className="card-header">Total Users</div>
+                        <div className="card-body">
+                            <h5 className="card-title">1000</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card text-white bg-success mb-3">
+                        <div className="card-header">Active Users</div>
+                        <div className="card-body">
+                            <h5 className="card-title">800</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card text-white bg-warning mb-3">
+                        <div className="card-header">Inactive Users</div>
+                        <div className="card-body">
+                            <h5 className="card-title">200</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card text-white bg-info mb-3">
+                        <div className="card-header">Total Waves</div>
+                        <div className="card-body">
+                            <h5 className="card-title">50</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Logout button */}
             <div className="row mt-5">
                 <div className="col d-flex justify-content-center">
-                    <button
-                        className="btn btn-danger"
-                        onClick={handleLogout}
-                    >
+                    <button className="btn btn-danger" onClick={handleLogout}>
                         Logout
                     </button>
                 </div>

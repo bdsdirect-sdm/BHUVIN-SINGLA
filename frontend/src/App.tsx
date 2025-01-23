@@ -22,6 +22,11 @@ const App: React.FC = () => {
 
   const router = createBrowserRouter([
     {
+      path: '/admin/app/dashboard',
+      element: <AdminDashboard />
+    },
+
+    {
       path: '/',
       element: <Sidebar1 />,
       children: [
@@ -49,10 +54,7 @@ const App: React.FC = () => {
           path: '/admin/login',
           element: < AdminLogin />
         },
-        {
-          path: 'admin/app/dashboard',
-          element: < AdminDashboard />
-        }
+
       ]
     },
     {
