@@ -16,21 +16,9 @@
     text-align: center;
 }
 
-/* Custom colors for each card */
+/* All cards have the same color */
 .bg-primary {
     background-color: #007bff !important;
-}
-
-.bg-success {
-    background-color: #28a745 !important;
-}
-
-.bg-warning {
-    background-color: #ffc107 !important;
-}
-
-.bg-info {
-    background-color: #17a2b8 !important;
 }
 
 /* Card body styling */
@@ -63,7 +51,7 @@ button.btn-danger:hover {
     margin-top: 3rem !important;
 }
 
-/* Centering the cards */
+/* Centering the cards and ensuring they stay in one line */
 .row.mt-5 {
     display: flex;
     justify-content: space-between;

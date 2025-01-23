@@ -32,7 +32,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                 </div>
                 <div className="col-md-3">
-                    <div className="card text-white bg-success mb-3">
+                    <div className="card text-white bg-primary mb-3">
                         <div className="card-header">Active Users</div>
                         <div className="card-body">
                             <h5 className="card-title">800</h5>
@@ -40,7 +40,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                 </div>
                 <div className="col-md-3">
-                    <div className="card text-white bg-warning mb-3">
+                    <div className="card text-white bg-primary mb-3">
                         <div className="card-header">Inactive Users</div>
                         <div className="card-body">
                             <h5 className="card-title">200</h5>
@@ -48,7 +48,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                 </div>
                 <div className="col-md-3">
-                    <div className="card text-white bg-info mb-3">
+                    <div className="card text-white bg-primary mb-3">
                         <div className="card-header">Total Waves</div>
                         <div className="card-body">
                             <h5 className="card-title">50</h5>
