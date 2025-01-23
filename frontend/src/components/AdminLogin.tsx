@@ -18,7 +18,9 @@ const AdminLogin: React.FC = () => {
         try {
             const response = await api.post(`${Local.AUTH_ADMIN_USER}`, formData);
             toast.success(response.data.message);
-            navigate('/admin/dashboard');
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            navigate('admin/app/dashboard');
         } catch (err: any) {
             toast.error(`${err.response.data.message}`);
             console.error(err);

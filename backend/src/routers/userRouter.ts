@@ -13,7 +13,8 @@ import {
     deleteComment,
     updateComment,
     getProfileData,
-    registerAdmin
+    registerAdmin,
+    loginAdmin
     // addProfile
 } from "../controllers/userController";
 
@@ -32,6 +33,8 @@ router.post('/addcomment', userAuthMiddleware, addComment);
 router.post('/updateprofilephoto', userAuthMiddleware, updateProfilePhoto);
 router.post('/updateuserprofile', userAuthMiddleware, addOrUpdateUser);
 router.post('/admin-register', registerAdmin);
+router.post('/admin-login', loginAdmin);
+
 
 
 router.get('/getmywave', userAuthMiddleware, getMyWaves);

@@ -637,3 +637,44 @@ export const registerAdmin = async (req: any, res: any) => {
     }
 };
 
+export const loginAdmin = async (req: any, res: any) => {
+    try {
+        const { email, password } = req.body;
+        console.log("----------------------")
+        console.log("email", email, "PASSWORD", password);
+        console.log("---------------------------")
+
+        const admin = await Admin.findOne({ where: { email: email } });
+        if (!admin) {
+            return res.status(401).json({ message: 'Invalid email' });
+        }
+
+        // Compare the provided password with the stored hashed password
+        // const isValid = bcrypt.compare(password, Admin.password);
+        // if (!isValid) {
+        //     return res.status(401).json({ message: 'Wrong password' });
+        // }
+
+        // Generate JWT token for the admin
+        console.log("tarun", admin)
+        const token = jwt.sign({ uuid: admin.uuid }, SECRET_KEY, { expiresIn: '1h' });
+
+        // Send the response with success message, token, and admin info
+        return res.status(200).json({
+            message: 'Login successful',
+            token,
+            admin: {
+                uuid: admin.uuid,
+                firstname: admin.firstname,
+                lastname: admin.lastname,
+                email: admin.email,
+                password: admin.password,
+                status: admin.status,
+
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Something went wrong, please try again later' });
+    }
+};

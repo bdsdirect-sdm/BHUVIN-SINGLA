@@ -16,6 +16,7 @@ import ChangePassword from './components/ChangePassword';
 import InviteFriend from './components/InviteFriend';
 import AdminRegister from './components/AdminRegister';
 import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
 
 const App: React.FC = () => {
 
@@ -47,6 +48,10 @@ const App: React.FC = () => {
         {
           path: '/admin/login',
           element: < AdminLogin />
+        },
+        {
+          path: 'admin/app/dashboard',
+          element: < AdminDashboard />
         }
       ]
     },

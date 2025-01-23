@@ -2,35 +2,44 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/db";
 import { v4 as UUID } from 'uuid';
 
-class Admin extends Model{
+class Admin extends Model {
+    static password(password: any, password1: any) {
+        throw new Error("Method not implemented.");
+    }
     public uuid!: string;
     public firstname!: string;
     public lastname!: string;
     public email!: string;
+    public password!: string;
     public status!: boolean;
     public isDeleted!: boolean;
     public deletedAt!: Date;
 }
 
 Admin.init({
-    uuid:{
+    uuid: {
         type: DataTypes.UUID,
         defaultValue: UUID,
         primaryKey: true,
         allowNull: false
     },
-    firstname:{
+    firstname: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    lastname:{
-        type: DataTypes.STRING,
-        allowNull: false
-        },
-    email:{
+    lastname: {
         type: DataTypes.STRING,
         allowNull: false
     },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+
     status: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
@@ -43,7 +52,7 @@ Admin.init({
         type: DataTypes.DATE,
         allowNull: true,
     }
-},{
+}, {
     modelName: 'Admin',
     sequelize
 })
