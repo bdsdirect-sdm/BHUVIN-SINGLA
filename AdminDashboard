@@ -1,0 +1,166 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const AdminDashboard: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // Clear user token and navigate to login page
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate('/admin/login'); // Redirect to login page
+    };
+
+    return (
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col">
+                    <h1 className="text-center">Welcome to the Admin Dashboard</h1>
+                    <p className="text-center">Manage your platform settings and view analytics here.</p>
+                </div>
+            </div>
+
+            {/* Four boxes in one line */}
+            <div className="row mt-5">
+                <div className="col-md-3">
+                    <div className="card text-white bg-primary mb-3">
+                        <div className="card-header">Total Users</div>
+                        <div className="card-body">
+                            <h5 className="card-title">1000</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card text-white bg-success mb-3">
+                        <div className="card-header">Active Users</div>
+                        <div className="card-body">
+                            <h5 className="card-title">800</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card text-white bg-warning mb-3">
+                        <div className="card-header">Inactive Users</div>
+                        <div className="card-body">
+                            <h5 className="card-title">200</h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card text-white bg-info mb-3">
+                        <div className="card-header">Total Waves</div>
+                        <div className="card-body">
+                            <h5 className="card-title">50</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Logout button */}
+            <div className="row mt-5">
+                <div className="col d-flex justify-content-center">
+                    <button className="btn btn-danger" onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default AdminDashboard;
+
+
+
+/* General styles for the dashboard */
+.container {
+    max-width: 1200px;
+    margin-top: 30px;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Custom colors for each card */
+.bg-primary {
+    background-color: #007bff !important;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+/* Card body styling */
+.card-body {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.card-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* Logout button styling */
+button.btn-danger {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button.btn-danger:hover {
+    background-color: #d43f3a;
+}
+
+/* Spacing between rows */
+.mt-5 {
+    margin-top: 3rem !important;
+}
+
+/* Centering the cards */
+.row.mt-5 {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 767px) {
+    .row.mt-5 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-md-3 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+    }
+}
