@@ -3,6 +3,7 @@ import sequelize from "../config/db";
 import { v4 as UUID } from 'uuid';
 
 class Admin extends Model {
+    is_login: any;
     static password(password: any, password1: any) {
         throw new Error("Method not implemented.");
     }
