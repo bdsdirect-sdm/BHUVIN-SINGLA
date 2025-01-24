@@ -16,7 +16,7 @@ const AdminRegister: React.FC = () => {
     const [pass2type, setPass2Type] = useState('password');
     const [pass2visible, setPass2Visible] = useState(0);
 
-    // API call to register the admin
+
     const registerAdmin = async (formData: any) => {
         try {
             console.log("formdataaaaa", formData);
@@ -29,7 +29,6 @@ const AdminRegister: React.FC = () => {
         }
     };
 
-    // Validation schema for form inputs
     const validationSchema = Yup.object().shape({
         email: Yup.string().email("Invalid email").required("Email is required"),
         password: Yup.string()

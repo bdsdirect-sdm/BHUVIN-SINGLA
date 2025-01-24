@@ -20,6 +20,7 @@ interface config {
     GET_PROFILE: string;
     CREATE_ADMIN_USER: string;
     AUTH_ADMIN_USER: string;
+    GET_ADMIN_DATA: string;
 }
 // console.log("--------->", import.meta.env.VITE_BASE_URL)
 const Local: config = {
@@ -44,6 +45,8 @@ const Local: config = {
     UPDATE_PROFILE: import.meta.env.VITE_UPDATE_PROFILE,
     CREATE_ADMIN_USER: import.meta.env.VITE_CREATE_ADMIN_USER,
     AUTH_ADMIN_USER: import.meta.env.VITE_AUTH_ADMIN_USER,
+    GET_ADMIN_DATA: import.meta.env.VITE_GET_ADMIN_DATA,
+
 
 }
 
