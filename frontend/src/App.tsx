@@ -17,6 +17,7 @@ import InviteFriend from './components/InviteFriend';
 import AdminRegister from './components/AdminRegister';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
+import DynamicForm from './components/DynamicForm';
 
 const App: React.FC = () => {
 
@@ -24,6 +25,10 @@ const App: React.FC = () => {
     {
       path: '/admin/app/dashboard',
       element: <AdminDashboard />
+    },
+    {
+      path: '/form',
+      element: < DynamicForm />
     },
 
     {
@@ -53,8 +58,7 @@ const App: React.FC = () => {
         {
           path: '/admin/login',
           element: < AdminLogin />
-        },
-
+        }
       ]
     },
     {
