@@ -98,12 +98,54 @@ export const editUserstatus = async (req: any, res: Response): Promise<any> => {
     }
 }
 
-export const getAllUsers = async (req: any, res: Response): Promise<any> => {
-    try {
-        const { search, userType } = req.query;
-        var users;
-        if (userType != 1) {
+// export const getAllUsers = async (req: any, res: any): Promise<any> => {
+//     try {
+//         const { search, userType } = req.query;
+//         var users;
+//         if (userType != 1) {
 
+//             users = await User.findAll({
+//                 where: {
+//                     [Op.and]: [
+//                         {
+//                             [Op.or]: [
+//                                 { firstname: { [Op.like]: `%${search}%` } },
+//                                 { lastname: { [Op.like]: `%${search}%` } },
+//                                 { email: { [Op.like]: `%${search}%` } },
+//                             ]
+//                         },
+//                         { status: userType == 2 ? true : false }
+//                     ]
+//                 }
+//             });
+//         } else {
+//             users = await User.findAll({
+//                 where: {
+//                     [Op.or]: [
+//                         { firstname: { [Op.like]: `%${search}%` } },
+//                         { lastname: { [Op.like]: `%${search}%` } },
+//                         { email: { [Op.like]: `%${search}%` } },
+//                     ]
+//                 }
+//             });
+//         }
+//         return res.status(200).json(users);
+//     }
+//     catch (err) {
+//         return res.status(500).json({ message: `Internal Server Error ${err}` });
+//     }
+// }
+
+
+export const getAllUsers = async (req: any, res: any): Promise<any> => {
+    try {
+        console.log("Search start");
+        const { search, userType } = req.query;
+        console.log(req.query.data, "");
+        let users;
+
+        // If the userType is not '1', filter by 'status' as well
+        if (userType != 1) {
             users = await User.findAll({
                 where: {
                     [Op.and]: [
@@ -113,7 +155,8 @@ export const getAllUsers = async (req: any, res: Response): Promise<any> => {
                                 { lastname: { [Op.like]: `%${search}%` } },
                                 { email: { [Op.like]: `%${search}%` } },
                             ]
-                        },
+                        }
+                        ,
                         { status: userType == 2 ? true : false }
                     ]
                 }
@@ -129,12 +172,13 @@ export const getAllUsers = async (req: any, res: Response): Promise<any> => {
                 }
             });
         }
-        return res.status(200).json(users);
+        return res.status(200).json(users); // Return the users found
     }
     catch (err) {
-        return res.status(500).json({ message: `Internal Server Error ${err}` });
+        return res.status(500).json({ message: `Internal Server Error ${err}` }); // Handle errors
     }
 }
+
 
 export const getAllwaves = async (req: any, res: Response): Promise<any> => {
     try {

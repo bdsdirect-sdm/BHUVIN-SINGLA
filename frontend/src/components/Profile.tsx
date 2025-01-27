@@ -5,7 +5,7 @@ import Local from "../environment/env";
 import { toast } from "react-toastify";
 
 const Profile: React.FC = () => {
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const token = localStorage.getItem('token');
   const [activeTab, setActiveTab] = useState<"basic" | "personal">("basic");
   const [profileData, setProfileData] = useState<any>({

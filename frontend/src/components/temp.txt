@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect } from "react";
 import "../styling/Profile.css";
 import api from "../api/axiosInstance";
@@ -379,5 +375,4 @@ const Profile: React.FC = () => {
 export default Profile;
 
 
-now you know that i want add all input feilds inside my code + add one extra multer feature.give me full code after updating.already shared backend multer file for this 
-and on click of change picture button, choose a file to upload in frame 
+i want to create an form as OUTPUT which take array of objects in a const file which we can submit again & again with different values . and we have to check it's datatype and other things and add it in form with suitable label. i have to iterate all values one by one by using map function and then using switch to assign jsx . create a project plan in tabular form and tell me all strategy to solve this .   

@@ -1,6 +1,5 @@
 interface config {
-    UPDATE_BASIC_USER_DETAIL: any;
-    UPDATE_PERSONAL_USER_DETAIL: any;
+    GET_ADMIN_DATA: any;
     UPDATE_PROFILE_PHOTO: any;
     UPDATE_PROFILE: string;
     BASE_URL: string;
@@ -23,36 +22,33 @@ interface config {
     GET_PROFILE: string;
     CREATE_ADMIN_USER: string;
     AUTH_ADMIN_USER: string;
-    GET_ADMIN_DATA: string;
 }
 // console.log("--------->", import.meta.env.VITE_BASE_URL)
 const Local: config = {
     BASE_URL: import.meta.env.VITE_BASE_URL,
     CREATE_USER: "signup",
     AUTH_USER: "login",
-    CREATE_WAVE: import.meta.env.VITE_CREATE_WAVE,
-    GET_MY_WAVES: import.meta.env.VITE_GET_MY_WAVES,
-    GET_REQUESTS: import.meta.env.VITE_GET_REQUESTS,
-    INVITE_FRIEND: import.meta.env.VITE_INVITE_FRIEND,
+    CREATE_WAVE: "addwave",
+    GET_MY_WAVES: "getmywave",
+    GET_REQUESTS: "getrequests",
+    INVITE_FRIEND: "invite-friend",
     SECRET_KEY: import.meta.env.VITE_CRYPTO_SECRET_KEY,
-    GET_LATEST_WAVES: import.meta.env.VITE_GET_LATEST_WAVES,
-    GET_COMMENTS: import.meta.env.VITE_GET_COMMENTS,
-    GET_PREFERENCE: import.meta.env.VITE_GET_PREFERENCE,
-    UPDATE_PREFERENCE: import.meta.env.VITE_UPDATE_PREFERENCE,
-    EDIT_PASSWORD: import.meta.env.VITE_EDIT_PASSWORD,
-    GET_FRIENDS: import.meta.env.VITE_GET_FRIENDS,
-    ADD_COMMENT: import.meta.env.VITE_ADD_COMMENT,
-    EDIT_COMMENT: import.meta.env.VITE_EDIT_COMMENT,
-    DELETE_COMMENT: import.meta.env.VITE_DELETE_COMMENT,
-    GET_PROFILE: import.meta.env.VITE_GET_PROFILE,
-    UPDATE_PROFILE: import.meta.env.VITE_UPDATE_PROFILE,
-    CREATE_ADMIN_USER: import.meta.env.VITE_CREATE_ADMIN_USER,
-    AUTH_ADMIN_USER: import.meta.env.VITE_AUTH_ADMIN_USER,
-    GET_ADMIN_DATA: import.meta.env.VITE_GET_ADMIN_DATA,
-    UPDATE_BASIC_USER_DETAIL: undefined,
-    UPDATE_PERSONAL_USER_DETAIL: undefined,
+    GET_LATEST_WAVES: "getlatestwaves",
+    GET_COMMENTS: "getcomments",
+    GET_PREFERENCE: "getpreference",
+    UPDATE_PREFERENCE: "updatepreference",
+    EDIT_PASSWORD: "updatepassword",
+    GET_FRIENDS: "getfriendlist",
+    ADD_COMMENT: "addcomment",
+    EDIT_COMMENT: "editcomment",
+    DELETE_COMMENT: "deletecomment",
+    GET_PROFILE: "getprofiledata",
+    UPDATE_PROFILE: "updateuserprofile",
+    CREATE_ADMIN_USER: "admin-register",
+    AUTH_ADMIN_USER: "admin-login",
+    // GET_ADMIN_DATA: import.meta.env.VITE_GET_ADMIN_DATA,
     UPDATE_PROFILE_PHOTO: "updateprofilephoto",
-
+    GET_ADMIN_DATA: "allusers"
 }
 
 export default Local

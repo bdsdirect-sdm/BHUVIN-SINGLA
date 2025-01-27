@@ -2,7 +2,6 @@ import { Router } from "express";
 import userAuthMiddleware from "../middlewares/userAuth";
 import { adminLogin, adminLogout, adminregister, editUserstatus, editWavestatus, getAllUsers, getAllwaves, getCounts, updatePersonalUser, updateBasicUser, deleteWave, deleteUser } from "../controllers/adminController";
 
-
 const adminRouter = Router();
 
 adminRouter.post('/adminauth', adminLogin);
