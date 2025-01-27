@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use('/', userRouter);
 
-sequelize.sync({ alter: false }).then(() => {
+sequelize.sync({ alter: true }).then(() => {
     console.log('Database connected');
 
     app.listen(Local.SERVER_PORT, () => {

@@ -599,7 +599,7 @@ export const updateProfilePhoto = async (req: any, res: Response): Promise<any> 
             return res.status(404).json({ message: "User not found" });
         }
 
-        await user.update({ profilePhoto: photoPath });
+        await user.update({ profile_photo: photoPath });
 
         return res.status(200).json({ message: "Profile photo updated successfully", photoPath });
     } catch (err) {

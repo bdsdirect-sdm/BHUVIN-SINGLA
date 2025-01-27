@@ -1,9 +1,9 @@
 import User from "./User";
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/db";
-import { v4 as UUID} from 'uuid';
+import { v4 as UUID } from 'uuid';
 
-class Wave extends Model{
+class Wave extends Model {
     public uuid!: string;
     public photo!: string;
     public video!: string;
@@ -21,19 +21,19 @@ Wave.init({
         type: DataTypes.UUID,
         defaultValue: UUID,
         primaryKey: true,
-        },
+    },
     photo: {
         type: DataTypes.STRING,
-        allowNull:true
+        allowNull: true
     },
     video: {
         type: DataTypes.STRING,
-        allowNull:true
+        allowNull: true
     },
     text: {
         type: DataTypes.STRING,
     },
-    isactive:{
+    isactive: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
@@ -49,7 +49,7 @@ Wave.init({
         type: DataTypes.DATE,
         allowNull: true,
     },
-},{
+}, {
     modelName: 'Wave',
     sequelize
 })

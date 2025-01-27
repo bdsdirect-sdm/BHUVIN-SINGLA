@@ -1,4 +1,7 @@
 interface config {
+    UPDATE_BASIC_USER_DETAIL: any;
+    UPDATE_PERSONAL_USER_DETAIL: any;
+    UPDATE_PROFILE_PHOTO: any;
     UPDATE_PROFILE: string;
     BASE_URL: string;
     CREATE_USER: string;
@@ -25,8 +28,8 @@ interface config {
 // console.log("--------->", import.meta.env.VITE_BASE_URL)
 const Local: config = {
     BASE_URL: import.meta.env.VITE_BASE_URL,
-    CREATE_USER: import.meta.env.VITE_CREATE_USER,
-    AUTH_USER: import.meta.env.VITE_AUTH_USER,
+    CREATE_USER: "signup",
+    AUTH_USER: "login",
     CREATE_WAVE: import.meta.env.VITE_CREATE_WAVE,
     GET_MY_WAVES: import.meta.env.VITE_GET_MY_WAVES,
     GET_REQUESTS: import.meta.env.VITE_GET_REQUESTS,
@@ -46,7 +49,9 @@ const Local: config = {
     CREATE_ADMIN_USER: import.meta.env.VITE_CREATE_ADMIN_USER,
     AUTH_ADMIN_USER: import.meta.env.VITE_AUTH_ADMIN_USER,
     GET_ADMIN_DATA: import.meta.env.VITE_GET_ADMIN_DATA,
-
+    UPDATE_BASIC_USER_DETAIL: undefined,
+    UPDATE_PERSONAL_USER_DETAIL: undefined,
+    UPDATE_PROFILE_PHOTO: "updateprofilephoto",
 
 }
 

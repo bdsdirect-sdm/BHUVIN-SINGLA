@@ -21,6 +21,7 @@ import {
 
 import userAuthMiddleware from "../middlewares/userAuth";
 import { uploadWave } from "../utils/uploadWave";
+import { uploadProfile } from "../utils/uploadProfilePhoto";
 
 const router = Router();
 
@@ -30,7 +31,7 @@ router.post('/addwave', userAuthMiddleware, uploadWave.single('photo'), createWa
 router.post('/invite-friend', userAuthMiddleware, inviteFriend);
 router.post('/updatepreference', userAuthMiddleware, addorUpdatePreference);
 router.post('/addcomment', userAuthMiddleware, addComment);
-router.post('/updateprofilephoto', userAuthMiddleware, updateProfilePhoto);
+router.post('/updateprofilephoto', userAuthMiddleware, uploadProfile.single('profile_photo'), updateProfilePhoto);
 router.post('/updateuserprofile', userAuthMiddleware, addOrUpdateUser);
 router.post('/admin-register', registerAdmin);
 router.post('/admin-login', loginAdmin);

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styling/Profile.css";
 import api from "../api/axiosInstance";
 import Local from "../environment/env";
 import { toast } from "react-toastify";
 
-
 const Profile: React.FC = () => {
+  const fileInputRef = useRef(null);
+  const token = localStorage.getItem('token');
   const [activeTab, setActiveTab] = useState<"basic" | "personal">("basic");
-  const [profileData, setProfileData] = useState({
+  const [profileData, setProfileData] = useState<any>({
     user: {
       firstname: "",
       lastname: "",
@@ -28,29 +29,26 @@ const Profile: React.FC = () => {
     }
   });
 
-  const token = localStorage.getItem('token');
-
+  const fetchProfileData = async () => {
+    try {
+      const response = await api.get(`${Local.GET_PROFILE}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log("helooooooooooooooo", response.data);
+      if (response.status === 200) {
+        setProfileData(response.data);
+      } else {
+        console.error("Failed to fetch profile data:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
 
   // Fetch profile data on component mount
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const response = await api.get(`${Local.GET_PROFILE}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        console.log("helooooooooooooooo", response.data);
-        if (response.status === 200) {
-          setProfileData(response.data);
-        } else {
-          console.error("Failed to fetch profile data:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
-
     fetchProfileData();
   }, []);
 
@@ -85,20 +83,67 @@ const Profile: React.FC = () => {
     }
   };
 
+  const updatePhoto = async (data: any) => {
+    try {
+      const response = await api.post(`${Local.UPDATE_PROFILE_PHOTO}`, data, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      fetchProfileData();
+      toast.success(`${response.data.message}`)
+    }
+    catch (err: any) {
+      toast.error(`${err.response.data.message}`)
+    }
+  }
+
+  function profile_photo_update(file: any) {
+
+    const formdata = new FormData();
+    formdata.append('profile_photo', file);
+    updatePhoto(formdata);
+  }
+
+
+
   return (
     <div className="profile-container">
       {/* Header Section */}
       <div className="profile-header">
         <div className="profile-bg-text">My Profile</div>
-        <img
-          // src="https://via.placeholder.com/100"
-          src="https://placehold.co/400"
-          alt="profile"
-          className="profile-image"
-        />
+        {profileData.user?.profile_photo && (
+          <img
+            src={`${Local.BASE_URL}${profileData.user?.profile_photo}`}
+            alt='User Profile'
+            className='rounded-circle border'
+            style={{ width: '100px', height: '100px' }}
+            data-bs-toggle='dropdown'
+            aria-expanded='false'
+          />
+        )}
+        {!profileData.user?.profile_photo && (
+          <img
+            src={`https://api.dicebear.com/5.x/initials/svg?seed=${profileData.user?.firstname} ${profileData.user?.lastname}`}
+            alt='User Profile'
+            className='rounded-circle border'
+            style={{ width: '100px', height: '100px' }}
+            data-bs-toggle='dropdown'
+            aria-expanded='false'
+          />
+        )}
         <div className="profile-info">
           {/* <p className="profile-text">Upload a New Photo</p> */}
-          <button className="change-picture-button">Change Picture</button>
+          {/* <button className="change-picture-button">Change Picture</button> */}
+
+          <button className='change-picture-button  btn btn-light h-11 w-44 ms-[32vw] mt-[-11px]' onClick={() => fileInputRef?.current?.click()} >Change Picture</button>
+
+          <input ref={fileInputRef}
+            type="file"
+            accept='image/jpg, image/png, image/jpeg'
+            hidden onChange={(e: any) => { profile_photo_update(e.currentTarget.files[0]) }} />
+
+
         </div>
       </div>
 
@@ -166,26 +211,6 @@ const Profile: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="socialSecurity">Social Security (Numbers only)</label>
-              <input
-                type="text"
-                id="socialSecurity"
-                placeholder="Social Security"
-                value={profileData.user.social_security}
-                onChange={(e) =>
-                  handleInputChange(
-                    "preference",
-                    "social_security",
-                    e.target.value
-                  )
-                }
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-
-            <div className="form-group">
               <label htmlFor="phone">Phone Number *</label>
               <input
                 type="text"
@@ -197,6 +222,12 @@ const Profile: React.FC = () => {
                 }
               />
             </div>
+
+          </div>
+
+          <div className="form-row">
+
+
 
             {/* Address Section */}
             <div className="form-group">
@@ -210,11 +241,7 @@ const Profile: React.FC = () => {
                   handleInputChange("user", "address_one", e.target.value)
                 }
               />
-            </div></div>
-
-
-          <div className="form-row">
-
+            </div>
             <div className="form-group">
               <label htmlFor="addressTwo">Address Two</label>
               <input
@@ -229,6 +256,14 @@ const Profile: React.FC = () => {
 
             </div>
 
+
+          </div>
+
+
+          <div className="form-row">
+
+
+
             <div className="form-group">
               <label htmlFor="city">City *</label>
               <input
@@ -240,9 +275,7 @@ const Profile: React.FC = () => {
                   handleInputChange("user", "city", e.target.value)
                 }
               />
-            </div></div>
-
-          <div className="form-row">
+            </div>
 
             <div className="form-group">
               <label htmlFor="state">State *</label>
@@ -256,6 +289,12 @@ const Profile: React.FC = () => {
                 }
               />
             </div>
+
+          </div>
+
+          <div className="form-row">
+
+
 
             <div className="form-group">
               <label htmlFor="zip">Home Zip Code *</label>
