@@ -1,0 +1,47 @@
+{
+    "title": "User Registration Form",
+    "fields": [
+        {
+            "id": "fullname",
+            "label": "Full Name",
+            "type": "name",
+            "nameType": "fullName",
+            "required": true,
+            "value": "John doe"
+        },
+        {
+            "id": "fathername",
+            "label": "Father's Name",
+            "type": "text",
+            "nameType": "fatherName",
+            "required": true,
+            "value": "Father"
+        },
+        {
+            "id": "email",
+            "label": "Email",
+            "type": "email",
+            "required": true,
+            "value": "john.doe@example.com"
+        },
+        {
+            "id": "phone",
+            "label": "Phone",
+            "type": "phone",
+            "required": false,
+            "value": "1234567890"
+        },
+        {
+            "id": "country",
+            "label": "Country",
+            "type": "dropdown",
+            "required": true,
+            "options": [
+                "USA",
+                "Canada",
+                "UK"
+            ],
+            "value": "USA"
+        }
+    ]
+}

@@ -17,7 +17,8 @@ import InviteFriend from './components/InviteFriend';
 import AdminRegister from './components/AdminRegister';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
-import DynamicForm from './components/DynamicForm';
+import DynamicForm from '../src/DynamicForm/DynamicForm';
+import SubmittedSuccessfully from '../src/DynamicForm/SubmittedSuccessfully';
 
 const App: React.FC = () => {
 
@@ -25,6 +26,10 @@ const App: React.FC = () => {
     {
       path: '/admin/app/dashboard',
       element: <AdminDashboard />
+    },
+    {
+      path: './success',
+      element: <SubmittedSuccessfully />
     },
     {
       path: '/form',

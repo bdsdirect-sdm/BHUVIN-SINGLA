@@ -1,162 +1,69 @@
-export const getAllUsers = async (req: any, res: any): Promise<any> => {
-    try {
-        const { search, userType } = req.query;
-        var users;
-        if (userType != 1) {
+SMS24.me
 
-            users = await User.findAll({
-                where: {
-                    [Op.and]: [
-                        {
-                            [Op.or]: [
-                                { firstname: { [Op.like]: `%${search}%` } },
-                                { lastname: { [Op.like]: `%${search}%` } },
-                                { email: { [Op.like]: `%${search}%` } },
-                            ]
-                        },
-                        { status: userType == 2 ? true : false }
-                    ]
-                }
-            });
-        } else {
-            users = await User.findAll({
-                where: {
-                    [Op.or]: [
-                        { firstname: { [Op.like]: `%${search}%` } },
-                        { lastname: { [Op.like]: `%${search}%` } },
-                        { email: { [Op.like]: `%${search}%` } },
-                    ]
-                }
-            });
-        }
-        return res.status(200).json(users);
-    }
-    catch (err) {
-        return res.status(500).json({ message: `Internal Server Error ${err}` });
-    }
-}
-update this api so that it can get all details from Users table in database with model name file User.ts
+    All Numbers
+    All Countries
+    Privacy
+    Games
 
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/db";
-import { v4 as UUID } from 'uuid';
+    English
+    @sms24_me Telegram ChannelTelegram
 
-class User extends Model{
-    public uuid!: string;
-    public firstname!: string;
-    public lastname!: string;
-    public email!: string;
-    public phone!: string
-    public password!: string;
-    public address_one!: string;
-    public address_two!: string;
-    public city!: string;
-    public state!: string;
-    public zip_code!: string;
-    public dob!: Date;
-    public gender!: string;
-    public martial_status!: string;
-    public social_security!: string;
-    public social!: string;
-    public kids!: Number;
-    public profile_photo!: string;
-    public status!: boolean;
-    public isDeleted!: boolean;
-    public deletedAt!: Date;
-}
+India Phone Numbers
+ADVERTISEMENT
+India
++919811466825
+India
++919126403855
+India
++917233068865
+India
++919417975203
+India
++919598324597
+India
++919598324808
+India
++918728963926
+India
++916389831175
+India
++916389824709
+India
++919709380129
+India
++917454339242
+India
++918527834259
+India
++917428731249
+India
++917454339241
+India
++919090407368
 
-User.init({
-    uuid:{
-        type: DataTypes.UUID,
-        defaultValue: UUID,
-        primaryKey: true,
-        allowNull: false
-    },
-    profile_photo:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    firstname:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    lastname:{
-        type: DataTypes.STRING,
-        allowNull: false
-        },
-    email:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    phone:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    password:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    address_one:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    address_two:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    city:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    state:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    zip_code:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    dob:{
-        type: DataTypes.DATEONLY,
-        allowNull: true
-    },
-    gender:{
-        type: DataTypes.ENUM('male', 'female', 'others'),
-        allowNull: true
-    },
-    martial_status:{
-        type: DataTypes.ENUM('single', 'married', 'divorced'),
-        allowNull: true
-    },
-    social_security:{
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
-    social:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    kids:{
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
-    status:{
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-        allowNull: false
-    },
-    isDeleted:{
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
-    },
-    deletedAt:{
-        type: DataTypes.DATE,
-        allowNull: true
-    }
-}, {
-    modelName: 'User',
-    sequelize,
-})
+    1
+    2
+    3
+    4
 
-export default User;
+India
+
+The Indian IT market is one of the fastest growing in the world and is ready to open its spaces to all users of the worldwide network.
+
+Many useful and entertaining sites leading educational work or just forums where registered users share their photos - all this can become your world! One has only to register on these sites using a free SMS.
+
+How to be in such a situation when you do not have the numbers of local telephone operators, and you don’t want to share your personal with unknown little-known sites?
+
+It is worth protecting yourself and choosing a number from the database of free virtual numbers in India on the site sms24.me!
+
+sms24.me is a godsend for every user! In addition to phone numbers of India,here you can find databases of phone numbers and other countries, which are available for free and absolutely free use! It has never been so easy registration with free SMS!
+
+It is very easy to use the site sms24.me! Open the site where you want to log in. In the field where the number is expected, copy one of theIndia virtual phone numbers taken from sms24.me. And confirm the expectation of the SMS password.
+
+Just a couple of minutes, and when the page sms24.me is updated, you will see a confirmation code. It should be entered to complete the registration.
+
+We on sms24.me are always on the side of our users, and if the site on which you want to log in is fraudulent, we will stop the registration confirmation by notifying you about the intruders of this resource by sending a message instead of a code!
+
+With sms24.me you are completely safe even on the World Wide Web! Popular websites in India are waiting for you to register! Immerse yourself in vibrant India with a security assistant - with the sms24.me website!
+
+Don't wait, start using our virtual numbers to receive SMS for free
