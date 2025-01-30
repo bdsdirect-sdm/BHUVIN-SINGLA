@@ -16,8 +16,32 @@ import { Op } from "sequelize";
 import Comment from "../models/Comment";
 import { uploadWave } from "../utils/uploadWave"; // Adjust import if using another uploader
 import Admin from "../models/Admin";
+import Stripe from 'stripe';
 
 const SECRET_KEY: any = Local.SECRET_KEY
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, { apiVersion: '2025-01-27.acacia' });
+
+export const createPaymentIntent = async (req: any, res: Response) => {
+    try {
+        const { amount, currency } = req.body;
+
+        // Create PaymentIntent
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount * 100, // Stripe expects the amount in cents
+            currency,
+            payment_method_types: ['card'], // Allows only card payments
+        });
+
+        // Send the clientSecret to the frontend
+        res.status(200).json({
+            clientSecret: paymentIntent.client_secret
+        });
+    } catch (error: any) {
+        console.error('Error creating payment intent:', error);
+        res.status(500).json({ message: 'Failed to create payment intent', error: error.message });
+    }
+};
+
 
 export const userList = async (req: any, res: Response): Promise<any> => {
     try {
@@ -485,9 +509,8 @@ export const deleteComment = async (req: any, res: Response): Promise<any> => {
 
 export const getProfileData = async (req: any, res: Response): Promise<any> => {
     try {
-        console.log('====================================');
         console.log("flkdjfl fldjfkldjklfj");
-        console.log('====================================');
+
         const { uuid } = req.user;
         const user = await User.findOne({ where: { uuid } });
 

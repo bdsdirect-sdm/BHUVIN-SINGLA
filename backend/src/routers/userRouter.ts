@@ -14,7 +14,8 @@ import {
     updateComment,
     getProfileData,
     registerAdmin,
-    loginAdmin
+    loginAdmin,
+    createPaymentIntent
     // addProfile
 } from "../controllers/userController";
 
@@ -36,6 +37,7 @@ router.post('/updateuserprofile', userAuthMiddleware, addOrUpdateUser);
 router.post('/admin-register', registerAdmin);
 router.post('/admin-login', loginAdmin);
 
+router.post('/create-payment-intent', createPaymentIntent);
 
 
 router.get('/getmywave', userAuthMiddleware, getMyWaves);

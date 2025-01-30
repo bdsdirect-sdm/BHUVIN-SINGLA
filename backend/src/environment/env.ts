@@ -1,9 +1,9 @@
 import dotenv from 'dotenv'
 
-dotenv.config({path:".env.development"});
+dotenv.config({ path: ".env.development" });
 
-export const Local:any = {
-    DB_NAME:  process.env.DB_NAME,
+export const Local: any = {
+    DB_NAME: process.env.DB_NAME,
     DB_USER: process.env.DB_USER,
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_HOST: process.env.DB_HOST,
@@ -15,5 +15,6 @@ export const Local:any = {
     BASE_URL: process.env.BASE_URL,
     LOGIN_URL: process.env.LOGIN_URL,
     SIGNUP_URL: process.env.SIGNUP_URL,
-    CRYPTO_SECRET_KEY: process.env.CRYPTO_SECRET_KEY
+    CRYPTO_SECRET_KEY: process.env.CRYPTO_SECRET_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
 };

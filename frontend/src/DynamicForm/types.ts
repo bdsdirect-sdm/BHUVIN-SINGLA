@@ -1,8 +1,10 @@
+// types.ts
 export interface FormField {
     id: string;
     label: string;
-    type: 'text' | 'email' | 'phone' | 'dropdown' | 'textarea' | 'name';
-    required?: boolean;
-    nameType?: 'fullName' | 'firstName' | 'lastName'; // Only applicable for 'name' type fields
-    options?: string[]; // Only applicable for 'dropdown' type fields
+    type: "name" | "email" | "phone" | "dropdown" | "textarea" | "text" | "password" | "number" | "radio" | "checkbox" | "url" | "date";
+    nameType?: "fullName" | "firstName" | "lastName";
+    required: boolean;
+    options?: string[];  // For fields like dropdown and radio
+    value?: string;      // For pre-filled values
 }

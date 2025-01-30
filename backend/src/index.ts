@@ -14,6 +14,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use('/', userRouter, adminRouter);
 
+
 sequelize.sync({ alter: true }).then(() => {
     console.log('Database connected');
 
