@@ -24,12 +24,10 @@ import PaymentForm from '../src/stripe/PaymentForm';
 const App: React.FC = () => {
 
   const router = createBrowserRouter([
-
     {
       path: '/payment',
       element: <PaymentForm />
     },
-
     {
       path: '/success',
       element: <SubmittedSuccessfully />

@@ -22,6 +22,7 @@ interface config {
     GET_PROFILE: string;
     CREATE_ADMIN_USER: string;
     AUTH_ADMIN_USER: string;
+    PAYMENT: string;
 }
 // console.log("--------->", import.meta.env.VITE_BASE_URL)
 const Local: config = {
@@ -48,7 +49,8 @@ const Local: config = {
     AUTH_ADMIN_USER: "admin-login",
     // GET_ADMIN_DATA: import.meta.env.VITE_GET_ADMIN_DATA,
     UPDATE_PROFILE_PHOTO: "updateprofilephoto",
-    GET_ADMIN_DATA: "allusers"
+    GET_ADMIN_DATA: "allusers",
+    PAYMENT: "create-payment-intent"
 }
 
 export default Local

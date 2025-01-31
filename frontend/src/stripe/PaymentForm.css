@@ -1,0 +1,138 @@
+/* Background */
+body {
+    background: linear-gradient(135deg, #FF7E5F, #feb47b, #ff512f);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Payment Card */
+.payment-card {
+    width: 460px;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    text-align: center;
+    color: white;
+    animation: slideUp 0.5s ease-in-out;
+}
+
+/* Heading */
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Input Row */
+.row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.input-field {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    outline: none;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.input-field:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.02);
+    color: rgb(54, 52, 52);
+}
+
+/* Full-width Input */
+.full-width {
+    width: 100%;
+}
+
+/* Half-width Input */
+.half-width {
+    width: 48%;
+}
+
+/* Placeholder Color */
+::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Pay Button */
+.pay-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    margin-top: 15px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.pay-button:hover {
+    background: linear-gradient(90deg, #ff7800, #e52e71);
+    transform: scale(1.05);
+}
+
+/* Disabled Button */
+.pay-button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
+/* Message */
+.message {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 450px) {
+    .payment-card {
+        width: 90%;
+    }
+}

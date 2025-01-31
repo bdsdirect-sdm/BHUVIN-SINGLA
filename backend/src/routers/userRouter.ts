@@ -39,7 +39,6 @@ router.post('/admin-login', loginAdmin);
 
 router.post('/create-payment-intent', createPaymentIntent);
 
-
 router.get('/getmywave', userAuthMiddleware, getMyWaves);
 router.get('/getrequests', userAuthMiddleware, getRequests);
 router.get('/getlatestwaves', userAuthMiddleware, getLatestWaves);
@@ -47,7 +46,6 @@ router.get('/getcomments', userAuthMiddleware, getComments);
 router.get('/getpreference', userAuthMiddleware, getUserPreference);
 router.get('/getfriendlist', userAuthMiddleware, userList);
 router.get('/getprofiledata', userAuthMiddleware, getProfileData);
-
 
 router.put('/updatepassword', userAuthMiddleware, updateUserPassword);
 router.put('/editcomment', userAuthMiddleware, updateComment);
