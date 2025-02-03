@@ -374,6 +374,5 @@ const Profile: React.FC = () => {
 
 export default Profile;
 
-if i put 1 rupee bet and at every ext bet i multiply it with previous bet * 1% of previous bet . so how many total bets i can play if i have total amount of 500 rupees. create a table of every bet 
 
-i want to create an form as OUTPUT which take array of objects in a const file which we can submit again & again with different values . and we have to check it's datatype and other things and add it in form with suitable label. i have to iterate all values one by one by using map function and then using switch to create jsx to create final form  . create form for me using frontend side only (react with typescript) . use react query if needed . i want details in my raw data file and want to assign all data in my output form with proper field name . so create 2 files one fields.ts which i will be using as const file to upload new data and one DynamicForm.tsx file which will perform all operations and create jsx from const data file.
+i have created a folder inside my project (react with ts ) name "multi-lingual" in which i want to create a form with some filed names that can change their languages as its staic data and store data at local storage and also want to change static data in english , hindi and other 2 languages . make one for me . 

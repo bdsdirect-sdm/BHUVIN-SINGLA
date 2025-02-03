@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './input.css'
 import App from './App.tsx'
+import "./multi-lingual/i18n"; // Import i18n setup
 
 export const queryClient = new QueryClient();
 

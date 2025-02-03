@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import './PaymentForm.css'; // Import your CSS file
+import './PaymentForm.css';
 
 const stripePromise = loadStripe('pk_test_51QmvomRpsiQOSl8fZ9jjJPPpkcsnVt4UeiQvvzY5K2JgemFko7zPT5fLCaTMK34WW9Ifq8cbeF5JFsrmsnyoTkri0060DYFbqc');
 

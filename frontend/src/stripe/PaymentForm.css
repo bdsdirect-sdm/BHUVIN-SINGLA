@@ -1,5 +1,4 @@
-/* Background */
-body {
+Background body {
     background: linear-gradient(135deg, #FF7E5F, #feb47b, #ff512f);
     font-family: 'Poppins', sans-serif;
     display: flex;

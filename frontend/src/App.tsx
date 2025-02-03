@@ -20,21 +20,28 @@ import AdminDashboard from './components/AdminDashboard';
 import DynamicForm from '../src/DynamicForm/DynamicForm';
 import SubmittedSuccessfully from '../src/DynamicForm/SubmittedSuccessfully';
 import PaymentForm from '../src/stripe/PaymentForm';
+import MultiLingual from './multi-lingual/MultiLingualForm';
 
 const App: React.FC = () => {
 
   const router = createBrowserRouter([
     {
-      path: '/payment',
-      element: <PaymentForm />
+      path: 'language',
+      element: < MultiLingual />
     },
+
     {
       path: '/success',
       element: <SubmittedSuccessfully />
     },
+
     {
       path: '/form',
       element: < DynamicForm />
+    },
+    {
+      path: '/payment',
+      element: <PaymentForm />
     },
     {
       path: '/admin/app/dashboard',
