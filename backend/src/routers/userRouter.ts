@@ -51,5 +51,4 @@ router.put('/updatepassword', userAuthMiddleware, updateUserPassword);
 router.put('/editcomment', userAuthMiddleware, updateComment);
 router.put('/deletecomment/:commentId', userAuthMiddleware, deleteComment);
 
-
 export default router;

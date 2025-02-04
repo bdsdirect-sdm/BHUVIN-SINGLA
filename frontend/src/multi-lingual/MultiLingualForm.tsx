@@ -89,7 +89,6 @@ const MultiLingual: React.FC = () => {
 
     return (
         <div className="multi-lingual-container">
-
             <div className="language-switcher">
                 <span>{t("language")}: </span>
                 <button onClick={() => changeLanguage("en")}>English</button>
